@@ -10,14 +10,11 @@ This is team 3179's code for the 2025 FRC season. This repo is a place for our t
 
 ## File Navigation
 
-* Utils
-    * FILE
-
-* Commands
-    * AutoCommands
+* Commands - Folder to hold all the commands we will use
+    * Auto - Sub folder that holds non joystick commands
         * FILE
-    * TeleopCommands
-        * FILE
+    * Teleop - Sub folder that holds all the default Teleop commands
+        * TeleopDrive.java - File that holds the default command for driving
 
 * Subsystems
     * FILE
