@@ -9,7 +9,7 @@ This is team 3179's code for the 2025 FRC season. This repo is a place for our t
 
 
 ## File Navigation
-
+```
  📦robot
  ┣ 📂Commands - Folder to hold all the commands we will use.
  ┃ ┃
@@ -34,7 +34,7 @@ This is team 3179's code for the 2025 FRC season. This repo is a place for our t
  ┣ 📜Robot.java - Has all the places to run non-command based code to run.
  ┃
  ┗ 📜RobotContainer.java - File that makes instances of all the subsystems and joystick and provides all the commands with joystick input or buttons to start. This file also sets the auto command that we will run for that match.
-
+```
 
 ## Contributing
 
