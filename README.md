@@ -1,5 +1,5 @@
 
-![Logo](https://github.com/frc3179/2025-Reefscape/blob/main/3179.png)
+![Logo](https://github.com/frc3179/2025-Reefscape/blob/main/3179.png.png)
 
 
 # 2025-Reefscape
