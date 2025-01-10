@@ -102,4 +102,10 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final class TrackingConstants {
+    public static final double kStrafeDriveP = 0.0;
+    public static final double kStrafeDriveI = 0.0;
+    public static final double kStrafeDriveD = 0.0;
+  }
 }
