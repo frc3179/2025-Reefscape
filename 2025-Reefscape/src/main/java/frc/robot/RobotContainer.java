@@ -8,6 +8,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.SpeedSettingsConstants;
+import frc.robot.SpeedSettings.DriveSpeedSettings;
 import frc.robot.Subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -22,6 +24,13 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+
+  // Other objects
+  private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
+    SpeedSettingsConstants.kDriveSlowModePCT,
+    SpeedSettingsConstants.kDriveDefaultModePCT,
+    SpeedSettingsConstants.kDriveDefaultModePCT
+    );
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -49,14 +58,12 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
       new TeleopDrive(
         m_robotDrive,
+        m_DriveSpeedSettings,
         () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveStickDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveStickDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveStickDeadband),
         () -> m_driverController.getLeftBumperButton(),
-        0.25,
         () -> m_driverController.getLeftTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
-        0.5,
-        1.0,
         () -> m_driverController.getRightTriggerAxis() >= OIConstants.kDriveTriggerDeadband
         )
     );

@@ -9,19 +9,42 @@ This is team 3179's code for the 2025 FRC season. This repo is a place for our t
 
 
 ## File Navigation
-
-* Utils
-    * FILE
-
-* Commands
-    * AutoCommands
-        * FILE
-    * TeleopCommands
-        * FILE
-
-* Subsystems
-    * FILE
-
+```
+📦robot
+ ┣ 📂Commands - Folder to hold all the commands we will use.
+ ┃ ┃
+ ┃ ┣ 📂Auto - Sub folder that holds non joystick commands.
+ ┃ ┃ ┃
+ ┃ ┃ ┗ 📜StrafeDriveToPoint.java - This is a general command that strafes the robot to a given point, 
+ ┃ ┃							       given through parameters.
+ ┃ ┃
+ ┃ ┗ 📂Teleop - Sub folder that holds all the default Teleop commands.
+ ┃   ┃
+ ┃   ┗ 📜TeleopDrive.java - File that holds the default command for driving.
+ ┃
+ ┣ 📂SpeedSettings - Folder that contains all speed settings and math for all the different subsystems.
+ ┃ ┃
+ ┃ ┗ 📜DriveSpeedSettings.java - File that has the drive speed settings and math.
+ ┃
+ ┣ 📂Subsystems - Folder that holds all the subsystems.
+ ┃ ┃
+ ┃ ┣ 📜DriveSubsystem.java - File that uses the MAXSwerveModule Subsystem to implement the drivetrain.
+ ┃ ┃
+ ┃ ┗ 📜MAXSwerveModule.java - File that uses base moters to make a subsystem of a single swerve module.
+ ┃
+ ┣ 📜Configs.java - File that creates the configurations for all the REV devices. New as the update of 
+ ┃		            the REV API for 2025.
+ ┃
+ ┣ 📜Constants.java - File that has all the constants for ports, deadbands, and limits.
+ ┃
+ ┣ 📜Main.java - We don't touch this file. It handles having an entry point for the binary created.
+ ┃
+ ┣ 📜Robot.java - Has all the places to run non-command based code to run.
+ ┃
+ ┗ 📜RobotContainer.java - File that makes instances of all the subsystems and joystick and provides 
+			   all the commands with joystick input or buttons to start. This file also sets 
+			   the auto command that we will run for that match.
+```
 
 ## Contributing
 
