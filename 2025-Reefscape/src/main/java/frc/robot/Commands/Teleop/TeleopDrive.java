@@ -3,35 +3,33 @@ package frc.robot.Commands.Teleop;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.SpeedSettings.DriveSpeedSettings;
 import frc.robot.Subsystems.DriveSubsystem;
 
 public class TeleopDrive extends Command{
-    DriveSubsystem m_DriveSubsystem;
+    final DriveSubsystem m_DriveSubsystem;
     Supplier<Double> xSpeed;
     Supplier<Double> ySpeed;
     Supplier<Double> rot;
     Supplier<Boolean> fieldRelative;
 
-    double slowSpeed;
     Supplier<Boolean> isSlowMode;
-    double defaultSpeed;
-    double fastSpeed;
     Supplier<Boolean> isFastMode;
 
     double finalXSpeed;
     double finalYSpeed;
     double finalRot;
 
+    final DriveSpeedSettings m_DriveSpeedSettings;
+
     public TeleopDrive(
             DriveSubsystem m_DriveSubsystem,
+            DriveSpeedSettings m_DriveSpeedSettings,
             Supplier<Double> xSpeed, 
             Supplier<Double> ySpeed, 
             Supplier<Double> rot, 
             Supplier<Boolean> fieldRelative,
-            double slowSpeed,
             Supplier<Boolean> isSlowMode,
-            double defaultSpeed,
-            double fastSpeed,
             Supplier<Boolean> isFastMode
         ){
 
@@ -42,11 +40,10 @@ public class TeleopDrive extends Command{
         this.rot = rot;
         this.fieldRelative = fieldRelative;
 
-        this.slowSpeed = slowSpeed;
         this.isSlowMode = isSlowMode;
-        this.defaultSpeed = defaultSpeed;
-        this.fastSpeed = fastSpeed;
         this.isFastMode = isFastMode;
+
+        this.m_DriveSpeedSettings = m_DriveSpeedSettings;
 
         addRequirements(m_DriveSubsystem);
     }
@@ -56,18 +53,9 @@ public class TeleopDrive extends Command{
 
     @Override
     public void execute() {
-        if(isFastMode.get() == true) {
-            finalXSpeed = fastSpeed*xSpeed.get();
-            finalYSpeed = fastSpeed*ySpeed.get();
-            finalRot = fastSpeed*rot.get();
-        } else if (isSlowMode.get() == true) {
-            finalXSpeed = slowSpeed*xSpeed.get();
-            finalYSpeed = slowSpeed*ySpeed.get();
-            finalRot = slowSpeed*rot.get();
-        }
-        finalXSpeed = defaultSpeed*xSpeed.get();
-        finalYSpeed = defaultSpeed*ySpeed.get();
-        finalRot = defaultSpeed*rot.get();
+        double finalXSpeed = m_DriveSpeedSettings.getFinalSpeed(xSpeed.get(), isFastMode.get(), isSlowMode.get());
+        double finalYSpeed = m_DriveSpeedSettings.getFinalSpeed(ySpeed.get(), isFastMode.get(), isSlowMode.get());
+        double finalRot = m_DriveSpeedSettings.getFinalSpeed(rot.get(), isFastMode.get(), isSlowMode.get());
 
         m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, fieldRelative.get());
     }

@@ -108,4 +108,10 @@ public final class Constants {
     public static final double kStrafeDriveI = 0.0;
     public static final double kStrafeDriveD = 0.0;
   }
+
+  public static final class SpeedSettingsConstants {
+    public static final double kDriveFastModePCT = 1.0;
+    public static final double kDriveSlowModePCT = 0.25;
+    public static final double kDriveDefaultModePCT = 0.5;
+  }
 }
