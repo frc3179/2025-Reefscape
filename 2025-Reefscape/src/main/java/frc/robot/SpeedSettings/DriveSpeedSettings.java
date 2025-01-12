@@ -19,4 +19,27 @@ public class DriveSpeedSettings {
         }
         return defaultSpeedPCT * baseSpeed;
     }
+
+    /**
+     * 
+     * @param POV
+     * @param isFastMode
+     * @param isSlowMode
+     * @return speed in [X, Y]
+     */
+    public double[] convertPOVtoSpeed(double POV) {
+        double[] res = new double[2];
+
+        if (POV == -1) {
+            res[0] = 0.0;
+            res[1] = 0.0;
+            return res;
+        }
+        double radPOV = Math.toRadians(POV);
+
+        res[0] = Math.cos(radPOV);
+        res[1] = Math.sin(radPOV);
+
+        return res;
+    }
 }
