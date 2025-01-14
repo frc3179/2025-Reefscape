@@ -29,7 +29,7 @@ public class RobotContainer {
   private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
     SpeedSettingsConstants.kDriveSlowModePCT,
     SpeedSettingsConstants.kDriveDefaultModePCT,
-    SpeedSettingsConstants.kDriveDefaultModePCT
+    SpeedSettingsConstants.kDriveFastModePCT
     );
 
   // The driver's controller
@@ -37,7 +37,7 @@ public class RobotContainer {
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  */
   public RobotContainer() {
     // Configure Auto Bindings
     configureAutoBindings();
@@ -62,9 +62,10 @@ public class RobotContainer {
         () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveStickDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveStickDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveStickDeadband),
-        () -> m_driverController.getLeftBumperButton(),
+        () -> !m_driverController.getLeftBumperButton(),
         () -> m_driverController.getLeftTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
-        () -> m_driverController.getRightTriggerAxis() >= OIConstants.kDriveTriggerDeadband
+        () -> m_driverController.getRightTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
+        () -> (double)m_driverController.getPOV()
         )
     );
 

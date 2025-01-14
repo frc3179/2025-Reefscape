@@ -15,9 +15,9 @@ public class TeleopDrive extends Command{
 
     Supplier<Boolean> isSlowMode;
     Supplier<Boolean> isFastMode;
+    Supplier<Double> pov;
 
-    double finalXSpeed;
-    double finalYSpeed;
+    double[] finalSpeeds; // [x, y]
     double finalRot;
 
     final DriveSpeedSettings m_DriveSpeedSettings;
@@ -30,7 +30,8 @@ public class TeleopDrive extends Command{
             Supplier<Double> rot, 
             Supplier<Boolean> fieldRelative,
             Supplier<Boolean> isSlowMode,
-            Supplier<Boolean> isFastMode
+            Supplier<Boolean> isFastMode,
+            Supplier<Double> pov
         ){
 
         this.m_DriveSubsystem = m_DriveSubsystem;
@@ -42,6 +43,9 @@ public class TeleopDrive extends Command{
 
         this.isSlowMode = isSlowMode;
         this.isFastMode = isFastMode;
+        this.pov = pov;
+
+        finalSpeeds = new double[2];
 
         this.m_DriveSpeedSettings = m_DriveSpeedSettings;
 
@@ -53,11 +57,18 @@ public class TeleopDrive extends Command{
 
     @Override
     public void execute() {
-        double finalXSpeed = m_DriveSpeedSettings.getFinalSpeed(xSpeed.get(), isFastMode.get(), isSlowMode.get());
-        double finalYSpeed = m_DriveSpeedSettings.getFinalSpeed(ySpeed.get(), isFastMode.get(), isSlowMode.get());
-        double finalRot = m_DriveSpeedSettings.getFinalSpeed(rot.get(), isFastMode.get(), isSlowMode.get());
+        if (pov.get() != -1) {
+            finalSpeeds = m_DriveSpeedSettings.convertPOVtoSpeed(pov.get());
+            finalSpeeds[0] = m_DriveSpeedSettings.getFinalSpeed(finalSpeeds[0], isFastMode.get(), isSlowMode.get());
+            finalSpeeds[1] = m_DriveSpeedSettings.getFinalSpeed(finalSpeeds[1], isFastMode.get(), isSlowMode.get());
+            finalRot = m_DriveSpeedSettings.getFinalSpeed(rot.get(), isFastMode.get(), isSlowMode.get());
+        } else {
+            finalSpeeds[0] = m_DriveSpeedSettings.getFinalSpeed(xSpeed.get(), isFastMode.get(), isSlowMode.get());
+            finalSpeeds[1] = m_DriveSpeedSettings.getFinalSpeed(ySpeed.get(), isFastMode.get(), isSlowMode.get());
+            finalRot = m_DriveSpeedSettings.getFinalSpeed(rot.get(), isFastMode.get(), isSlowMode.get());
+        }
 
-        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, fieldRelative.get());
+        m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get());
     }
 
     @Override
