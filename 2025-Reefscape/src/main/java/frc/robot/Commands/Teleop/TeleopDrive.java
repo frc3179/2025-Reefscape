@@ -7,27 +7,27 @@ import frc.robot.SpeedSettings.DriveSpeedSettings;
 import frc.robot.Subsystems.DriveSubsystem;
 
 public class TeleopDrive extends Command{
-    final DriveSubsystem m_DriveSubsystem;
-    Supplier<Double> xSpeed;
-    Supplier<Double> ySpeed;
-    Supplier<Double> rot;
-    Supplier<Boolean> fieldRelative;
+    private final DriveSubsystem m_DriveSubsystem;
+    private Supplier<Double> xSpeed;
+    private Supplier<Double> ySpeed;
+    private Supplier<Double> rot;
+    private Supplier<Boolean> fieldRelative;
 
-    Supplier<Boolean> isSlowMode;
-    Supplier<Boolean> isFastMode;
-    Supplier<Double> pov;
+    private Supplier<Boolean> isSlowMode;
+    private Supplier<Boolean> isFastMode;
+    private Supplier<Double> pov;
 
-    double[] finalSpeeds; // [x, y]
-    double finalRot;
+    private double[] finalSpeeds; // [x, y]
+    private double finalRot;
 
-    final DriveSpeedSettings m_DriveSpeedSettings;
+    private final DriveSpeedSettings m_DriveSpeedSettings;
 
     public TeleopDrive(
             DriveSubsystem m_DriveSubsystem,
             DriveSpeedSettings m_DriveSpeedSettings,
             Supplier<Double> xSpeed, 
             Supplier<Double> ySpeed, 
-            Supplier<Double> rot, 
+            Supplier<Double> rot,
             Supplier<Boolean> fieldRelative,
             Supplier<Boolean> isSlowMode,
             Supplier<Boolean> isFastMode,

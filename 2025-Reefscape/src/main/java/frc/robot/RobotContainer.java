@@ -5,12 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Commands.Teleop.TeleopDrive;
+import frc.robot.Commands.Teleop.TeleopElevator;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpeedSettingsConstants;
 import frc.robot.SpeedSettings.DriveSpeedSettings;
 import frc.robot.Subsystems.DriveSubsystem;
+import frc.robot.Subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -24,16 +27,18 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
 
   // Other objects
   private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
     SpeedSettingsConstants.kDriveSlowModePCT,
     SpeedSettingsConstants.kDriveDefaultModePCT,
     SpeedSettingsConstants.kDriveFastModePCT
-    );
+  );
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -67,6 +72,13 @@ public class RobotContainer {
         () -> m_driverController.getRightTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
         () -> (double)m_driverController.getPOV()
         )
+    );
+
+    m_elevator.setDefaultCommand(
+      new TeleopElevator(
+        m_elevator,
+        () -> m_armController.getX()
+      )
     );
 
   }

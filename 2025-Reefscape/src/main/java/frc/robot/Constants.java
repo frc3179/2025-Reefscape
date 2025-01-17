@@ -80,6 +80,8 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveStickDeadband = 0.1;
     public static final double kDriveTriggerDeadband = 0.1;
+
+    public static final int kArmControllerPort = 1;
   }
 
     public static final class AutoConstants {
@@ -107,11 +109,29 @@ public final class Constants {
     public static final double kStrafeDriveP = 0.0;
     public static final double kStrafeDriveI = 0.0;
     public static final double kStrafeDriveD = 0.0;
+
+    public static final double kRotateDriveP = 0.0;
+    public static final double kRotateDriveI = 0.0;
+    public static final double kRotateDriveD = 0.0;
+
+    public static final double kDriveDriveP = 0.0;
+    public static final double kDriveDriveI = 0.0;
+    public static final double kDriveDriveD = 0.0;
+
+    public static final double kElevatorP = 0.0;
+    public static final double kElevatorI = 0.0;
+    public static final double kElevatorD = 0.0;
   }
 
   public static final class SpeedSettingsConstants {
     public static final double kDriveFastModePCT = 1.0;
     public static final double kDriveSlowModePCT = 0.25;
     public static final double kDriveDefaultModePCT = 0.5;
+  }
+
+  public static final class ElevatorConstants {
+    public static final int kLeftMotorPort = 0; //TODO: Change
+    public static final int kRightMotorPort = 1; //TODO: Change
+    public static final int kEncoderPort = 2; //TODO: Change
   }
 }

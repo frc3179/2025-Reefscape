@@ -8,11 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TrackingConstants;
 import frc.robot.Subsystems.DriveSubsystem;
 
-public class StrafeDriveToPoint extends Command{
+public class DriveDriveToPoint extends Command{
     private DriveSubsystem m_DriveSubsystem;
-    private Supplier<Double> xSpeed;
+    private Supplier<Double> ySpeed;
     private Supplier<Double> rot;
-
     private double goalPos;
     private Supplier<Double> currentPos;
     private double errOffset;
@@ -22,11 +21,11 @@ public class StrafeDriveToPoint extends Command{
     private double finalYSpeed;
     private double finalRot;
 
-    private PIDController strafePidController;
+    private PIDController drivePidController;
 
-    public StrafeDriveToPoint(
-            DriveSubsystem m_DriveSubsystem,
-            Supplier<Double> xSpeed, 
+    public DriveDriveToPoint(
+            DriveSubsystem m_DriveSubsystem, 
+            Supplier<Double> ySpeed,
             Supplier<Double> rot,
             double goalPos,
             Supplier<Double> currentPos,
@@ -36,30 +35,30 @@ public class StrafeDriveToPoint extends Command{
 
         this.m_DriveSubsystem = m_DriveSubsystem;
 
-        this.xSpeed = xSpeed;
         this.rot = rot;
+        this.ySpeed = ySpeed;
 
         this.currentPos = currentPos;
         this.goalPos = goalPos;
         this.errOffset = errOffset;
         this.interupt = interupt;
 
-        strafePidController = new PIDController(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD);
-        strafePidController.setSetpoint(this.goalPos);
-        strafePidController.setTolerance(this.errOffset);
+        drivePidController = new PIDController(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD);
+        drivePidController.setSetpoint(this.goalPos);
+        drivePidController.setTolerance(this.errOffset);
 
         addRequirements(m_DriveSubsystem);
     }
 
     @Override
     public void initialize() {
-        strafePidController.reset();
+        drivePidController.reset();
     }
 
     @Override
     public void execute() {
-        finalXSpeed = xSpeed.get();
-        finalYSpeed = MathUtil.clamp(strafePidController.calculate(currentPos.get()), -0.5, 0.5);
+        finalXSpeed = MathUtil.clamp(drivePidController.calculate(currentPos.get()), -0.5, 0.5);
+        finalYSpeed = ySpeed.get();
         finalRot = rot.get();
 
         m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false);
@@ -70,7 +69,7 @@ public class StrafeDriveToPoint extends Command{
 
     @Override
     public boolean isFinished() {
-        if (strafePidController.atSetpoint()) {
+        if (drivePidController.atSetpoint()) {
             return true;
         }
 
