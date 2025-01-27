@@ -61,7 +61,7 @@ public final class Configs {
 
         static {
                 rightElevatorConfig
-                        .inverted(false)
+                        .inverted(true)
                         .idleMode(IdleMode.kBrake);
                 
                 leftElevatorConfig

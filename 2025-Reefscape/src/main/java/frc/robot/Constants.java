@@ -82,6 +82,7 @@ public final class Constants {
     public static final double kDriveTriggerDeadband = 0.1;
 
     public static final int kArmControllerPort = 1;
+    public static final double kArmControllerDeadband = 0.1;
   }
 
     public static final class AutoConstants {

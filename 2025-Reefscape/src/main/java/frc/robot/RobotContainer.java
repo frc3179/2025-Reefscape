@@ -77,7 +77,7 @@ public class RobotContainer {
     m_elevator.setDefaultCommand(
       new TeleopElevator(
         m_elevator,
-        () -> m_armController.getX()
+        () -> MathUtil.applyDeadband(m_armController.getY(), OIConstants.kArmControllerDeadband)
       )
     );
 
