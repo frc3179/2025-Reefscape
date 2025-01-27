@@ -11,17 +11,32 @@ This is team 3179's code for the 2025 FRC season. This repo is a place for our t
 ## File Navigation
 ```
 📦robot
+ ┃
  ┣ 📂Commands - Folder to hold all the commands we will use.
  ┃ ┃
  ┃ ┣ 📂Auto - Sub folder that holds non joystick commands.
  ┃ ┃ ┃
+ ┃ ┃ ┣ 📜DriveDriveToPoint.java - This is a general command that drives to robot forward and
+ ┃ ┃ ┃                             backward to a point, which is given through parameters.
+ ┃ ┃ ┃
+ ┃ ┃ ┣ 📜ElevatorMoveToPoint.java - This is a general command that moves the elevator to a given,
+ ┃ ┃ ┃                               point, which is given through parameters.
+ ┃ ┃ ┃
+ ┃ ┃ ┣ 📜FullDriveToPoint.java - This command implements the DriveDriveToPoint, RotateDriveToPoint,
+ ┃ ┃ ┃                            and StrafeDriveToPoint. It also runs them at the same time.
+ ┃ ┃ ┃
+ ┃ ┃ ┣ 📜RotateDriveToPoint.java - This is a general command that rotates the robot to a given point,
+ ┃ ┃ ┃                              which given through parameters.
+ ┃ ┃ ┃
  ┃ ┃ ┗ 📜StrafeDriveToPoint.java - This is a general command that strafes the robot to a given point, 
- ┃ ┃							       given through parameters.
+ ┃ ┃							       which given through parameters.
  ┃ ┃
  ┃ ┗ 📂Teleop - Sub folder that holds all the default Teleop commands.
  ┃   ┃
- ┃   ┗ 📜TeleopDrive.java - File that holds the default command for driving.
- ┃
+ ┃   ┣ 📜TeleopDrive.java - File that holds the default command for driving.
+ ┃   ┃
+ ┃   ┗ 📜TeleopElevator.java - File for the command for moving the elevator.
+ ┃  
  ┣ 📂SpeedSettings - Folder that contains all speed settings and math for all the different subsystems.
  ┃ ┃
  ┃ ┗ 📜DriveSpeedSettings.java - File that has the drive speed settings and math.
@@ -29,6 +44,8 @@ This is team 3179's code for the 2025 FRC season. This repo is a place for our t
  ┣ 📂Subsystems - Folder that holds all the subsystems.
  ┃ ┃
  ┃ ┣ 📜DriveSubsystem.java - File that uses the MAXSwerveModule Subsystem to implement the drivetrain.
+ ┃ ┃
+ ┃ ┣ 📜ElevatorSubsystem.java - File that makes the subsystem for the elevator.
  ┃ ┃
  ┃ ┗ 📜MAXSwerveModule.java - File that uses base moters to make a subsystem of a single swerve module.
  ┃
