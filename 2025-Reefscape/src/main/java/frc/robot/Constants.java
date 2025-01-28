@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -122,6 +125,12 @@ public final class Constants {
     public static final double kElevatorP = 0.0;
     public static final double kElevatorI = 0.0;
     public static final double kElevatorD = 0.0;
+
+    // x position in meters, y position in meters, and heading in radians higher number = trust less
+    public static final Matrix<N3,N1> stateStdDevs = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+
+    // x position in meters, y position in meters, and heading in radians higher number = trust less
+    public static final Matrix<N3,N1> visionMeasurementStdDevs = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
   }
 
   public static final class SpeedSettingsConstants {
@@ -131,8 +140,12 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final int kLeftMotorPort = 9; //TODO: Change
-    public static final int kRightMotorPort = 10; //TODO: Change
-    public static final int kEncoderPort = 20; //TODO: Change
+    public static final int kLeftMotorPort = 9; 
+    public static final int kRightMotorPort = 10;
+    public static final int kEncoderPort = 20;
+  }
+
+  public static final class ThroughCoralOuttakeConstants {
+    public static final int kThroughCoralOuttakeMotorPort = 19;
   }
 }

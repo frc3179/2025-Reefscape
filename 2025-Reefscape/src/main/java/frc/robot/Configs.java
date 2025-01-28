@@ -69,4 +69,17 @@ public final class Configs {
                         .idleMode(IdleMode.kBrake);
         }
     }
+
+    public static final class TroughCoralOuttakeConfig {
+        public static final SparkMaxConfig troughMotorConfig = new SparkMaxConfig();
+
+        static {
+                troughMotorConfig
+                        .inverted(true)
+                        .idleMode(IdleMode.kBrake);
+
+                troughMotorConfig.absoluteEncoder
+                        .inverted(false);
+        }
+    }
 }
