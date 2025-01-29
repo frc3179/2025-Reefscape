@@ -7,13 +7,14 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
+import frc.robot.Commands.Teleop.TeleopTracking;
 import frc.robot.Commands.Teleop.TeleopTroughCoralOuttake;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -21,6 +22,7 @@ import frc.robot.Constants.SpeedSettingsConstants;
 import frc.robot.Constants.TrackingConstants;
 import frc.robot.SpeedSettings.DriveSpeedSettings;
 import frc.robot.Subsystems.AutoSubsystem;
+import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.ElevatorSubsystem;
 import frc.robot.Subsystems.TrackingSubsystem;
@@ -40,14 +42,13 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
+  private final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
 
   private final TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem(
     DriveConstants.kDriveKinematics,
     m_robotDrive.getGryoAngle(),
     m_robotDrive.getWheelPosition(),
-    null,
-    TrackingConstants.stateStdDevs,
-    TrackingConstants.visionMeasurementStdDevs
+    null
   );
 
   // Other objects
@@ -116,6 +117,28 @@ public class RobotContainer {
         m_troughCoralOuttake,
         () -> m_armController.getRawButtonPressed(1) ? 1.0 : (m_armController.getRawButtonPressed(2) ? -1.0 : 0.0)
         )
+    );
+
+    m_branchCoralOuttake.setDefaultCommand(
+      new TeleopBranchCoralOuttake(
+        m_branchCoralOuttake,
+        () -> m_armController.getRawButtonPressed(3) ? 1.0 : 0.0
+      )
+    );
+
+    m_TrackingSubsystem.setDefaultCommand(
+      new TeleopTracking(
+        m_TrackingSubsystem,
+        null,
+        null,
+        null,
+        () -> m_robotDrive.getGryoAngle(),
+        () -> m_robotDrive.getWheelPosition(),
+        () -> m_robotDrive.getGryoRate(),
+        TrackingConstants.visionMeasurementStdDevs1,
+        TrackingConstants.visionMeasurementStdDevs2,
+        TrackingConstants.visionMeasurementStdDevs3
+      )
     );
 
   }

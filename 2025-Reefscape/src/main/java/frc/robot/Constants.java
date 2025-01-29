@@ -127,10 +127,13 @@ public final class Constants {
     public static final double kElevatorD = 0.0;
 
     // x position in meters, y position in meters, and heading in radians higher number = trust less
-    public static final Matrix<N3,N1> stateStdDevs = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+    public static final Matrix<N3,N1> visionMeasurementStdDevs1 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
 
     // x position in meters, y position in meters, and heading in radians higher number = trust less
-    public static final Matrix<N3,N1> visionMeasurementStdDevs = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+    public static final Matrix<N3,N1> visionMeasurementStdDevs2 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+
+    // x position in meters, y position in meters, and heading in radians higher number = trust less
+    public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
   }
 
   public static final class SpeedSettingsConstants {
@@ -147,5 +150,9 @@ public final class Constants {
 
   public static final class ThroughCoralOuttakeConstants {
     public static final int kThroughCoralOuttakeMotorPort = 19;
+  }
+
+  public static final class BranchCoralOuttakeConstants {
+    public static final int kBranchCoralOuttakeMotorPort = 18;
   }
 }

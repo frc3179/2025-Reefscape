@@ -3,23 +3,22 @@ package frc.robot.Commands.Teleop;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
+import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
 
-public class TeleopTroughCoralOuttake extends Command {
-
-    private TroughCoralOuttakeSubsystem m_TroughCoralOuttake;
+public class TeleopBranchCoralOuttake extends Command {
+    private BranchCoralOuttakeSubsystem m_BranchCoralOuttake;
     private Supplier<Double> speed;
 
-    public TeleopTroughCoralOuttake(
-        TroughCoralOuttakeSubsystem m_TroughCoralOuttake,
+    public TeleopBranchCoralOuttake(
+        BranchCoralOuttakeSubsystem m_BranchCoralOuttake,
         Supplier<Double> speed
         ) {
 
-        this.m_TroughCoralOuttake = m_TroughCoralOuttake;
+        this.m_BranchCoralOuttake = m_BranchCoralOuttake;
 
         this.speed = speed;
 
-        addRequirements(m_TroughCoralOuttake);
+        addRequirements(m_BranchCoralOuttake);
     }
 
     @Override
@@ -27,7 +26,7 @@ public class TeleopTroughCoralOuttake extends Command {
 
     @Override
     public void execute() {
-        m_TroughCoralOuttake.setSpeed(speed.get());
+        m_BranchCoralOuttake.setSpeed(speed.get());
     }
 
     @Override
