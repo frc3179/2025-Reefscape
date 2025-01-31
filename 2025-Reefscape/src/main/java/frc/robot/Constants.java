@@ -126,6 +126,13 @@ public final class Constants {
     public static final double kElevatorI = 0.0;
     public static final double kElevatorD = 0.0;
 
+    public static final double kThroughCoralOuttakeP = 0.0;
+    public static final double kThroughCoralOuttakeI = 0.0;
+    public static final double kThroughCoralOuttakeD = 0.0;
+
+    public static final double kElevatorEncoderIntakePosition = 0.0;
+    public static final double kElevatorEncoderOffset = 0.0;
+
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
     public static final Matrix<N3,N1> visionMeasurementStdDevs1 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
 

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Commands.Auto.DriveToPose2d;
+import frc.robot.Commands.Auto.ElevatorMoveToPoint;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
@@ -26,6 +27,7 @@ import frc.robot.Subsystems.AutoSubsystem;
 import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.ElevatorSubsystem;
+import frc.robot.Subsystems.FieldSubsystem;
 import frc.robot.Subsystems.TrackingSubsystem;
 import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,22 +46,23 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
   private final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
+  private final FieldSubsystem m_FieldSubsystem = new FieldSubsystem();
 
   private TrackingSubsystem m_TrackingSubsystem;
   
-    // Other objects
-    private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
-      SpeedSettingsConstants.kDriveSlowModePCT,
-      SpeedSettingsConstants.kDriveDefaultModePCT,
-      SpeedSettingsConstants.kDriveFastModePCT
-    );
-  
-    private SendableChooser<Command> autoChooser;
-    private AutoSubsystem m_AutoSubsystem;
-  
-    // The driver's controller
-    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-    Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
+  // Other objects
+  private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
+    SpeedSettingsConstants.kDriveSlowModePCT,
+    SpeedSettingsConstants.kDriveDefaultModePCT,
+    SpeedSettingsConstants.kDriveFastModePCT
+  );
+
+  private SendableChooser<Command> autoChooser;
+  private AutoSubsystem m_AutoSubsystem;
+
+  // The driver's controller
+  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
   
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -144,6 +147,13 @@ public class RobotContainer {
       )
     );
 
+    m_FieldSubsystem.setDefaultCommand(
+      new RunCommand(
+        () -> m_FieldSubsystem.updateRobotPose(TrackingSubsystem.poseEstimator.getEstimatedPosition()),
+        m_FieldSubsystem
+      )
+    );
+
   }
 
   /**
@@ -172,6 +182,17 @@ public class RobotContainer {
             m_robotDrive,
             m_AutoSubsystem.getInitPose(),
             () -> m_driverController.getAButtonReleased()
+          )
+        );
+    
+    new JoystickButton(m_armController, 4)
+        .whileTrue(
+          new ElevatorMoveToPoint(
+            m_elevator,
+            TrackingConstants.kElevatorEncoderIntakePosition,
+            () -> m_elevator.getEncoder(),
+            TrackingConstants.kElevatorEncoderOffset,
+            () -> m_armController.getRawButtonReleased(4)
           )
         );
 
