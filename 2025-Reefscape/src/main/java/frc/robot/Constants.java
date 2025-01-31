@@ -49,15 +49,15 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 1;
-    public static final int kRearLeftDrivingCanId = 7;
-    public static final int kFrontRightDrivingCanId = 3;
-    public static final int kRearRightDrivingCanId = 5;
+    public static final int kFrontLeftDrivingCanId = 2;
+    public static final int kRearLeftDrivingCanId = 8;
+    public static final int kFrontRightDrivingCanId = 4;
+    public static final int kRearRightDrivingCanId = 6;
 
-    public static final int kFrontLeftTurningCanId = 2;
-    public static final int kRearLeftTurningCanId = 8;
-    public static final int kFrontRightTurningCanId = 4;
-    public static final int kRearRightTurningCanId = 6;
+    public static final int kFrontLeftTurningCanId = 3;
+    public static final int kRearLeftTurningCanId = 9;
+    public static final int kFrontRightTurningCanId = 5;
+    public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
   }
@@ -126,14 +126,18 @@ public final class Constants {
     public static final double kElevatorI = 0.0;
     public static final double kElevatorD = 0.0;
 
-    // x position in meters, y position in meters, and heading in radians higher number = trust less
+    // x position in meters, y position in meters, and heading in radians; higher number = trust less
     public static final Matrix<N3,N1> visionMeasurementStdDevs1 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
 
-    // x position in meters, y position in meters, and heading in radians higher number = trust less
+    // x position in meters, y position in meters, and heading in radians; higher number = trust less
     public static final Matrix<N3,N1> visionMeasurementStdDevs2 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
 
-    // x position in meters, y position in meters, and heading in radians higher number = trust less
+    // x position in meters, y position in meters, and heading in radians; higher number = trust less
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+
+    public static final String kReefLimelightName = "Reef Limelight";
+    public static final String kTroughIntakeLimelightName = "Through Intake Limelight";
+    public static final String kBranchIntakeLimelightName = "Branch Intake Limelight";
   }
 
   public static final class SpeedSettingsConstants {
@@ -143,16 +147,16 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final int kLeftMotorPort = 9; 
-    public static final int kRightMotorPort = 10;
-    public static final int kEncoderPort = 20;
+    public static final int kLeftMotorPort = 10; 
+    public static final int kRightMotorPort = 11;
+    public static final int kEncoderPort = 21;
   }
 
   public static final class ThroughCoralOuttakeConstants {
-    public static final int kThroughCoralOuttakeMotorPort = 19;
+    public static final int kThroughCoralOuttakeMotorPort = 12;
   }
 
   public static final class BranchCoralOuttakeConstants {
-    public static final int kBranchCoralOuttakeMotorPort = 18;
+    public static final int kBranchCoralOuttakeMotorPort = 19;
   }
 }

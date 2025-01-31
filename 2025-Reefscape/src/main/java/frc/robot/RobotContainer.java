@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Commands.Auto.DriveToPose2d;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
@@ -44,50 +45,52 @@ public class RobotContainer {
   private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
   private final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
 
-  private final TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem(
-    DriveConstants.kDriveKinematics,
-    m_robotDrive.getGryoAngle(),
-    m_robotDrive.getWheelPosition(),
-    null
-  );
-
-  // Other objects
-  private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
-    SpeedSettingsConstants.kDriveSlowModePCT,
-    SpeedSettingsConstants.kDriveDefaultModePCT,
-    SpeedSettingsConstants.kDriveFastModePCT
-  );
-
-  private SendableChooser<Command> autoChooser;
-  private AutoSubsystem m_AutoSubsystem;
-
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
-
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-  */
-  public RobotContainer() {
-    // Configure Auto Bindings
-    configureAutoBindings();
-
-    // Configure Teleop Default Bindings
-    configureDefaultBindings();
-
-    // Configure the Teleop button bindings
-    configureButtonBindings();
-  }
-
-  private void configureAutoBindings() {
-    //TODO: AUTO COMMANDS
-
-    // Build an auto chooser. This will use Commands.none() as the default option.
-    autoChooser = AutoBuilder.buildAutoChooser();
-    SmartDashboard.putData("Auto Chooser", autoChooser);
-
-    m_AutoSubsystem = new AutoSubsystem(autoChooser);
-  }
+  private TrackingSubsystem m_TrackingSubsystem;
+  
+    // Other objects
+    private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
+      SpeedSettingsConstants.kDriveSlowModePCT,
+      SpeedSettingsConstants.kDriveDefaultModePCT,
+      SpeedSettingsConstants.kDriveFastModePCT
+    );
+  
+    private SendableChooser<Command> autoChooser;
+    private AutoSubsystem m_AutoSubsystem;
+  
+    // The driver's controller
+    XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
+  
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+    */
+    public RobotContainer() {
+      // Configure Auto Bindings
+      configureAutoBindings();
+  
+      // Configure Teleop Default Bindings
+      configureDefaultBindings();
+  
+      // Configure the Teleop button bindings
+      configureButtonBindings();
+    }
+  
+    private void configureAutoBindings() {
+      //TODO: AUTO COMMANDS
+  
+      // Build an auto chooser. This will use Commands.none() as the default option.
+      autoChooser = AutoBuilder.buildAutoChooser();
+      SmartDashboard.putData("Auto Chooser", autoChooser);
+  
+      m_AutoSubsystem = new AutoSubsystem(autoChooser);
+  
+      m_TrackingSubsystem = new TrackingSubsystem(
+        DriveConstants.kDriveKinematics,
+        m_robotDrive.getGryoAngle(),
+        m_robotDrive.getWheelPosition(),
+        m_AutoSubsystem.getInitPose()
+      );
+    }
 
   public void configureDefaultBindings() {
 
@@ -129,9 +132,9 @@ public class RobotContainer {
     m_TrackingSubsystem.setDefaultCommand(
       new TeleopTracking(
         m_TrackingSubsystem,
-        null,
-        null,
-        null,
+        TrackingConstants.kTroughIntakeLimelightName,
+        TrackingConstants.kBranchIntakeLimelightName,
+        TrackingConstants.kReefLimelightName,
         () -> m_robotDrive.getGryoAngle(),
         () -> m_robotDrive.getWheelPosition(),
         () -> m_robotDrive.getGryoRate(),
@@ -162,6 +165,16 @@ public class RobotContainer {
           )
         );
 
+    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+        .whileTrue(
+          new DriveToPose2d(
+            m_TrackingSubsystem,
+            m_robotDrive,
+            m_AutoSubsystem.getInitPose(),
+            () -> m_driverController.getAButtonReleased()
+          )
+        );
+
   }
 
   /**
@@ -170,6 +183,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return m_AutoSubsystem.getAuto();
   }
 }

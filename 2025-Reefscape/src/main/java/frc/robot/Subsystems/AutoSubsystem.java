@@ -3,6 +3,8 @@ package frc.robot.Subsystems;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
@@ -18,12 +20,20 @@ public class AutoSubsystem extends SubsystemBase {
         this.autoChooser = autoChooser;
     }
 
+    //TODO: FIND HOW THE NAME CORRELATES TO THE JSON PATH COULD ONLY BE BLUE AND NOT UPDATE FOR RED
     public Command getAuto() {
+        DriverStation.reportError("NOT AN ERROR; AUTO NAME = " + autoChooser.getSelected().toString(), null);
         return autoChooser.getSelected();
     }
 
+    //TODO: TEST THIS
+    public Pose2d getInitPose() {
+        return AutoBuilder.getCurrentPose();
+        //return getInitPoseFromJSON(null);
+    }
+
     //TODO: CHECK THIS
-    public Pose2d getInitPose(Path JSONpath) {
+    private Pose2d getInitPoseFromJSON(Path JSONpath) {
         Trajectory trajectory = new Trajectory();
         try {
             trajectory = TrajectoryUtil.fromPathweaverJson(JSONpath);
