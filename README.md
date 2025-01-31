@@ -1,5 +1,7 @@
 
-<div align=center>![Logo](https://github.com/frc3179/2025-Reefscape/blob/main/3179.png.png)</div>
+<div align=center>
+	<img src="3179.png.png" alt="LOGO">
+</div>
 
 
 # 2025-Reefscape
