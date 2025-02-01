@@ -71,8 +71,9 @@ public class DriveToPose2d extends Command{
 
         constraints = PathConstraints.unlimitedConstraints(12.0);
 
+        //TODO: TEST NULL FOR WAYPOINTS
         goalPath = new PathPlannerPath(
-            waypoints,
+            null,
             constraints,
             null, // The ideal starting state, this is only relevant for pre-planned paths, so can be null for on-the-fly paths
             new GoalEndState(0.0, targetPose.getRotation()) // Goal end state. You can set a holonomic rotation
