@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AutoSubsystem extends SubsystemBase {
     SendableChooser<Command> autoChooser;
+    private Pose2d startPose;
 
     public AutoSubsystem(SendableChooser<Command> autoChooser) {
         this.autoChooser = autoChooser;
@@ -23,12 +24,14 @@ public class AutoSubsystem extends SubsystemBase {
     //TODO: FIND HOW THE NAME CORRELATES TO THE JSON PATH COULD ONLY BE BLUE AND NOT UPDATE FOR RED
     public Command getAuto() {
         DriverStation.reportError("NOT AN ERROR; AUTO NAME = " + autoChooser.getSelected().toString(), null);
+        startPose = AutoBuilder.getCurrentPose();
         return autoChooser.getSelected();
     }
 
     //TODO: TEST THIS
     public Pose2d getInitPose() {
-        return AutoBuilder.getCurrentPose();
+        return startPose;
+        //return AutoBuilder.getCurrentPose();
         //return getInitPoseFromJSON(null);
     }
 

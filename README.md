@@ -1,5 +1,7 @@
 
-![Logo](https://github.com/frc3179/2025-Reefscape/blob/main/3179.png.png)
+<div align=center>
+	<img src="3179.png.png" alt="ANT Logo">
+</div>
 
 
 # 2025-Reefscape
@@ -77,5 +79,6 @@ Please view `LICENSE` for full information.
 
 ## Authors
 
-- [@Hunter2718](https://github.com/Hunter2718)
+- [@Hunter2718](https://github.com/Hunter2718) Did almost all the programming (Just used the team's account)
+- [@JDizzle4](https://github.com/JDizzle4) Did the Path Planner GUI for Auto
 

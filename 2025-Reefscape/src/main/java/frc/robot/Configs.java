@@ -82,4 +82,14 @@ public final class Configs {
                         .inverted(false);
         }
     }
+
+    public static final class BranchCoralOuttakeConfig {
+        public static final SparkMaxConfig branchMotorConfig = new SparkMaxConfig();
+
+        static {
+                branchMotorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+        }
+    }
 }
