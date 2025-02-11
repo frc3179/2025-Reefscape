@@ -20,8 +20,8 @@ public class AutoSubsystem extends SubsystemBase {
 
     //TODO: FIND HOW THE NAME CORRELATES TO THE JSON PATH COULD ONLY BE BLUE AND NOT UPDATE FOR RED
     public Command getAuto() {
-        DriverStation.reportError("NOT AN ERROR; AUTO NAME = " + autoChooser.getSelected().toString(), null);
-        startPose = AutoBuilder.getCurrentPose();
+        // DriverStation.reportError("NOT AN ERROR; AUTO NAME = " + autoChooser.getSelected().toString(), null);
+        // startPose = AutoBuilder.getCurrentPose();
         return autoChooser.getSelected();
     }
 

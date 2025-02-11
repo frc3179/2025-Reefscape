@@ -76,7 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
               this::getPose, // Robot pose supplier
               this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
               this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-              (speeds) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+              this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                       new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                       new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
