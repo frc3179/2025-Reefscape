@@ -16,6 +16,7 @@ public class TeleopDrive extends Command{
     private Supplier<Boolean> isSlowMode;
     private Supplier<Boolean> isFastMode;
     private Supplier<Double> pov;
+    Supplier<Boolean> resetGyro;
 
     private double[] finalSpeeds; // [x, y]
     private double finalRot;
@@ -31,7 +32,8 @@ public class TeleopDrive extends Command{
             Supplier<Boolean> fieldRelative,
             Supplier<Boolean> isSlowMode,
             Supplier<Boolean> isFastMode,
-            Supplier<Double> pov
+            Supplier<Double> pov,
+            Supplier<Boolean> resetGyro
         ){
 
         this.m_DriveSubsystem = m_DriveSubsystem;
@@ -44,6 +46,7 @@ public class TeleopDrive extends Command{
         this.isSlowMode = isSlowMode;
         this.isFastMode = isFastMode;
         this.pov = pov;
+        this.resetGyro = resetGyro;
 
         finalSpeeds = new double[2];
 
@@ -68,7 +71,7 @@ public class TeleopDrive extends Command{
             finalRot = m_DriveSpeedSettings.getFinalSpeed(rot.get(), isFastMode.get(), isSlowMode.get());
         }
 
-        m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get());
+        m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get(), resetGyro.get());
     }
 
     @Override

@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class FieldSubsystem extends SubsystemBase{
     private Field2d m_field;
-    private Pose2d robotPose;
 
     public FieldSubsystem() {
         this.m_field = new Field2d();
@@ -15,12 +14,6 @@ public class FieldSubsystem extends SubsystemBase{
     }
 
     public void updateRobotPose(Pose2d robotPose) {
-        this.robotPose = robotPose;
-    }
-
-
-    @Override
-    public void periodic() {
         m_field.setRobotPose(robotPose);
     }
 }

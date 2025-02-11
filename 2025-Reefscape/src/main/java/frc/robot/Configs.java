@@ -61,12 +61,13 @@ public final class Configs {
 
         static {
                 rightElevatorConfig
-                        .inverted(true)
+                        .follow(ElevatorConstants.kLeftMotorPort, true)
                         .idleMode(IdleMode.kBrake);
                 
                 leftElevatorConfig
-                        .follow(ElevatorConstants.kRightMotorPort, true)
+                        .inverted(false)
                         .idleMode(IdleMode.kBrake);
+
         }
     }
 
@@ -88,7 +89,7 @@ public final class Configs {
 
         static {
                 branchMotorConfig
-                        .inverted(false)
+                        .inverted(true)
                         .idleMode(IdleMode.kBrake);
         }
     }

@@ -61,7 +61,7 @@ public class DriveDriveToPoint extends Command{
         finalYSpeed = ySpeed.get();
         finalRot = rot.get();
 
-        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false);
+        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);
     }
 
     @Override

@@ -13,9 +13,11 @@ public class TrackingSubsystem extends SubsystemBase {
     private SwerveModulePosition[] wheelPositions;
     private Pose2d initialPoseMeters;
 
-    public static SwerveDrivePoseEstimator poseEstimator;
+    public SwerveDrivePoseEstimator poseEstimator;
     
-    public TrackingSubsystem(
+    public TrackingSubsystem() {}
+
+    public void setValues(
         SwerveDriveKinematics kinematics,
         Rotation2d gyroAngle,
         SwerveModulePosition[] wheelPositions,
@@ -26,7 +28,7 @@ public class TrackingSubsystem extends SubsystemBase {
         this.wheelPositions = wheelPositions;
         this.initialPoseMeters = initialPoseMeters;
 
-        TrackingSubsystem.poseEstimator = new SwerveDrivePoseEstimator(this.kinematics, this.gyroAngle, this.wheelPositions, this.initialPoseMeters);
+        this.poseEstimator = new SwerveDrivePoseEstimator(this.kinematics, this.gyroAngle, this.wheelPositions, this.initialPoseMeters);
     }
 
     public Pose2d getEstimatedPose() {

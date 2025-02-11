@@ -5,9 +5,9 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -32,6 +32,7 @@ import frc.robot.Subsystems.FieldSubsystem;
 import frc.robot.Subsystems.TrackingSubsystem;
 import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -48,8 +49,6 @@ public class RobotContainer {
   private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
   private final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
   private final FieldSubsystem m_FieldSubsystem = new FieldSubsystem();
-
-  private TrackingSubsystem m_TrackingSubsystem;
   
   // Other objects
   private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
@@ -59,7 +58,9 @@ public class RobotContainer {
   );
 
   private SendableChooser<Command> autoChooser;
-  private AutoSubsystem m_AutoSubsystem;
+  private AutoSubsystem m_AutoSubsystem = new AutoSubsystem();
+
+  private TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -86,14 +87,15 @@ public class RobotContainer {
       autoChooser = AutoBuilder.buildAutoChooser();
       SmartDashboard.putData("Auto Chooser", autoChooser);
   
-      m_AutoSubsystem = new AutoSubsystem(autoChooser);
+      m_AutoSubsystem.setValues(autoChooser);
   
-      m_TrackingSubsystem = new TrackingSubsystem(
-        DriveConstants.kDriveKinematics,
-        m_robotDrive.getGryoAngle(),
-        m_robotDrive.getWheelPosition(),
-        m_AutoSubsystem.getInitPose()
-      );
+      //TODO: TEST
+      // m_TrackingSubsystem.setValues(
+      //   DriveConstants.kDriveKinematics,
+      //   m_robotDrive.getGryoAngle(),
+      //   m_robotDrive.getWheelPosition(),
+      //   m_AutoSubsystem.getInitPose()
+      // );
     }
 
   public void configureDefaultBindings() {
@@ -105,10 +107,11 @@ public class RobotContainer {
         () -> -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveStickDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveStickDeadband),
         () -> -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveStickDeadband),
-        () -> !m_driverController.getLeftBumperButton(),
+        () -> !m_driverController.getRightBumperButton(),
         () -> m_driverController.getLeftTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
         () -> m_driverController.getRightTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
-        () -> (double)m_driverController.getPOV()
+        () -> (double)m_driverController.getPOV(),
+        () -> m_driverController.getAButton()
         )
     );
 
@@ -122,14 +125,14 @@ public class RobotContainer {
     m_troughCoralOuttake.setDefaultCommand(
       new TeleopTroughCoralOuttake(
         m_troughCoralOuttake,
-        () -> m_armController.getRawButtonPressed(1) ? 1.0 : (m_armController.getRawButtonPressed(2) ? -1.0 : 0.0)
+        () -> m_armController.getRawButton(10) ? 0.25 : (m_armController.getRawButton(9) ? -0.25 : 0.0)
         )
     );
 
     m_branchCoralOuttake.setDefaultCommand(
       new TeleopBranchCoralOuttake(
         m_branchCoralOuttake,
-        () -> m_armController.getRawButtonPressed(3) ? 1.0 : 0.0
+        () -> m_armController.getRawButton(1) ? 1.0 : (m_armController.getRawButton(2) ? -1.0 : 0.0)
       )
     );
 
@@ -150,7 +153,7 @@ public class RobotContainer {
 
     m_FieldSubsystem.setDefaultCommand(
       new RunCommand(
-        () -> m_FieldSubsystem.updateRobotPose(TrackingSubsystem.poseEstimator.getEstimatedPosition()),
+        () -> m_FieldSubsystem.updateRobotPose(new Pose2d(0, 0, new Rotation2d(0))),
         m_FieldSubsystem
       )
     );
@@ -176,7 +179,7 @@ public class RobotContainer {
           )
         );
 
-    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kB.value)
         .whileTrue(
           new DriveToPose2d(
             m_TrackingSubsystem,
@@ -196,6 +199,7 @@ public class RobotContainer {
             () -> m_armController.getRawButtonReleased(4)
           )
         );
+
 
   }
 

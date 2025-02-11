@@ -61,7 +61,7 @@ public class RotateDriveToPoint extends Command{
         finalYSpeed = ySpeed.get();
         finalRot = MathUtil.clamp(rotatePidController.calculate(currentPos.get()), -0.5, 0.5);
 
-        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false);
+        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);
     }
 
     @Override

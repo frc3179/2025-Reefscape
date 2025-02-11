@@ -12,10 +12,10 @@ public class DriveSpeedSettings {
     }
 
     public double getFinalSpeed(double baseSpeed, boolean isFastMode, boolean isSlowMode) {
-        if (isFastMode) {
-            return fastSpeedPCT * baseSpeed;
-        } else if (isSlowMode) {
+        if (isSlowMode) {
             return slowSpeedPCT * baseSpeed;
+        } else if (isFastMode) {
+            return fastSpeedPCT * baseSpeed;
         }
         return defaultSpeedPCT * baseSpeed;
     }
@@ -38,7 +38,7 @@ public class DriveSpeedSettings {
         double radPOV = Math.toRadians(POV);
 
         res[0] = Math.cos(radPOV);
-        res[1] = Math.sin(radPOV);
+        res[1] = -Math.sin(radPOV);
 
         return res;
     }

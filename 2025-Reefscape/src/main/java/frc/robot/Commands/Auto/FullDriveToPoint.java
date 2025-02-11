@@ -89,7 +89,7 @@ public class FullDriveToPoint extends Command{
         finalYSpeed = MathUtil.clamp(strafePidController.calculate(strafeCurrentPos.get()), -0.5, 0.5);
         finalRot = MathUtil.clamp(rotatePidController.calculate(rotateCurrentPos.get()), -0.5, 0.5);
 
-        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false);
+        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);
     }
 
     @Override

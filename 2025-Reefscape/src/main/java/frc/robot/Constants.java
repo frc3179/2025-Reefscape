@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import org.ejml.simple.SimpleMatrix;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -32,15 +34,16 @@ public final class Constants {
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26.5);
+    public static final double kTrackWidth = Units.inchesToMeters(25.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26.5);
+    public static final double kWheelBase = Units.inchesToMeters(25.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
-        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
+        new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
+    );
 
     // Angular offsets of the modules relative to the chassis in radians
     public static final double kFrontLeftChassisAngularOffset = -Math.PI / 2;
@@ -134,13 +137,16 @@ public final class Constants {
     public static final double kElevatorEncoderOffset = 0.0;
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final Matrix<N3,N1> visionMeasurementStdDevs1 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+    public static final SimpleMatrix visionMeasurementStdDevs1Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
+    public static final Matrix<N3,N1> visionMeasurementStdDevs1 = new Matrix<N3, N1>(visionMeasurementStdDevs1Data);
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final Matrix<N3,N1> visionMeasurementStdDevs2 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+    public static final SimpleMatrix visionMeasurementStdDevs2Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
+    public static final Matrix<N3,N1> visionMeasurementStdDevs2 = new Matrix<N3,N1>(visionMeasurementStdDevs2Data);
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(null, null, new double[] {0.0, 0.0, 0.0});
+    public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
+    public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
     public static final String kReefLimelightName = "Reef Limelight";
     public static final String kTroughIntakeLimelightName = "Through Intake Limelight";
@@ -156,7 +162,13 @@ public final class Constants {
   public static final class ElevatorConstants {
     public static final int kLeftMotorPort = 10; 
     public static final int kRightMotorPort = 11;
-    public static final int kEncoderPort = 21;
+    public static final int kEncoderPort = 10;
+
+    public static final double kBottomEncoder = 0.0001;
+    //public static final double kBottomEncoder = -1000000000;
+    public static final double kTopEncoder = 5.4;
+    public static final double kMaxEncoderBeforeReset = 1.0;
+    public static final double kMaxThresholdForResetPercent = 0.9;
   }
 
   public static final class ThroughCoralOuttakeConstants {

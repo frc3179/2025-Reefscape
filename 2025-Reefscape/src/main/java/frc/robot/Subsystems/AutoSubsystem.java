@@ -1,13 +1,8 @@
 package frc.robot.Subsystems;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,7 +12,9 @@ public class AutoSubsystem extends SubsystemBase {
     SendableChooser<Command> autoChooser;
     private Pose2d startPose;
 
-    public AutoSubsystem(SendableChooser<Command> autoChooser) {
+    public AutoSubsystem() {}
+
+    public void setValues(SendableChooser<Command> autoChooser) {
         this.autoChooser = autoChooser;
     }
 
@@ -36,15 +33,15 @@ public class AutoSubsystem extends SubsystemBase {
     }
 
     //TODO: CHECK THIS
-    private Pose2d getInitPoseFromJSON(Path JSONpath) {
-        Trajectory trajectory = new Trajectory();
-        try {
-            trajectory = TrajectoryUtil.fromPathweaverJson(JSONpath);
-        } catch (IOException e) {
-            DriverStation.reportError("Unable to get Init Pose of Robot at: " + JSONpath, e.getStackTrace());
-        }
+    // private Pose2d getInitPoseFromJSON(Path JSONpath) {
+    //     Trajectory trajectory = new Trajectory();
+    //     try {
+    //         trajectory = TrajectoryUtil.fromPathweaverJson(JSONpath);
+    //     } catch (IOException e) {
+    //         DriverStation.reportError("Unable to get Init Pose of Robot at: " + JSONpath, e.getStackTrace());
+    //     }
 
-        return trajectory.getInitialPose();
-    }
+    //     return trajectory.getInitialPose();
+    // }
 
 }

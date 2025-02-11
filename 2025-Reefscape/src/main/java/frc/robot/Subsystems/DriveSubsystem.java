@@ -145,7 +145,12 @@ public class DriveSubsystem extends SubsystemBase {
      * @param fieldRelative Whether the provided x and y speeds are relative to the
      *                      field.
      */
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean gyroReset) {
+      if (gyroReset) {
+        m_gyro.reset();
+      }
+
+
       // Convert the commanded speeds into the correct units for the drivetrain
       double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
       double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
@@ -154,7 +159,7 @@ public class DriveSubsystem extends SubsystemBase {
       var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
           fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                  Rotation2d.fromDegrees(m_gyro.getAngle()))
+                  Rotation2d.fromDegrees(-m_gyro.getAngle()))
               : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
       SwerveDriveKinematics.desaturateWheelSpeeds(
           swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);

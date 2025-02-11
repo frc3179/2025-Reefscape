@@ -12,7 +12,11 @@ public class BranchCoralOuttakeSubsystem extends SubsystemBase {
     private SparkMax branchMotor = new SparkMax(BranchCoralOuttakeConstants.kBranchCoralOuttakeMotorPort, MotorType.kBrushless);
 
     public BranchCoralOuttakeSubsystem() {
-        branchMotor.configure(BranchCoralOuttakeConfig.branchMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        branchMotor.configure(
+            BranchCoralOuttakeConfig.branchMotorConfig,
+            ResetMode.kResetSafeParameters,
+            PersistMode.kPersistParameters
+        );
     }
 
     public void setSpeed(double speed) {
