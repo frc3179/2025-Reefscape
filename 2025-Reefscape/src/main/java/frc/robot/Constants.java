@@ -125,16 +125,27 @@ public final class Constants {
     public static final double kDriveDriveI = 0.0;
     public static final double kDriveDriveD = 0.0;
 
-    public static final double kElevatorP = 0.0;
-    public static final double kElevatorI = 0.0;
-    public static final double kElevatorD = 0.0;
+    public static final double kElevatorL2P = 1.0;
+    public static final double kElevatorL2I = 0.2;
+    public static final double kElevatorL2D = 0.01;
+
+    public static final double kElevatorL3P = 1.0;
+    public static final double kElevatorL3I = 0.08;
+    public static final double kElevatorL3D = 0.08;
+
+    public static final double kElevatorL4P = 1.0;
+    public static final double kElevatorL4I = 0.05;
+    public static final double kElevatorL4D = 0.05;
 
     public static final double kThroughCoralOuttakeP = 0.0;
     public static final double kThroughCoralOuttakeI = 0.0;
     public static final double kThroughCoralOuttakeD = 0.0;
 
     public static final double kElevatorEncoderIntakePosition = 0.0;
-    public static final double kElevatorEncoderOffset = 0.0;
+    public static final double kElevatorEncoderL2Position = 1.75;
+    public static final double kElevatorEncoderL3Position = 3.2;
+    public static final double kElevatorEncoderL4Position = 5.4;
+    public static final double kElevatorEncoderOffset = 0.001;
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
     public static final SimpleMatrix visionMeasurementStdDevs1Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});

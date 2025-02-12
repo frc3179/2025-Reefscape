@@ -18,13 +18,19 @@ public class ElevatorMoveToPoint extends Command {
     double finalSpeed;
 
     private PIDController elevatorPidController;
+    private double P;
+    private double I;
+    private double D;
     
     public ElevatorMoveToPoint(
             ElevatorSubsystem m_elevator,
             double goalPos,
             Supplier<Double> currentPos,
             double errOffset,
-            Supplier<Boolean> interupt
+            Supplier<Boolean> interupt,
+            double P,
+            double I,
+            double D
         ) {
 
         this.m_elevator = m_elevator;
@@ -34,7 +40,11 @@ public class ElevatorMoveToPoint extends Command {
         this.errOffset = errOffset;
         this.interupt = interupt;
 
-        elevatorPidController = new PIDController(TrackingConstants.kElevatorP, TrackingConstants.kElevatorI, TrackingConstants.kElevatorD);
+        this.P = P;
+        this.I = I;
+        this.D = D;
+
+        elevatorPidController = new PIDController(this.P, this.I, this.D);
         elevatorPidController.setSetpoint(this.goalPos);
         elevatorPidController.setTolerance(this.errOffset);
 

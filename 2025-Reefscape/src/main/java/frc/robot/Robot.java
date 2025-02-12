@@ -8,9 +8,11 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.TrackingConstants;
 import frc.robot.Subsystems.TrackingSubsystem;
 
 public class Robot extends TimedRobot {
@@ -26,6 +28,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    //SmartDashboard.putNumber("Goal Elevator Pose", TrackingConstants.kElevatorEncoderL3Position);
   }
 
   @Override

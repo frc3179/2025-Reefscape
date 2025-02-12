@@ -188,19 +188,47 @@ public class RobotContainer {
             () -> m_driverController.getAButtonReleased()
           )
         );
-    
-    new JoystickButton(m_armController, 4)
+    new JoystickButton(m_armController, 11)
         .whileTrue(
           new ElevatorMoveToPoint(
             m_elevator,
-            TrackingConstants.kElevatorEncoderIntakePosition,
+            TrackingConstants.kElevatorEncoderL2Position,
             () -> m_elevator.getEncoder(),
             TrackingConstants.kElevatorEncoderOffset,
-            () -> m_armController.getRawButtonReleased(4)
+            () -> m_armController.getRawButtonReleased(4),
+            TrackingConstants.kElevatorL2P,
+            TrackingConstants.kElevatorL2I,
+            TrackingConstants.kElevatorL2D
           )
         );
 
-
+    new JoystickButton(m_armController, 12)
+        .whileTrue(
+          new ElevatorMoveToPoint(
+            m_elevator,
+            TrackingConstants.kElevatorEncoderL3Position,
+            () -> m_elevator.getEncoder(),
+            TrackingConstants.kElevatorEncoderOffset,
+            () -> m_armController.getRawButtonReleased(4),
+            TrackingConstants.kElevatorL3P,
+            TrackingConstants.kElevatorL3I,
+            TrackingConstants.kElevatorL3D
+          )
+        );
+    
+    new JoystickButton(m_armController, 6)
+        .whileTrue(
+          new ElevatorMoveToPoint(
+            m_elevator,
+            TrackingConstants.kElevatorEncoderL4Position,
+            () -> m_elevator.getEncoder(),
+            TrackingConstants.kElevatorEncoderOffset,
+            () -> m_armController.getRawButtonReleased(4),
+            TrackingConstants.kElevatorL4P,
+            TrackingConstants.kElevatorL4I,
+            TrackingConstants.kElevatorL4D
+          )
+        );
   }
 
   /**
