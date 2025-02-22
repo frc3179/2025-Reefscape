@@ -63,7 +63,6 @@ public class TeleopTracking extends Command {
 
     @Override
     public void execute() {
-        //TOD: FIX
         LimelightHelpers.SetRobotOrientation(
             limelightName1,
             m_TrackingSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
@@ -75,6 +74,7 @@ public class TeleopTracking extends Command {
         );
 
         LimelightHelpers.PoseEstimate limelight1 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName1);
+        
         if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         {
             doRejectUpdate1 = true;

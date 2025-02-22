@@ -143,27 +143,27 @@ public class RobotContainer {
       )
     );
 
-    // m_TrackingSubsystem.setDefaultCommand(
-    //   new TeleopTracking(
-    //     m_TrackingSubsystem,
-    //     TrackingConstants.kReefLimelightName,
-    //     TrackingConstants.kReefLimelightName,
-    //     TrackingConstants.kReefLimelightName,
-    //     () -> m_robotDrive.getGryoAngle(),
-    //     () -> m_robotDrive.getWheelPosition(),
-    //     () -> m_robotDrive.getGryoRate(),
-    //     TrackingConstants.visionMeasurementStdDevs1,
-    //     TrackingConstants.visionMeasurementStdDevs2,
-    //     TrackingConstants.visionMeasurementStdDevs3
-    //   )
-    // );
+    m_TrackingSubsystem.setDefaultCommand(
+      new TeleopTracking(
+        m_TrackingSubsystem,
+        TrackingConstants.kReefLimelightName,
+        TrackingConstants.kReefLimelightName,
+        TrackingConstants.kReefLimelightName,
+        () -> m_robotDrive.getGryoAngle(),
+        () -> m_robotDrive.getWheelPosition(),
+        () -> m_robotDrive.getGryoRate(),
+        TrackingConstants.visionMeasurementStdDevs1,
+        TrackingConstants.visionMeasurementStdDevs2,
+        TrackingConstants.visionMeasurementStdDevs3
+      )
+    );
 
-    // m_FieldSubsystem.setDefaultCommand(
-    //   new RunCommand(
-    //     () -> m_FieldSubsystem.updateRobotPose(m_AutoSubsystem.getInitPose()),
-    //     m_FieldSubsystem
-    //   )
-    // );
+    m_FieldSubsystem.setDefaultCommand(
+      new RunCommand(
+        () -> m_TrackingSubsystem.poseEstimator.getEstimatedPosition(),
+        m_FieldSubsystem
+      )
+    );
     
 
     m_algaeSubsystem.setDefaultCommand(

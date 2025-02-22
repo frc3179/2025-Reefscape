@@ -159,9 +159,9 @@ public final class Constants {
     public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
-    public static final String kReefLimelightName = "reef";
-    public static final String kTroughIntakeLimelightName = "through";
-    public static final String kBranchIntakeLimelightName = "branch";
+    public static final String kReefLimelightName = "limelight-reef";
+    public static final String kTroughIntakeLimelightName = "limelight-through";
+    public static final String kBranchIntakeLimelightName = "limelight-branch";
   }
 
   public static final class SpeedSettingsConstants {
