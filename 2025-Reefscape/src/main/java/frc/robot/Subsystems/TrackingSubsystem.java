@@ -28,7 +28,12 @@ public class TrackingSubsystem extends SubsystemBase {
         this.wheelPositions = wheelPositions;
         this.initialPoseMeters = initialPoseMeters;
 
-        this.poseEstimator = new SwerveDrivePoseEstimator(this.kinematics, this.gyroAngle, this.wheelPositions, this.initialPoseMeters);
+        this.poseEstimator = new SwerveDrivePoseEstimator(
+            this.kinematics,
+            this.gyroAngle,
+            this.wheelPositions,
+            this.initialPoseMeters
+        );
     }
 
     public Pose2d getEstimatedPose() {

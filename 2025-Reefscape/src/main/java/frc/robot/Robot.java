@@ -6,14 +6,10 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
 
-import edu.wpi.first.wpilibj.Preferences;
+import au.grapplerobotics.CanBridge;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.TrackingConstants;
-import frc.robot.Subsystems.TrackingSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -22,7 +18,8 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
-    FollowPathCommand.warmupCommand().schedule(); //TODO: I THINK THIS IS HOW YOU DO THIS
+    FollowPathCommand.warmupCommand().schedule();
+    CanBridge.runTCP();
   }
 
   @Override

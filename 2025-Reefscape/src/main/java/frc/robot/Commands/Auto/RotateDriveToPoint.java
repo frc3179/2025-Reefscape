@@ -59,7 +59,8 @@ public class RotateDriveToPoint extends Command{
     public void execute() {
         finalXSpeed = xSpeed.get();
         finalYSpeed = ySpeed.get();
-        finalRot = MathUtil.clamp(rotatePidController.calculate(currentPos.get()), -0.5, 0.5);
+        //finalRot = MathUtil.clamp(rotatePidController.calculate(currentPos.get()), -1, 1);
+        finalRot = rotatePidController.calculate(currentPos.get());
 
         m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);
     }

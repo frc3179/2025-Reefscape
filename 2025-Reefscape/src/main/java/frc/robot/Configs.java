@@ -76,7 +76,7 @@ public final class Configs {
 
         static {
                 troughMotorConfig
-                        .inverted(true)
+                        .inverted(false)
                         .idleMode(IdleMode.kBrake);
 
                 troughMotorConfig.absoluteEncoder
@@ -90,6 +90,21 @@ public final class Configs {
         static {
                 branchMotorConfig
                         .inverted(true)
+                        .idleMode(IdleMode.kBrake);
+        }
+    }
+
+    public static final class AlgaeSubsystemConfig {
+        public static final SparkMaxConfig inOutTakeMotorConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig wristMotorConfig = new SparkMaxConfig();
+
+        static {
+                inOutTakeMotorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+
+                wristMotorConfig
+                        .inverted(false)
                         .idleMode(IdleMode.kBrake);
         }
     }

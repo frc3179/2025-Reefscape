@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Commands.Auto.DriveToPose2d;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
+import frc.robot.Commands.Auto.RotateDriveToPoint;
+import frc.robot.Commands.Teleop.TeleopAlgae;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
@@ -24,6 +26,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpeedSettingsConstants;
 import frc.robot.Constants.TrackingConstants;
 import frc.robot.SpeedSettings.DriveSpeedSettings;
+import frc.robot.Subsystems.AlgaeInOutTakeSubsystem;
+import frc.robot.Subsystems.AlgaeSubsystem;
+import frc.robot.Subsystems.AlgaeWristSubsystem;
 import frc.robot.Subsystems.AutoSubsystem;
 import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
@@ -32,7 +37,6 @@ import frc.robot.Subsystems.FieldSubsystem;
 import frc.robot.Subsystems.TrackingSubsystem;
 import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -49,6 +53,9 @@ public class RobotContainer {
   private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
   private final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
   private final FieldSubsystem m_FieldSubsystem = new FieldSubsystem();
+  private final AlgaeInOutTakeSubsystem m_AlgaeInOutTakeSubsystem = new AlgaeInOutTakeSubsystem();
+  private final AlgaeWristSubsystem m_AlgaeWristSubsystem = new AlgaeWristSubsystem();
+  private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem(m_AlgaeInOutTakeSubsystem, m_AlgaeWristSubsystem);
   
   // Other objects
   private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
@@ -90,12 +97,12 @@ public class RobotContainer {
       m_AutoSubsystem.setValues(autoChooser);
   
       //TODO: TEST
-      // m_TrackingSubsystem.setValues(
-      //   DriveConstants.kDriveKinematics,
-      //   m_robotDrive.getGryoAngle(),
-      //   m_robotDrive.getWheelPosition(),
-      //   m_AutoSubsystem.getInitPose()
-      // );
+      m_TrackingSubsystem.setValues(
+        DriveConstants.kDriveKinematics,
+        m_robotDrive.getGryoAngle(),
+        m_robotDrive.getWheelPosition(),
+        m_AutoSubsystem.getInitPose()
+      );
     }
 
   public void configureDefaultBindings() {
@@ -136,25 +143,34 @@ public class RobotContainer {
       )
     );
 
-    m_TrackingSubsystem.setDefaultCommand(
-      new TeleopTracking(
-        m_TrackingSubsystem,
-        TrackingConstants.kTroughIntakeLimelightName,
-        TrackingConstants.kBranchIntakeLimelightName,
-        TrackingConstants.kReefLimelightName,
-        () -> m_robotDrive.getGryoAngle(),
-        () -> m_robotDrive.getWheelPosition(),
-        () -> m_robotDrive.getGryoRate(),
-        TrackingConstants.visionMeasurementStdDevs1,
-        TrackingConstants.visionMeasurementStdDevs2,
-        TrackingConstants.visionMeasurementStdDevs3
-      )
-    );
+    // m_TrackingSubsystem.setDefaultCommand(
+    //   new TeleopTracking(
+    //     m_TrackingSubsystem,
+    //     TrackingConstants.kReefLimelightName,
+    //     TrackingConstants.kReefLimelightName,
+    //     TrackingConstants.kReefLimelightName,
+    //     () -> m_robotDrive.getGryoAngle(),
+    //     () -> m_robotDrive.getWheelPosition(),
+    //     () -> m_robotDrive.getGryoRate(),
+    //     TrackingConstants.visionMeasurementStdDevs1,
+    //     TrackingConstants.visionMeasurementStdDevs2,
+    //     TrackingConstants.visionMeasurementStdDevs3
+    //   )
+    // );
 
-    m_FieldSubsystem.setDefaultCommand(
-      new RunCommand(
-        () -> m_FieldSubsystem.updateRobotPose(new Pose2d(0, 0, new Rotation2d(0))),
-        m_FieldSubsystem
+    // m_FieldSubsystem.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> m_FieldSubsystem.updateRobotPose(m_AutoSubsystem.getInitPose()),
+    //     m_FieldSubsystem
+    //   )
+    // );
+    
+
+    m_algaeSubsystem.setDefaultCommand(
+      new TeleopAlgae(
+        m_algaeSubsystem,
+        () -> m_armController.getRawButton(5) ? 1.0 : (m_armController.getRawButton(3) ? -1.0 : 0.0), //In Out Take Speed
+        () -> m_armController.getRawButton(7) ? 0.3 : (m_armController.getRawButton(8) ? -0.3 : 0.0) //Wrist speed
       )
     );
 
@@ -195,7 +211,7 @@ public class RobotContainer {
             TrackingConstants.kElevatorEncoderL2Position,
             () -> m_elevator.getEncoder(),
             TrackingConstants.kElevatorEncoderOffset,
-            () -> m_armController.getRawButtonReleased(4),
+            () -> m_armController.getRawButtonReleased(11),
             TrackingConstants.kElevatorL2P,
             TrackingConstants.kElevatorL2I,
             TrackingConstants.kElevatorL2D
@@ -209,7 +225,7 @@ public class RobotContainer {
             TrackingConstants.kElevatorEncoderL3Position,
             () -> m_elevator.getEncoder(),
             TrackingConstants.kElevatorEncoderOffset,
-            () -> m_armController.getRawButtonReleased(4),
+            () -> m_armController.getRawButtonReleased(12),
             TrackingConstants.kElevatorL3P,
             TrackingConstants.kElevatorL3I,
             TrackingConstants.kElevatorL3D
@@ -223,7 +239,7 @@ public class RobotContainer {
             TrackingConstants.kElevatorEncoderL4Position,
             () -> m_elevator.getEncoder(),
             TrackingConstants.kElevatorEncoderOffset,
-            () -> m_armController.getRawButtonReleased(4),
+            () -> m_armController.getRawButtonReleased(6),
             TrackingConstants.kElevatorL4P,
             TrackingConstants.kElevatorL4I,
             TrackingConstants.kElevatorL4D

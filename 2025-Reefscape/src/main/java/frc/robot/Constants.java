@@ -117,7 +117,7 @@ public final class Constants {
     public static final double kStrafeDriveI = 0.0;
     public static final double kStrafeDriveD = 0.0;
 
-    public static final double kRotateDriveP = 0.0;
+    public static final double kRotateDriveP = 0.2;
     public static final double kRotateDriveI = 0.0;
     public static final double kRotateDriveD = 0.0;
 
@@ -159,9 +159,9 @@ public final class Constants {
     public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
-    public static final String kReefLimelightName = "Reef Limelight";
-    public static final String kTroughIntakeLimelightName = "Through Intake Limelight";
-    public static final String kBranchIntakeLimelightName = "Branch Intake Limelight";
+    public static final String kReefLimelightName = "reef";
+    public static final String kTroughIntakeLimelightName = "through";
+    public static final String kBranchIntakeLimelightName = "branch";
   }
 
   public static final class SpeedSettingsConstants {
@@ -188,5 +188,13 @@ public final class Constants {
 
   public static final class BranchCoralOuttakeConstants {
     public static final int kBranchCoralOuttakeMotorPort = 19;
+
+    public static final int kFrontLaserCanPort = 20;
+    public static final int kBackLaserCanPort = 21;
+  }
+
+  public static final class AlgaeSubsystemConstants {
+    public static final int kInOutTakeMotorPort = 23;
+    public static final int kWristMotorPort = 22;
   }
 }

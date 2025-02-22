@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.TrackingConstants;
 import frc.robot.Subsystems.ElevatorSubsystem;
 
 public class ElevatorMoveToPoint extends Command {
@@ -58,7 +57,7 @@ public class ElevatorMoveToPoint extends Command {
 
     @Override
     public void execute() {
-        finalSpeed = MathUtil.clamp(elevatorPidController.calculate(currentPos.get()), -0.5, 0.5); //TODO: change the speed
+        finalSpeed = MathUtil.clamp(elevatorPidController.calculate(currentPos.get()), -0.5, 0.5);
 
         m_elevator.setElevatorSpeed(finalSpeed);
     }

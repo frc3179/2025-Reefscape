@@ -64,95 +64,95 @@ public class TeleopTracking extends Command {
     @Override
     public void execute() {
         //TOD: FIX
-        // LimelightHelpers.SetRobotOrientation(
-        //     limelightName1,
-        //     m_TrackingSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-        //     0,
-        //     0,
-        //     0,
-        //     0,
-        //     0
-        // );
+        LimelightHelpers.SetRobotOrientation(
+            limelightName1,
+            m_TrackingSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+            0,
+            0,
+            0,
+            0,
+            0
+        );
 
         LimelightHelpers.PoseEstimate limelight1 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName1);
-        // if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        // {
-        //     doRejectUpdate1 = true;
-        // }
-        // if(limelight1.tagCount == 0)
-        // {
-        //     doRejectUpdate1 = true;
-        // }
-        // if(!doRejectUpdate1)
-        // {
-        //     m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight1VisionMeasurementStdDevs);
-        //     m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-        //         limelight1.pose,
-        //         limelight1.timestampSeconds
-        //     );
-        // }
+        if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            doRejectUpdate1 = true;
+        }
+        if(limelight1.tagCount == 0)
+        {
+            doRejectUpdate1 = true;
+        }
+        if(!doRejectUpdate1)
+        {
+            m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight1VisionMeasurementStdDevs);
+            m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
+                limelight1.pose,
+                limelight1.timestampSeconds
+            );
+        }
 
 
-        // LimelightHelpers.SetRobotOrientation(
-        //     limelightName2,
-        //     m_TrackingSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-        //     0,
-        //     0,
-        //     0,
-        //     0,
-        //     0
-        // );
+        LimelightHelpers.SetRobotOrientation(
+            limelightName2,
+            m_TrackingSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+            0,
+            0,
+            0,
+            0,
+            0
+        );
 
-        // LimelightHelpers.PoseEstimate limelight2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName2);
-        // if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        // {
-        //     doRejectUpdate2 = true;
-        // }
-        // if(limelight2.tagCount == 0)
-        // {
-        //     doRejectUpdate2 = true;
-        // }
-        // if(!doRejectUpdate2)
-        // {
-        //     m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight2VisionMeasurementStdDevs);
-        //     m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-        //         limelight1.pose,
-        //         limelight1.timestampSeconds
-        //     );
-        // }
+        LimelightHelpers.PoseEstimate limelight2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName2);
+        if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            doRejectUpdate2 = true;
+        }
+        if(limelight2.tagCount == 0)
+        {
+            doRejectUpdate2 = true;
+        }
+        if(!doRejectUpdate2)
+        {
+            m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight2VisionMeasurementStdDevs);
+            m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
+                limelight1.pose,
+                limelight1.timestampSeconds
+            );
+        }
 
 
-        // LimelightHelpers.SetRobotOrientation(
-        //     limelightName3,
-        //     m_TrackingSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
-        //     0,
-        //     0,
-        //     0,
-        //     0,
-        //     0
-        // );
+        LimelightHelpers.SetRobotOrientation(
+            limelightName3,
+            m_TrackingSubsystem.poseEstimator.getEstimatedPosition().getRotation().getDegrees(),
+            0,
+            0,
+            0,
+            0,
+            0
+        );
 
-        // LimelightHelpers.PoseEstimate limelight3 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName3);
-        // if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        // {
-        //     doRejectUpdate3 = true;
-        // }
-        // if(limelight3.tagCount == 0)
-        // {
-        //     doRejectUpdate3 = true;
-        // }
-        // if(!doRejectUpdate3)
-        // {
-        //     m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight3VisionMeasurementStdDevs);
-        //     m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-        //         limelight1.pose,
-        //         limelight1.timestampSeconds
-        //     );
-        // }
+        LimelightHelpers.PoseEstimate limelight3 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName3);
+        if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            doRejectUpdate3 = true;
+        }
+        if(limelight3.tagCount == 0)
+        {
+            doRejectUpdate3 = true;
+        }
+        if(!doRejectUpdate3)
+        {
+            m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight3VisionMeasurementStdDevs);
+            m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
+                limelight1.pose,
+                limelight1.timestampSeconds
+            );
+        }
 
 
         
-        // m_TrackingSubsystem.poseEstimator.update(gryoAngle.get(), wheelPositions.get());
+        m_TrackingSubsystem.poseEstimator.update(gryoAngle.get(), wheelPositions.get());
     }
 
     @Override
