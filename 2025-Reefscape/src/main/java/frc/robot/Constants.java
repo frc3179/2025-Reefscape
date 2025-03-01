@@ -113,7 +113,7 @@ public final class Constants {
   }
 
   public static final class TrackingConstants {
-    public static final double kStrafeDriveP = 0.0;
+    public static final double kStrafeDriveP = 5.0;
     public static final double kStrafeDriveI = 0.0;
     public static final double kStrafeDriveD = 0.0;
 
@@ -121,7 +121,7 @@ public final class Constants {
     public static final double kRotateDriveI = 0.0;
     public static final double kRotateDriveD = 0.0;
 
-    public static final double kDriveDriveP = 0.0;
+    public static final double kDriveDriveP = 5.0;
     public static final double kDriveDriveI = 0.0;
     public static final double kDriveDriveD = 0.0;
 
@@ -146,6 +146,9 @@ public final class Constants {
     public static final double kElevatorEncoderL3Position = 3.2;
     public static final double kElevatorEncoderL4Position = 5.4;
     public static final double kElevatorEncoderOffset = 0.001;
+
+    public static final double kThroughCoralOuttakeIntakePos = 0.0;
+    public static final double kThroughCoralOutakeScoringPos = 1.0;
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
     public static final SimpleMatrix visionMeasurementStdDevs1Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
@@ -175,9 +178,10 @@ public final class Constants {
     public static final int kRightMotorPort = 11;
     public static final int kEncoderPort = 10;
 
-    public static final double kBottomEncoder = 0.0001;
-    //public static final double kBottomEncoder = -1000000000;
-    public static final double kTopEncoder = 5.4;
+    //public static final double kBottomEncoder = 0.0001;
+    public static final double kBottomEncoder = -1000000000;
+    //public static final double kTopEncoder = 5.4;
+    public static final double kTopEncoder = 100000000;
     public static final double kMaxEncoderBeforeReset = 1.0;
     public static final double kMaxThresholdForResetPercent = 0.9;
   }
@@ -196,5 +200,9 @@ public final class Constants {
   public static final class AlgaeSubsystemConstants {
     public static final int kInOutTakeMotorPort = 23;
     public static final int kWristMotorPort = 22;
+  }
+
+  public static final class LightSubsystemConstants {
+    public static final int kBlinkinPort = 0;
   }
 }

@@ -106,6 +106,9 @@ public final class Configs {
                 wristMotorConfig
                         .inverted(false)
                         .idleMode(IdleMode.kBrake);
+                
+                wristMotorConfig.absoluteEncoder
+                        .inverted(false);
         }
     }
 }

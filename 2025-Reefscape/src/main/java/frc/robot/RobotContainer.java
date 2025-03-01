@@ -6,22 +6,23 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Commands.Auto.DriveToPose2d;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
-import frc.robot.Commands.Auto.RotateDriveToPoint;
+import frc.robot.Commands.Auto.ThroughCoralOuttakeToPoint;
 import frc.robot.Commands.Teleop.TeleopAlgae;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
+import frc.robot.Commands.Teleop.TeleopLights;
 import frc.robot.Commands.Teleop.TeleopTracking;
 import frc.robot.Commands.Teleop.TeleopTroughCoralOuttake;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.LightSubsystemConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SpeedSettingsConstants;
 import frc.robot.Constants.TrackingConstants;
@@ -34,10 +35,12 @@ import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.ElevatorSubsystem;
 import frc.robot.Subsystems.FieldSubsystem;
+import frc.robot.Subsystems.LightSubsystem;
 import frc.robot.Subsystems.TrackingSubsystem;
 import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /*
@@ -56,6 +59,7 @@ public class RobotContainer {
   private final AlgaeInOutTakeSubsystem m_AlgaeInOutTakeSubsystem = new AlgaeInOutTakeSubsystem();
   private final AlgaeWristSubsystem m_AlgaeWristSubsystem = new AlgaeWristSubsystem();
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem(m_AlgaeInOutTakeSubsystem, m_AlgaeWristSubsystem);
+  private final LightSubsystem m_lightSubsystem = new LightSubsystem(LightSubsystemConstants.kBlinkinPort);
   
   // Other objects
   private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
@@ -169,8 +173,16 @@ public class RobotContainer {
     m_algaeSubsystem.setDefaultCommand(
       new TeleopAlgae(
         m_algaeSubsystem,
-        () -> m_armController.getRawButton(5) ? 1.0 : (m_armController.getRawButton(3) ? -1.0 : 0.0), //In Out Take Speed
+        () -> m_armController.getRawButton(3) ? 1.0 : (m_armController.getRawButton(5) ? -1.0 : 0.0), //In Out Take Speed
         () -> m_armController.getRawButton(7) ? 0.3 : (m_armController.getRawButton(8) ? -0.3 : 0.0) //Wrist speed
+      )
+    );
+
+
+    m_lightSubsystem.setDefaultCommand(
+      new TeleopLights(
+        m_lightSubsystem,
+        () -> m_lightSubsystem.laserCanToColor(m_branchCoralOuttake.getLaserCanMeasurments()[0], m_branchCoralOuttake.getLaserCanMeasurments()[1])
       )
     );
 
@@ -189,9 +201,17 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kX.value)
         .whileTrue(
-          new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive
+          new SequentialCommandGroup(
+            new RunCommand(
+              () -> m_robotDrive.setX(),
+              m_robotDrive
+            ),
+
+            new RunCommand(
+              () -> m_driverController.setRumble(RumbleType.kBothRumble, 1),
+              null
+            )
+            
           )
         );
 
@@ -204,6 +224,7 @@ public class RobotContainer {
             () -> m_driverController.getAButtonReleased()
           )
         );
+
     new JoystickButton(m_armController, 11)
         .whileTrue(
           new ElevatorMoveToPoint(
@@ -245,6 +266,35 @@ public class RobotContainer {
             TrackingConstants.kElevatorL4D
           )
         );
+
+    new JoystickButton(m_armController, 4)
+        .whileTrue(
+          new ThroughCoralOuttakeToPoint(
+            m_troughCoralOuttake,
+            TrackingConstants.kThroughCoralOuttakeIntakePos,
+            () -> m_troughCoralOuttake.getEncoder(),
+            0.1,
+            () -> !m_armController.getRawButton(4)
+          )
+        );
+
+    
+    // new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kY.value)
+    //     .whileTrue(
+    //       new FullDriveToPoint(
+    //         m_robotDrive,
+    //         10.24,
+    //         () -> 10.24,
+    //         0.05,
+    //         2.27,
+    //         () -> 2.27,//() -> LimelightHelpers.getTA(TrackingConstants.kReefLimelightName),
+    //         0.05,
+    //         -12.94,
+    //         () -> LimelightHelpers.getTY(TrackingConstants.kReefLimelightName),
+    //         0.05,
+    //         () -> !m_driverController.getYButton()
+    //       )
+    //     );
   }
 
   /**

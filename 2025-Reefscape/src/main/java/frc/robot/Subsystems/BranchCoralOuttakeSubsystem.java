@@ -16,6 +16,8 @@ public class BranchCoralOuttakeSubsystem extends SubsystemBase {
     private LaserCan frontLaserCan;
     private LaserCan backLaserCan;
 
+    public static final int LC_NULL = -999999999;
+
     public BranchCoralOuttakeSubsystem() {
         branchMotor.configure(
             BranchCoralOuttakeConfig.branchMotorConfig,
@@ -44,24 +46,35 @@ public class BranchCoralOuttakeSubsystem extends SubsystemBase {
         return finalMeasurement;
     }
 
+    /**
+     * 
+     * @return [front, back]
+     */
+    public int[] getLaserCanMeasurments() {
+        int[] res = new int[2];
+        LaserCan.Measurement[] lc = getLaserCanValues();
+        if (lc[0].status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+            res[0] = lc[0].distance_mm;
+        } else {
+            res[0] = BranchCoralOuttakeSubsystem.LC_NULL;
+        }
+
+
+        if (lc[1].status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+            res[1] = lc[1].distance_mm;
+        } else {
+            res[1] = BranchCoralOuttakeSubsystem.LC_NULL;
+        }
+
+
+        return res;
+    }
+
     @Override
     public void periodic() {
-        LaserCan.Measurement[] laserCanValues = getLaserCanValues();
+        int[] laserCanMeasurments = getLaserCanMeasurments();
 
-
-        if (laserCanValues[0] != null && laserCanValues[0].status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-            SmartDashboard.putNumber("Front Laser Can MM", laserCanValues[0].distance_mm);
-        } else {
-            SmartDashboard.putNumber("Front Laser Can MM", -999);
-            // You can still use distance_mm in here, if you're ok tolerating a clamped value or an unreliable measurement.
-        }
-
-
-        if (laserCanValues[1] != null && laserCanValues[1].status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-            SmartDashboard.putNumber("Back Laser Can MM", laserCanValues[1].distance_mm);
-        } else {
-            SmartDashboard.putNumber("Back Laser Can MM", -999);
-            // You can still use distance_mm in here, if you're ok tolerating a clamped value or an unreliable measurement.
-        }
+        SmartDashboard.putNumber("Front Laser Can MM", laserCanMeasurments[0]);
+        SmartDashboard.putNumber("Back Laser Can MM", laserCanMeasurments[1]);
     }
 }

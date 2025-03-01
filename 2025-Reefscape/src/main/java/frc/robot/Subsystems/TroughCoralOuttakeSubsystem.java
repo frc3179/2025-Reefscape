@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.ThroughCoralOuttakeConstants;
@@ -38,5 +39,10 @@ public class TroughCoralOuttakeSubsystem extends SubsystemBase {
      */
     public double getEncoder() {
         return troughEncoder.getPosition();
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Through Coral Outtake Encoder", getEncoder());
     }
 }

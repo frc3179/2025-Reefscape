@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
             PersistMode.kPersistParameters
         );
 
-        elevatorEncoder = leftMotor.getAbsoluteEncoder();
+        elevatorEncoder = rightMotor.getAbsoluteEncoder();
 
         lastEncoderPosition = 0.0;
         rotationCount = 0.0;
@@ -59,20 +59,21 @@ public class ElevatorSubsystem extends SubsystemBase {
      * @return the Encoder value of the elevator encoder
      */
     public double getEncoder() {
-        if (
-            elevatorEncoder.getPosition() < lastEncoderPosition &&
-            (lastEncoderPosition - elevatorEncoder.getPosition()) > ElevatorConstants.kMaxThresholdForResetPercent
-        ) {
-            rotationCount += 1;
-        } else if (
-            elevatorEncoder.getPosition() > lastEncoderPosition && 
-            (elevatorEncoder.getPosition() - lastEncoderPosition) > ElevatorConstants.kMaxThresholdForResetPercent
-        ) {
-            rotationCount -= 1;
-        }
+        // if (
+        //     elevatorEncoder.getPosition() < lastEncoderPosition &&
+        //     (lastEncoderPosition - elevatorEncoder.getPosition()) > ElevatorConstants.kMaxThresholdForResetPercent
+        // ) {
+        //     rotationCount += 1;
+        // } else if (
+        //     elevatorEncoder.getPosition() > lastEncoderPosition && 
+        //     (elevatorEncoder.getPosition() - lastEncoderPosition) > ElevatorConstants.kMaxThresholdForResetPercent
+        // ) {
+        //     rotationCount -= 1;
+        // }
 
-        lastEncoderPosition = elevatorEncoder.getPosition();
-        return elevatorEncoder.getPosition() + (rotationCount * ElevatorConstants.kMaxEncoderBeforeReset);
+        // lastEncoderPosition = elevatorEncoder.getPosition();
+        // return elevatorEncoder.getPosition() + (rotationCount * ElevatorConstants.kMaxEncoderBeforeReset);
+        return elevatorEncoder.getPosition();
     }
 
     @Override

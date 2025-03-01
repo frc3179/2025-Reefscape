@@ -97,7 +97,7 @@ public class FullDriveToPoint extends Command{
 
     @Override
     public boolean isFinished() {
-        if (drivePidController.atSetpoint()) {
+        if (drivePidController.atSetpoint() && strafePidController.atSetpoint() && rotatePidController.atSetpoint()) {
             return true;
         }
 

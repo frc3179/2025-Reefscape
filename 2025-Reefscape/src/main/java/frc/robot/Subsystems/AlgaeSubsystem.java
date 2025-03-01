@@ -1,5 +1,6 @@
 package frc.robot.Subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class AlgaeSubsystem extends SubsystemBase {
@@ -17,5 +18,10 @@ public class AlgaeSubsystem extends SubsystemBase {
     public void move(double inOutTakeSpeed, double wristSpeed) {
         m_InOutTake.setSpeed(inOutTakeSpeed);
         m_Wrist.setSpeed(wristSpeed);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Algae Encoder value", m_Wrist.getEncoder());
     }
 }
