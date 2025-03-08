@@ -1,3 +1,15 @@
+/**
+ * A command that moves the Trough Coral Outtake subsystem to a specified position using a PID controller.
+ *
+ * This command calculates the necessary speed to reach the goal position based on the current position
+ * and updates the Trough Coral Outtake subsystem accordingly.
+ *
+ * @param m_troughCoralOuttake The Trough Coral Outtake subsystem to control
+ * @param goalPos The target position to reach
+ * @param currentPos A supplier for the current position of the subsystem
+ * @param errOffset The allowable error offset from the target position
+ * @param interupt A supplier for the interruption condition
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;

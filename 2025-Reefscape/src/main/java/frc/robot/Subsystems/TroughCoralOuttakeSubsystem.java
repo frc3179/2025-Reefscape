@@ -1,3 +1,7 @@
+/**
+ * The `TroughCoralOuttakeSubsystem` class represents a subsystem in a robot that controls a motor and
+ * encoder for a trough coral outtake mechanism.
+ */
 package frc.robot.Subsystems;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -25,22 +29,30 @@ public class TroughCoralOuttakeSubsystem extends SubsystemBase {
         troughEncoder = troughMotor.getAbsoluteEncoder();
     }
 
+    
     /**
-     * Sets the elevator motors to a specific speed
-     * @param speed Speed for the elevator motors
+     * Sets the speed of the trough motor.
+     *
+     * @param speed The speed to set for the trough motor
      */
     public void setSpeed(double speed) {
         troughMotor.set(speed);
     }
 
+    
     /**
-     * Gets the value of the elevator encoder
-     * @return the Encoder value of the elevator encoder
+     * Retrieves the current position of the encoder associated with the trough.
+     *
+     * @return The position of the encoder
      */
     public double getEncoder() {
         return troughEncoder.getPosition();
     }
 
+    /**
+     * Updates the SmartDashboard with the current value of the "Through Coral Outtake Encoder" entry.
+     * This method is called periodically to update the SmartDashboard.
+     */
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Through Coral Outtake Encoder", getEncoder());

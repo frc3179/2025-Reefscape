@@ -1,3 +1,16 @@
+/**
+ * A command that drives the robot to a specified point using strafing motion.
+ *
+ * This command uses a PID controller to adjust the robot's position based on the current and goal positions.
+ *
+ * @param m_DriveSubsystem The DriveSubsystem of the robot
+ * @param xSpeed A supplier for the forward/backward speed of the robot
+ * @param rot A supplier for the rotational speed of the robot
+ * @param goalPos The goal position to drive the robot to
+ * @param currentPos A supplier for the current position of the robot
+ * @param errOffset The error offset for the PID controller
+ * @param interupt A supplier for interrupting the command
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;

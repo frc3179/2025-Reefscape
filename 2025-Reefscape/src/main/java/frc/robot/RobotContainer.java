@@ -5,17 +5,22 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Commands.Auto.BranchIntake;
+import frc.robot.Commands.Auto.BranchIntakeNoInteruptStopMotor;
+import frc.robot.Commands.Auto.BranchOuttake;
 import frc.robot.Commands.Auto.DriveToPose2d;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
 import frc.robot.Commands.Auto.ThroughCoralOuttakeToPoint;
 import frc.robot.Commands.Teleop.TeleopAlgae;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
+import frc.robot.Commands.Teleop.TeleopClimb;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
 import frc.robot.Commands.Teleop.TeleopLights;
@@ -32,6 +37,7 @@ import frc.robot.Subsystems.AlgaeSubsystem;
 import frc.robot.Subsystems.AlgaeWristSubsystem;
 import frc.robot.Subsystems.AutoSubsystem;
 import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
+import frc.robot.Subsystems.ClimbingSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.ElevatorSubsystem;
 import frc.robot.Subsystems.FieldSubsystem;
@@ -60,6 +66,7 @@ public class RobotContainer {
   private final AlgaeWristSubsystem m_AlgaeWristSubsystem = new AlgaeWristSubsystem();
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem(m_AlgaeInOutTakeSubsystem, m_AlgaeWristSubsystem);
   private final LightSubsystem m_lightSubsystem = new LightSubsystem(LightSubsystemConstants.kBlinkinPort);
+  private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
   
   // Other objects
   private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
@@ -76,6 +83,7 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
+  Joystick m_autoController = new Joystick(2);
   
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -93,6 +101,108 @@ public class RobotContainer {
   
     private void configureAutoBindings() {
       //TODO: AUTO COMMANDS
+      NamedCommands.registerCommand(
+        "L4 Score",
+        new SequentialCommandGroup(
+          new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderL4Position,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            ),
+
+            new BranchOuttake(
+              m_branchCoralOuttake,
+              () -> m_autoController.getRawButton(2)
+            ),
+
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderIntakePosition,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            )
+        )
+      );
+
+      NamedCommands.registerCommand(
+        "L3 Score",
+        new SequentialCommandGroup(
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderL3Position,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL3P,
+              TrackingConstants.kElevatorL3I,
+              TrackingConstants.kElevatorL3D
+            ),
+
+            new BranchOuttake(
+              m_branchCoralOuttake,
+              () -> m_autoController.getRawButton(2)
+            ),
+
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderIntakePosition,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            )
+          )
+      );
+
+      NamedCommands.registerCommand(
+        "L2 Score",
+        new SequentialCommandGroup(
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderL2Position,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL2P,
+              TrackingConstants.kElevatorL2I,
+              TrackingConstants.kElevatorL2D
+            ),
+
+            new BranchOuttake(
+              m_branchCoralOuttake,
+              () -> m_autoController.getRawButton(2)
+            ),
+
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderIntakePosition,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            )
+          )
+      );
+
+      NamedCommands.registerCommand(
+        "Branch Intake",
+        new BranchIntakeNoInteruptStopMotor(
+          m_branchCoralOuttake
+        )
+      );
   
       // Build an auto chooser. This will use Commands.none() as the default option.
       autoChooser = AutoBuilder.buildAutoChooser();
@@ -150,9 +260,9 @@ public class RobotContainer {
     m_TrackingSubsystem.setDefaultCommand(
       new TeleopTracking(
         m_TrackingSubsystem,
-        TrackingConstants.kReefLimelightName,
-        TrackingConstants.kReefLimelightName,
-        TrackingConstants.kReefLimelightName,
+        TrackingConstants.kBranchIntakeLimelightName, //first to update pose
+        TrackingConstants.kBranchIntakeLimelightName, //second to update pose
+        TrackingConstants.kBranchIntakeLimelightName,//TrackingConstants.kReefLimelightName, //third to update pose
         () -> m_robotDrive.getGryoAngle(),
         () -> m_robotDrive.getWheelPosition(),
         () -> m_robotDrive.getGryoRate(),
@@ -186,6 +296,13 @@ public class RobotContainer {
       )
     );
 
+    m_ClimbingSubsystem.setDefaultCommand(
+      new TeleopClimb(
+        m_ClimbingSubsystem,
+        () -> m_autoController.getRawAxis(1)
+      )
+    );
+
   }
 
   /**
@@ -201,18 +318,10 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kX.value)
         .whileTrue(
-          new SequentialCommandGroup(
             new RunCommand(
               () -> m_robotDrive.setX(),
               m_robotDrive
-            ),
-
-            new RunCommand(
-              () -> m_driverController.setRumble(RumbleType.kBothRumble, 1),
-              null
             )
-            
-          )
         );
 
     new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kB.value)
@@ -232,7 +341,7 @@ public class RobotContainer {
             TrackingConstants.kElevatorEncoderL2Position,
             () -> m_elevator.getEncoder(),
             TrackingConstants.kElevatorEncoderOffset,
-            () -> m_armController.getRawButtonReleased(11),
+            () -> !m_armController.getRawButton(11),
             TrackingConstants.kElevatorL2P,
             TrackingConstants.kElevatorL2I,
             TrackingConstants.kElevatorL2D
@@ -246,26 +355,113 @@ public class RobotContainer {
             TrackingConstants.kElevatorEncoderL3Position,
             () -> m_elevator.getEncoder(),
             TrackingConstants.kElevatorEncoderOffset,
-            () -> m_armController.getRawButtonReleased(12),
+            () -> !m_armController.getRawButton(12),
             TrackingConstants.kElevatorL3P,
             TrackingConstants.kElevatorL3I,
             TrackingConstants.kElevatorL3D
           )
         );
     
-    new JoystickButton(m_armController, 6)
-        .whileTrue(
-          new ElevatorMoveToPoint(
-            m_elevator,
-            TrackingConstants.kElevatorEncoderL4Position,
-            () -> m_elevator.getEncoder(),
-            TrackingConstants.kElevatorEncoderOffset,
-            () -> m_armController.getRawButtonReleased(6),
-            TrackingConstants.kElevatorL4P,
-            TrackingConstants.kElevatorL4I,
-            TrackingConstants.kElevatorL4D
+    // L4
+    new JoystickButton(m_autoController, 6)
+        .onTrue(
+          new SequentialCommandGroup(
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderL4Position,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            ),
+
+            new BranchOuttake(
+              m_branchCoralOuttake,
+              () -> m_autoController.getRawButton(2)
+            ),
+
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderIntakePosition,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            )
           )
         );
+
+    // L3
+    new JoystickButton(m_autoController, 4)
+        .onTrue(
+          new SequentialCommandGroup(
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderL3Position,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL3P,
+              TrackingConstants.kElevatorL3I,
+              TrackingConstants.kElevatorL3D
+            ),
+
+            new BranchOuttake(
+              m_branchCoralOuttake,
+              () -> m_autoController.getRawButton(2)
+            ),
+
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderIntakePosition,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            )
+          )
+        );
+
+    // L2
+    new JoystickButton(m_autoController, 3)
+        .onTrue(
+          new SequentialCommandGroup(
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderL2Position,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL2P,
+              TrackingConstants.kElevatorL2I,
+              TrackingConstants.kElevatorL2D
+            ),
+
+            new BranchOuttake(
+              m_branchCoralOuttake,
+              () -> m_autoController.getRawButton(2)
+            ),
+
+            new ElevatorMoveToPoint(
+              m_elevator,
+              TrackingConstants.kElevatorEncoderIntakePosition,
+              () -> m_elevator.getEncoder(),
+              TrackingConstants.kElevatorEncoderOffset,
+              () -> m_autoController.getRawButton(2),
+              TrackingConstants.kElevatorL4P,
+              TrackingConstants.kElevatorL4I,
+              TrackingConstants.kElevatorL4D
+            )
+          )
+        );
+
+
 
     new JoystickButton(m_armController, 4)
         .whileTrue(
@@ -275,6 +471,15 @@ public class RobotContainer {
             () -> m_troughCoralOuttake.getEncoder(),
             0.1,
             () -> !m_armController.getRawButton(4)
+          )
+        );
+
+    
+    new JoystickButton(m_autoController, 1)
+        .whileTrue(
+          new BranchIntake(
+            m_branchCoralOuttake,
+            () -> !m_autoController.getRawButton(1)
           )
         );
 

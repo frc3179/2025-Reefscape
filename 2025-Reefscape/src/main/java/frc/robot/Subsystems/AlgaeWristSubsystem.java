@@ -1,3 +1,7 @@
+/**
+ * The `AlgaeWristSubsystem` class represents a subsystem for controlling a wrist mechanism using a
+ * SparkMax motor controller and an AbsoluteEncoder.
+ */
 package frc.robot.Subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
@@ -24,10 +28,20 @@ public class AlgaeWristSubsystem {
     }
 
 
+    /**
+     * Sets the speed of the wrist motor.
+     *
+     * @param speed The speed to set for the wrist motor
+     */
     public void setSpeed(double speed) {
         wristMotor.set(speed);
     }
 
+    /**
+     * Retrieves the current position of the wrist encoder.
+     *
+     * @return The position of the wrist encoder
+     */
     public double getEncoder() {
         return wristEncoder.getPosition();
     }

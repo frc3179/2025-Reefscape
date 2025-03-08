@@ -1,3 +1,18 @@
+/**
+ * A command that controls the drive subsystem to move to a specific point using PID controllers.
+ *
+ * This command calculates the necessary speeds for the drive subsystem to reach the desired positions
+ * using PID controllers for each movement direction (drive, rotate, strafe).
+ *
+ * @param m_DriveSubsystem The drive subsystem to control
+ * @param driveGoalPos The goal position for driving
+ * @param driveCurrentPos A supplier for the current position for driving
+ * @param driveErrOffset The error offset for driving
+ * @param rotateGoalPos The goal position for rotation
+ * @param rotateCurrentPos A supplier for the current position for rotation
+ * @param rotateErrOffset The error offset for rotation
+ * @param strafe
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;

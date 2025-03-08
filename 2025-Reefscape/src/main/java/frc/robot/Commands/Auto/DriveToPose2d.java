@@ -1,3 +1,11 @@
+/**
+ * A command that drives the robot to a specified Pose2d target using a path planner.
+ *
+ * @param m_TrackingSubsystem The tracking subsystem for tracking robot position
+ * @param m_DriveSubsystem The drive subsystem for controlling robot movement
+ * @param targetPose The target Pose2d the robot should drive to
+ * @param interupt A supplier that determines if the command should be interrupted
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.List;

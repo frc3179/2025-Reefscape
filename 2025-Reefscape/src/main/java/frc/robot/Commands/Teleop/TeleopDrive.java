@@ -1,3 +1,16 @@
+/**
+ * A command that handles teleoperated driving of the robot.
+ *
+ * This command takes input from various suppliers for xSpeed, ySpeed, rotation, field relative mode,
+ * slow mode, fast mode, POV, and gyro reset. It calculates the final speeds and rotation based on the input
+ * and the drive speed settings. The command then drives the robot using the DriveSubsystem.
+ *
+ * @param m_DriveSubsystem The DriveSubsystem instance to control the robot's drive system.
+ * @param m_DriveSpeedSettings The DriveSpeedSettings instance to configure the drive speed settings.
+ * @param xSpeed A supplier for the x-axis speed input.
+ * @param ySpeed A supplier for the y-axis speed input.
+ * @param
+ */
 package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;

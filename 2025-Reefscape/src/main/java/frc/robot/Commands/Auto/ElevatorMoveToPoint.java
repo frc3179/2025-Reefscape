@@ -1,3 +1,15 @@
+/**
+ * A command that moves the elevator subsystem to a specified position using a PID controller.
+ *
+ * @param m_elevator The elevator subsystem to control
+ * @param goalPos The target position for the elevator
+ * @param currentPos A supplier for the current position of the elevator
+ * @param errOffset The allowable error offset from the target position
+ * @param interupt A supplier for interrupt condition
+ * @param P The proportional gain for the PID controller
+ * @param I The integral gain for the PID controller
+ * @param D The derivative gain for the PID controller
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;
@@ -57,7 +69,7 @@ public class ElevatorMoveToPoint extends Command {
 
     @Override
     public void execute() {
-        finalSpeed = MathUtil.clamp(elevatorPidController.calculate(currentPos.get()), -0.5, 0.5);
+        finalSpeed = MathUtil.clamp(elevatorPidController.calculate(currentPos.get()), -1, 1);
 
         m_elevator.setElevatorSpeed(finalSpeed);
     }

@@ -1,3 +1,11 @@
+/**
+ * A command that allows teleoperation of the Algae subsystem.
+ * This command controls the movement of the Algae subsystem based on input speeds for intake/outtake and wrist.
+ *
+ * @param m_AlgaeSubsystem The AlgaeSubsystem to control
+ * @param inOutTakeSpeed A supplier for the speed of the intake/outtake mechanism
+ * @param wristSpeed A supplier for the speed of the wrist mechanism
+ */
 package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;

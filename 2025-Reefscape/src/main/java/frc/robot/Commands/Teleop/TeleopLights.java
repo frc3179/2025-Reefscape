@@ -1,3 +1,10 @@
+/**
+ * A command to control the lights on the robot during teleoperation.
+ * This command sets the color of the lights based on the provided color supplier.
+ *
+ * @param m_LightSubsystem The subsystem responsible for controlling the lights.
+ * @param color A supplier that provides the color value for the lights.
+ */
 package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;

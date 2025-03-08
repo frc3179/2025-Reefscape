@@ -1,3 +1,17 @@
+/**
+ * A command that rotates the drive subsystem to a specified point using PID control.
+ *
+ * This command calculates the necessary rotation to reach a goal position using a PID controller.
+ * The command ends when the rotation reaches the goal position or when interrupted.
+ *
+ * @param m_DriveSubsystem The DriveSubsystem to control
+ * @param xSpeed A supplier for the x-axis speed
+ * @param ySpeed A supplier for the y-axis speed
+ * @param goalPos The goal position to rotate towards
+ * @param currentPos A supplier for the current position
+ * @param errOffset The error offset tolerance for the PID controller
+ * @param interupt A supplier for the interruption condition
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;

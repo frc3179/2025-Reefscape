@@ -111,4 +111,17 @@ public final class Configs {
                         .inverted(false);
         }
     }
+
+    public static final class ClimbingSubsystemConfig {
+        public static final SparkMaxConfig climbMotorConfig = new SparkMaxConfig();
+
+        static {
+                climbMotorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+                
+                climbMotorConfig.absoluteEncoder
+                        .inverted(false);
+        }
+    }
 }

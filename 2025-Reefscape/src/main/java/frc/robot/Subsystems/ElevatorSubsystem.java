@@ -1,3 +1,7 @@
+/**
+ * The ElevatorSubsystem class controls an elevator system using SparkMax motor controllers and an
+ * AbsoluteEncoder for position feedback.
+ */
 package frc.robot.Subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
@@ -38,9 +42,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     }
 
+    
     /**
-     * Sets the elevator motors to a specific speed
-     * @param speed Speed for the elevator motors
+     * Sets the speed of the elevator motor based on the current encoder value.
+     *
+     * @param speed The speed at which to set the elevator motor
      */
     public void setElevatorSpeed(double speed) {
         if (getEncoder() <= ElevatorConstants.kBottomEncoder) {
@@ -55,7 +61,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     /**
-     * Gets the value of the elevator encoder
+     * Gets the value of the elevator encoder.
+     * 
      * @return the Encoder value of the elevator encoder
      */
     public double getEncoder() {
@@ -76,6 +83,9 @@ public class ElevatorSubsystem extends SubsystemBase {
         return elevatorEncoder.getPosition();
     }
 
+    /**
+     * Updates the SmartDashboard with the current value of the elevator encoder.
+     */
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Elevator Encoder", getEncoder());

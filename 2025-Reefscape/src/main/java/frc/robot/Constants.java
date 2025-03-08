@@ -63,6 +63,9 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
+
+    public static final double xNavxOffset = -8.75;
+    public static final double yNavxOffset = -4.5;
   }
 
   public static final class ModuleConstants {
@@ -88,7 +91,7 @@ public final class Constants {
     public static final double kDriveTriggerDeadband = 0.1;
 
     public static final int kArmControllerPort = 1;
-    public static final double kArmControllerDeadband = 0.1;
+    public static final double kArmControllerDeadband = 0.15;
   }
 
     public static final class AutoConstants {
@@ -125,27 +128,27 @@ public final class Constants {
     public static final double kDriveDriveI = 0.0;
     public static final double kDriveDriveD = 0.0;
 
-    public static final double kElevatorL2P = 1.0;
-    public static final double kElevatorL2I = 0.2;
-    public static final double kElevatorL2D = 0.01;
+    public static final double kElevatorL2P = 10.0;
+    public static final double kElevatorL2I = 0.005;
+    public static final double kElevatorL2D = 0.0;
 
-    public static final double kElevatorL3P = 1.0;
-    public static final double kElevatorL3I = 0.08;
-    public static final double kElevatorL3D = 0.08;
+    public static final double kElevatorL3P = 10.0;
+    public static final double kElevatorL3I = 0.005;
+    public static final double kElevatorL3D = 0.0;
 
-    public static final double kElevatorL4P = 1.0;
-    public static final double kElevatorL4I = 0.05;
-    public static final double kElevatorL4D = 0.05;
+    public static final double kElevatorL4P = 8.0;
+    public static final double kElevatorL4I = 0.005;
+    public static final double kElevatorL4D = 0.0;
 
     public static final double kThroughCoralOuttakeP = 0.0;
     public static final double kThroughCoralOuttakeI = 0.0;
     public static final double kThroughCoralOuttakeD = 0.0;
 
-    public static final double kElevatorEncoderIntakePosition = 0.0;
-    public static final double kElevatorEncoderL2Position = 1.75;
-    public static final double kElevatorEncoderL3Position = 3.2;
-    public static final double kElevatorEncoderL4Position = 5.4;
-    public static final double kElevatorEncoderOffset = 0.001;
+    public static final double kElevatorEncoderIntakePosition = 0.02; //TODO: TEST
+    public static final double kElevatorEncoderL2Position = 0.19;
+    public static final double kElevatorEncoderL3Position = 0.34;
+    public static final double kElevatorEncoderL4Position = 0.60;
+    public static final double kElevatorEncoderOffset = 0.015;
 
     public static final double kThroughCoralOuttakeIntakePos = 0.0;
     public static final double kThroughCoralOutakeScoringPos = 1.0;
@@ -204,5 +207,9 @@ public final class Constants {
 
   public static final class LightSubsystemConstants {
     public static final int kBlinkinPort = 0;
+  }
+
+  public static final class ClimbSubsystemConstants {
+    public static final int kClimbMotorPort = 13;
   }
 }

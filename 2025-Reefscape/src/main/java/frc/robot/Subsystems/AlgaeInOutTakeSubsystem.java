@@ -1,3 +1,7 @@
+/**
+ * The `AlgaeInOutTakeSubsystem` class represents a subsystem for controlling an intake/outtake
+ * mechanism using a SparkMax motor controller.
+ */
 package frc.robot.Subsystems;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -20,6 +24,11 @@ public class AlgaeInOutTakeSubsystem {
     }
 
 
+    /**
+     * Sets the speed of the motor controlling the intake/outtake mechanism.
+     *
+     * @param speed The speed at which to set the motor
+     */
     public void setSpeed(double speed) {
         inOutTakeMotor.set(speed);
     }

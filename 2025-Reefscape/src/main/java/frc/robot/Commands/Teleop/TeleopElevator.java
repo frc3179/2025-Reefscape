@@ -1,3 +1,10 @@
+/**
+ * A command to control the elevator subsystem during teleoperation.
+ * This command sets the speed of the elevator based on the provided supplier.
+ *
+ * @param m_elevator The elevator subsystem to control
+ * @param speed A supplier providing the speed value for the elevator
+ */
 package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;

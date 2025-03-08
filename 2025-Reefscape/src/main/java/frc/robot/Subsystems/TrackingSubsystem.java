@@ -1,3 +1,7 @@
+/**
+ * The `TrackingSubsystem` class in Java implements a subsystem for tracking the pose of an object
+ * using a Swerve drive pose estimator.
+ */
 package frc.robot.Subsystems;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -36,6 +40,11 @@ public class TrackingSubsystem extends SubsystemBase {
         );
     }
 
+    /**
+     * Retrieves the estimated pose (position and orientation) from the pose estimator.
+     *
+     * @return The estimated pose (position and orientation) of the object.
+     */
     public Pose2d getEstimatedPose() {
         return poseEstimator.getEstimatedPosition();
     }

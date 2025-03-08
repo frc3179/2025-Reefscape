@@ -1,3 +1,7 @@
+/**
+ * The `FieldSubsystem` class represents a subsystem for updating and displaying the pose of a robot on
+ * the field in a Java FRC robot project.
+ */
 package frc.robot.Subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,6 +17,11 @@ public class FieldSubsystem extends SubsystemBase{
         SmartDashboard.putData("Field", this.m_field);
     }
 
+    /**
+     * Updates the pose of the robot on the field.
+     *
+     * @param robotPose The new pose of the robot.
+     */
     public void updateRobotPose(Pose2d robotPose) {
         m_field.setRobotPose(robotPose);
     }

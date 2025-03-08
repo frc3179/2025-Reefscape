@@ -1,3 +1,17 @@
+/**
+ * A command that handles teleop tracking using multiple Limelight cameras.
+ *
+ * This command initializes and executes the tracking process using the provided Limelight cameras
+ * and updates the pose estimator based on the vision measurements received from the cameras.
+ *
+ * @param m_TrackingSubsystem The tracking subsystem to use for pose estimation
+ * @param limelightName1 The name of the first Limelight camera
+ * @param limelightName2 The name of the second Limelight camera
+ * @param limelightName3 The name of the third Limelight camera
+ * @param gryoAngle A supplier for the gyro angle
+ * @param wheelPositions A supplier for the swerve module positions
+ * @param gryoRate A supplier for the
+ */
 package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;
@@ -74,22 +88,23 @@ public class TeleopTracking extends Command {
         );
 
         LimelightHelpers.PoseEstimate limelight1 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName1);
-        
-        if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
-            doRejectUpdate1 = true;
-        }
-        if(limelight1.tagCount == 0)
-        {
-            doRejectUpdate1 = true;
-        }
-        if(!doRejectUpdate1)
-        {
-            m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight1VisionMeasurementStdDevs);
-            m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-                limelight1.pose,
-                limelight1.timestampSeconds
-            );
+            if (limelight1 != null) {
+                if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+            {
+                doRejectUpdate1 = true;
+            }
+            if(limelight1.tagCount == 0)
+            {
+                doRejectUpdate1 = true;
+            }
+            if(!doRejectUpdate1)
+            {
+                m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight1VisionMeasurementStdDevs);
+                m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
+                    limelight1.pose,
+                    limelight1.timestampSeconds
+                );
+            }
         }
 
 
@@ -104,21 +119,23 @@ public class TeleopTracking extends Command {
         );
 
         LimelightHelpers.PoseEstimate limelight2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName2);
-        if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
-            doRejectUpdate2 = true;
-        }
-        if(limelight2.tagCount == 0)
-        {
-            doRejectUpdate2 = true;
-        }
-        if(!doRejectUpdate2)
-        {
-            m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight2VisionMeasurementStdDevs);
-            m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-                limelight1.pose,
-                limelight1.timestampSeconds
-            );
+        if (limelight2 != null) {
+            if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+            {
+                doRejectUpdate2 = true;
+            }
+            if(limelight2.tagCount == 0)
+            {
+                doRejectUpdate2 = true;
+            }
+            if(!doRejectUpdate2)
+            {
+                m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight2VisionMeasurementStdDevs);
+                m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
+                    limelight1.pose,
+                    limelight1.timestampSeconds
+                );
+            }
         }
 
 
@@ -133,21 +150,23 @@ public class TeleopTracking extends Command {
         );
 
         LimelightHelpers.PoseEstimate limelight3 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName3);
-        if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
-            doRejectUpdate3 = true;
-        }
-        if(limelight3.tagCount == 0)
-        {
-            doRejectUpdate3 = true;
-        }
-        if(!doRejectUpdate3)
-        {
-            m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight3VisionMeasurementStdDevs);
-            m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-                limelight1.pose,
-                limelight1.timestampSeconds
-            );
+        if (limelight3 != null) {
+            if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+            {
+                doRejectUpdate3 = true;
+            }
+            if(limelight3.tagCount == 0)
+            {
+                doRejectUpdate3 = true;
+            }
+            if(!doRejectUpdate3)
+            {
+                m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight3VisionMeasurementStdDevs);
+                m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
+                    limelight1.pose,
+                    limelight1.timestampSeconds
+                );
+            }
         }
 
 
