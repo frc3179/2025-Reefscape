@@ -63,9 +63,6 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 7;
 
     public static final boolean kGyroReversed = false;
-
-    public static final double xNavxOffset = -8.75;
-    public static final double yNavxOffset = -4.5;
   }
 
   public static final class ModuleConstants {
