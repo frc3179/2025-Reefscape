@@ -14,7 +14,7 @@
     "Top Feeder"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 6.0,
+  "defaultMaxVel": 10.0,
   "defaultMaxAccel": 20.0,
   "defaultMaxAngVel": 360.0,
   "defaultMaxAngAccel": 20.0,

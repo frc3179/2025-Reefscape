@@ -72,7 +72,7 @@ public class StrafeDriveToPoint extends Command{
     @Override
     public void execute() {
         finalXSpeed = xSpeed.get();
-        finalYSpeed = MathUtil.clamp(strafePidController.calculate(currentPos.get()), -0.5, 0.5);
+        finalYSpeed = -MathUtil.clamp(strafePidController.calculate(currentPos.get()), -0.3, 0.3);
         finalRot = rot.get();
 
         m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);

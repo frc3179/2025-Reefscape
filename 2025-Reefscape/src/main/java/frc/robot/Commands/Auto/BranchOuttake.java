@@ -16,7 +16,6 @@ import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
 public class BranchOuttake extends Command{
     private BranchCoralOuttakeSubsystem m_BranchCoralOuttakeSubsystem;
     private Supplier<Boolean> interupt;
-    private boolean end;
     private int[] lcValues;
 
     public BranchOuttake(
@@ -34,7 +33,6 @@ public class BranchOuttake extends Command{
 
     @Override
     public void initialize() {
-        end = false;
     }
 
     @Override

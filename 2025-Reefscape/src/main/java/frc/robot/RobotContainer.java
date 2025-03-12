@@ -6,7 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,8 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Commands.Auto.BranchIntake;
 import frc.robot.Commands.Auto.BranchIntakeNoInteruptStopMotor;
 import frc.robot.Commands.Auto.BranchOuttake;
-import frc.robot.Commands.Auto.DriveToPose2d;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
+import frc.robot.Commands.Auto.FullDriveToPoint;
 import frc.robot.Commands.Auto.ThroughCoralOuttakeToPoint;
 import frc.robot.Commands.Teleop.TeleopAlgae;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
@@ -261,8 +260,8 @@ public class RobotContainer {
       new TeleopTracking(
         m_TrackingSubsystem,
         TrackingConstants.kBranchIntakeLimelightName, //first to update pose
-        TrackingConstants.kBranchIntakeLimelightName, //second to update pose
-        TrackingConstants.kBranchIntakeLimelightName,//TrackingConstants.kReefLimelightName, //third to update pose
+        TrackingConstants.kStillIntakeLimelightName, //second to update pose
+        TrackingConstants.kStillIntakeLimelightName,//TrackingConstants.kReefLimelightName, //third to update pose
         () -> m_robotDrive.getGryoAngle(),
         () -> m_robotDrive.getWheelPosition(),
         () -> m_robotDrive.getGryoRate(),
@@ -322,16 +321,6 @@ public class RobotContainer {
               () -> m_robotDrive.setX(),
               m_robotDrive
             )
-        );
-
-    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kB.value)
-        .whileTrue(
-          new DriveToPose2d(
-            m_TrackingSubsystem,
-            m_robotDrive,
-            m_AutoSubsystem.getInitPose(),
-            () -> m_driverController.getAButtonReleased()
-          )
         );
 
     new JoystickButton(m_armController, 11)
@@ -484,22 +473,24 @@ public class RobotContainer {
         );
 
     
-    // new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kY.value)
-    //     .whileTrue(
-    //       new FullDriveToPoint(
-    //         m_robotDrive,
-    //         10.24,
-    //         () -> 10.24,
-    //         0.05,
-    //         2.27,
-    //         () -> 2.27,//() -> LimelightHelpers.getTA(TrackingConstants.kReefLimelightName),
-    //         0.05,
-    //         -12.94,
-    //         () -> LimelightHelpers.getTY(TrackingConstants.kReefLimelightName),
-    //         0.05,
-    //         () -> !m_driverController.getYButton()
-    //       )
-    //     );
+    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kY.value)
+        .whileTrue(
+          new FullDriveToPoint(
+            m_robotDrive,
+            0.0, //Goal Drive
+            () -> 0.0,//LimelightHelpers.getTY(TrackingConstants.kStillIntakeLimelightName), //Drive Current
+            0.1, //Drive Error offset
+            0.0, //Goal Rotate
+            () -> -m_robotDrive.m_gyro.getAngle(), //Rotate Current
+            0.1, //Rotate Error offset
+            0.0, //Goal Strafe
+            () -> LimelightHelpers.getTX(TrackingConstants.kStillIntakeLimelightName), //Strafe Current
+            0.1, //Strafe Error offset
+            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kY.value)
+          )
+        );
+
+        
   }
 
   /**

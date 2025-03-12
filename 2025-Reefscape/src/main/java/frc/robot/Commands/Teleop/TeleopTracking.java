@@ -132,8 +132,8 @@ public class TeleopTracking extends Command {
             {
                 m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight2VisionMeasurementStdDevs);
                 m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-                    limelight1.pose,
-                    limelight1.timestampSeconds
+                    limelight2.pose,
+                    limelight2.timestampSeconds
                 );
             }
         }
@@ -163,8 +163,8 @@ public class TeleopTracking extends Command {
             {
                 m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight3VisionMeasurementStdDevs);
                 m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
-                    limelight1.pose,
-                    limelight1.timestampSeconds
+                    limelight3.pose,
+                    limelight3.timestampSeconds
                 );
             }
         }

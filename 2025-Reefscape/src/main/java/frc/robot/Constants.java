@@ -116,8 +116,10 @@ public final class Constants {
     public static final double kStrafeDriveP = 5.0;
     public static final double kStrafeDriveI = 0.0;
     public static final double kStrafeDriveD = 0.0;
+    public static final double kRightReefStrafeLimelight = 0.0;
+    public static final double kLeftReefStrafeLimelight = 0.0;
 
-    public static final double kRotateDriveP = 0.2;
+    public static final double kRotateDriveP = 5.0;
     public static final double kRotateDriveI = 0.0;
     public static final double kRotateDriveD = 0.0;
 
@@ -141,7 +143,7 @@ public final class Constants {
     public static final double kThroughCoralOuttakeI = 0.0;
     public static final double kThroughCoralOuttakeD = 0.0;
 
-    public static final double kElevatorEncoderIntakePosition = 0.02; //TODO: TEST
+    public static final double kElevatorEncoderIntakePosition = 0.01; //TODO: TEST
     public static final double kElevatorEncoderL2Position = 0.19;
     public static final double kElevatorEncoderL3Position = 0.34;
     public static final double kElevatorEncoderL4Position = 0.60;
@@ -163,7 +165,7 @@ public final class Constants {
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
     public static final String kReefLimelightName = "limelight-reef";
-    public static final String kTroughIntakeLimelightName = "limelight-through";
+    public static final String kStillIntakeLimelightName = "limelight-still";
     public static final String kBranchIntakeLimelightName = "limelight-branch";
   }
 
