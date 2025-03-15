@@ -75,7 +75,9 @@ public class ElevatorMoveToPoint extends Command {
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        m_elevator.setElevatorSpeed(0.0);
+    }
 
     @Override
     public boolean isFinished() {

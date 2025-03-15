@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.921,
-  "robotLength": 0.9398,
+  "robotWidth": 0.915,
+  "robotLength": 0.94,
   "holonomicMode": true,
   "pathFolders": [
     "Bottom Feeder",
@@ -14,15 +14,15 @@
     "Top Feeder"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 10.0,
-  "defaultMaxAccel": 20.0,
+  "defaultMaxVel": 20.0,
+  "defaultMaxAccel": 50.0,
   "defaultMaxAngVel": 360.0,
   "defaultMaxAngAccel": 20.0,
   "defaultNominalVoltage": 12.0,
   "robotMass": 68.0,
   "robotMOI": 9531.333,
   "robotTrackwidth": 0.546,
-  "driveWheelRadius": 0.0381,
+  "driveWheelRadius": 0.038,
   "driveGearing": 4.71,
   "maxDriveSpeed": 6.0,
   "driveMotorType": "NEO",

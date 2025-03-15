@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.193812086092715,
-        "y": 5.223572019867549
+        "x": 4.915994318181819,
+        "y": 5.336264204545455
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.7870240066225165,
-        "y": 5.884602649006622
+        "x": 4.598373094398719,
+        "y": 5.517026780650419
       },
       "isLocked": false,
       "linkedName": "JI-End"
     },
     {
       "anchor": {
-        "x": 1.7506415562913906,
-        "y": 7.025062086092714
+        "x": 0.8376136363636364,
+        "y": 7.988707386363636
       },
       "prevControl": {
-        "x": 2.501978030853162,
-        "y": 6.649599119001921
+        "x": 0.6180489562965834,
+        "y": 8.108253826156098
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 10.0,
-    "maxAcceleration": 20.0,
+    "maxVelocity": 20.0,
+    "maxAcceleration": 50.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 20.0,
     "nominalVoltage": 12.0,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -145.0
+    "rotation": -143.668
   },
   "reversed": false,
   "folder": "Top Feeder",

@@ -6,7 +6,12 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -96,10 +101,33 @@ public class RobotContainer {
   
       // Configure the Teleop button bindings
       configureButtonBindings();
+
+      autoChooser = AutoBuilder.buildAutoChooser();
+      autoChooser.setDefaultOption("Still", new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive));
+      SmartDashboard.putData("Auto Chooser", autoChooser);
     }
   
     private void configureAutoBindings() {
       //TODO: AUTO COMMANDS
+
+      //TODO: needs offset to right
+      NamedCommands.registerCommand(
+        "Robot Line Up",
+        new FullDriveToPoint(
+            m_robotDrive,
+            TrackingConstants.kReefForwardLimelightOffset, //Goal Drive
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName), //Drive Current
+            0.3, //Drive Error offset
+            0.0, //Goal Rotate
+            () -> 0.0, //Rotate Current
+            0.1, //Rotate Error offset
+            TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) < -10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset+5, //Strafe Current
+            0.3, //Stra fe Error offset
+            () -> false
+          ).withTimeout(1.3) 
+      );
+
       NamedCommands.registerCommand(
         "L4 Score",
         new SequentialCommandGroup(
@@ -108,7 +136,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderL4Position,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> false,
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -116,7 +144,7 @@ public class RobotContainer {
 
             new BranchOuttake(
               m_branchCoralOuttake,
-              () -> m_autoController.getRawButton(2)
+              () -> false
             ),
 
             new ElevatorMoveToPoint(
@@ -124,7 +152,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderIntakePosition,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> false,
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -140,7 +168,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderL3Position,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> false,
               TrackingConstants.kElevatorL3P,
               TrackingConstants.kElevatorL3I,
               TrackingConstants.kElevatorL3D
@@ -148,7 +176,7 @@ public class RobotContainer {
 
             new BranchOuttake(
               m_branchCoralOuttake,
-              () -> m_autoController.getRawButton(2)
+              () -> false
             ),
 
             new ElevatorMoveToPoint(
@@ -156,7 +184,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderIntakePosition,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> false,
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -172,7 +200,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderL2Position,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> false,
               TrackingConstants.kElevatorL2P,
               TrackingConstants.kElevatorL2I,
               TrackingConstants.kElevatorL2D
@@ -180,7 +208,7 @@ public class RobotContainer {
 
             new BranchOuttake(
               m_branchCoralOuttake,
-              () -> m_autoController.getRawButton(2)
+              () -> false
             ),
 
             new ElevatorMoveToPoint(
@@ -188,7 +216,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderIntakePosition,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> false,
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -200,14 +228,9 @@ public class RobotContainer {
         "Branch Intake",
         new BranchIntakeNoInteruptStopMotor(
           m_branchCoralOuttake
-        )
+        ).withTimeout(2)
       );
-  
-      // Build an auto chooser. This will use Commands.none() as the default option.
-      autoChooser = AutoBuilder.buildAutoChooser();
-      SmartDashboard.putData("Auto Chooser", autoChooser);
-  
-      m_AutoSubsystem.setValues(autoChooser);
+
   
       //TODO: TEST
       m_TrackingSubsystem.setValues(
@@ -231,7 +254,7 @@ public class RobotContainer {
         () -> m_driverController.getLeftTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
         () -> m_driverController.getRightTriggerAxis() >= OIConstants.kDriveTriggerDeadband,
         () -> (double)m_driverController.getPOV(),
-        () -> m_driverController.getAButton()
+        () -> m_driverController.getYButton()
         )
     );
 
@@ -260,8 +283,8 @@ public class RobotContainer {
       new TeleopTracking(
         m_TrackingSubsystem,
         TrackingConstants.kBranchIntakeLimelightName, //first to update pose
-        TrackingConstants.kStillIntakeLimelightName, //second to update pose
-        TrackingConstants.kStillIntakeLimelightName,//TrackingConstants.kReefLimelightName, //third to update pose
+        TrackingConstants.kStillLimelightName, //second to update pose
+        TrackingConstants.kStillLimelightName,//TrackingConstants.kReefLimelightName, //third to update pose
         () -> m_robotDrive.getGryoAngle(),
         () -> m_robotDrive.getWheelPosition(),
         () -> m_robotDrive.getGryoRate(),
@@ -472,25 +495,22 @@ public class RobotContainer {
           )
         );
 
-    
-    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kY.value)
+    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
         .whileTrue(
           new FullDriveToPoint(
             m_robotDrive,
             0.0, //Goal Drive
-            () -> 0.0,//LimelightHelpers.getTY(TrackingConstants.kStillIntakeLimelightName), //Drive Current
-            0.1, //Drive Error offset
+            () -> 0.0, //Drive Current
+            0.3, //Drive Error offset
             0.0, //Goal Rotate
-            () -> -m_robotDrive.m_gyro.getAngle(), //Rotate Current
+            () -> 0.0, //Rotate Current
             0.1, //Rotate Error offset
-            0.0, //Goal Strafe
-            () -> LimelightHelpers.getTX(TrackingConstants.kStillIntakeLimelightName), //Strafe Current
-            0.1, //Strafe Error offset
-            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kY.value)
+            TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) < -10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset+5, //Strafe Current
+            0.3, //Stra fe Error offset
+            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kA.value)
           )
         );
-
-        
   }
 
   /**
@@ -499,6 +519,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_AutoSubsystem.getAuto();
+    return autoChooser.getSelected();
   }
 }

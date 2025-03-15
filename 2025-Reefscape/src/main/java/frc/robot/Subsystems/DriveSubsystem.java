@@ -4,6 +4,7 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -45,7 +46,8 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  //public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  public final Pigeon2 m_gyro = new Pigeon2(50);
   
   
     // Odometry class for tracking robot pose

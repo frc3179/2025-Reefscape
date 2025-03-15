@@ -113,20 +113,23 @@ public final class Constants {
   }
 
   public static final class TrackingConstants {
-    public static final double kStrafeDriveP = 5.0;
-    public static final double kStrafeDriveI = 0.0;
-    public static final double kStrafeDriveD = 0.0;
-    public static final double kRightReefStrafeLimelight = 0.0;
-    public static final double kLeftReefStrafeLimelight = 0.0;
-
-    public static final double kRotateDriveP = 5.0;
+    public static final double kStrafeDriveP = 0.03;
+    public static final double kStrafeDriveI = 0.001;
+    public static final double kStrafeDriveD = 0.001;
+    public static final double kRightReefStrafeLimelightOffset = 17.75;
+    public static final double kLeftReefStrafeLimelightOffset = 0.0;
+    
+    public static final double kRotateDriveP = 0.01;
     public static final double kRotateDriveI = 0.0;
     public static final double kRotateDriveD = 0.0;
-
-    public static final double kDriveDriveP = 5.0;
-    public static final double kDriveDriveI = 0.0;
+    public static final double kRotGoalPose = 12.4;
+    
+    
+    public static final double kDriveDriveP = 0.1;
+    public static final double kDriveDriveI = 0.03; 
     public static final double kDriveDriveD = 0.0;
-
+    public static final double kReefForwardLimelightOffset = -11.9;
+    
     public static final double kElevatorL2P = 10.0;
     public static final double kElevatorL2I = 0.005;
     public static final double kElevatorL2D = 0.0;
@@ -143,10 +146,10 @@ public final class Constants {
     public static final double kThroughCoralOuttakeI = 0.0;
     public static final double kThroughCoralOuttakeD = 0.0;
 
-    public static final double kElevatorEncoderIntakePosition = 0.01; //TODO: TEST
-    public static final double kElevatorEncoderL2Position = 0.19;
-    public static final double kElevatorEncoderL3Position = 0.34;
-    public static final double kElevatorEncoderL4Position = 0.60;
+    public static final double kElevatorEncoderIntakePosition = 0.015;
+    public static final double kElevatorEncoderL2Position = 0.22;
+    public static final double kElevatorEncoderL3Position = 0.37;
+    public static final double kElevatorEncoderL4Position = 0.6;
     public static final double kElevatorEncoderOffset = 0.015;
 
     public static final double kThroughCoralOuttakeIntakePos = 0.0;
@@ -164,8 +167,8 @@ public final class Constants {
     public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
-    public static final String kReefLimelightName = "limelight-reef";
-    public static final String kStillIntakeLimelightName = "limelight-still";
+    public static final String kMovingLimelightName = "limelight-moving";
+    public static final String kStillLimelightName = "limelight-still";
     public static final String kBranchIntakeLimelightName = "limelight-branch";
   }
 
