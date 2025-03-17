@@ -4,6 +4,8 @@
  */
 package frc.robot.Subsystems;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -11,15 +13,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TrackingSubsystem extends SubsystemBase {
-    private SwerveDriveKinematics kinematics;
-    private Rotation2d gyroAngle;
-    private SwerveModulePosition[] wheelPositions;
-    private Pose2d initialPoseMeters;
-
     public SwerveDrivePoseEstimator poseEstimator;
+    private StructPublisher<Pose2d> publisher; 
     
     public TrackingSubsystem() {}
 
@@ -29,17 +31,16 @@ public class TrackingSubsystem extends SubsystemBase {
         SwerveModulePosition[] wheelPositions,
         Pose2d initialPoseMeters
     ) {
-        this.kinematics = kinematics;
-        this.gyroAngle = gyroAngle;
-        this.wheelPositions = wheelPositions;
-        this.initialPoseMeters = initialPoseMeters;
 
         this.poseEstimator = new SwerveDrivePoseEstimator(
-            this.kinematics,
-            this.gyroAngle,
-            this.wheelPositions,
-            this.initialPoseMeters
+            kinematics,
+            gyroAngle,
+            wheelPositions,
+            initialPoseMeters
         );
+
+        publisher = NetworkTableInstance.getDefault()
+            .getStructTopic("Robot Pose", Pose2d.struct).publish();
     }
 
     /**
@@ -49,5 +50,10 @@ public class TrackingSubsystem extends SubsystemBase {
      */
     public Pose2d getEstimatedPose() {
         return poseEstimator.getEstimatedPosition();
+    }
+
+    @Override
+    public void periodic() {
+        publisher.set(getEstimatedPose());
     }
 }

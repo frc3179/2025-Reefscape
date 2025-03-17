@@ -30,7 +30,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8;
+    public static final double kMaxSpeedMetersPerSecond = 5.74;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
@@ -72,7 +72,7 @@ public final class Constants {
     public static final int kDrivingMotorPinionTeeth = 14;
 
     // Calculations required for driving motor conversion factors and feed forward
-    public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
+    public static final double kDrivingMotorFreeSpeedRps = VortexMotorConstants.kFreeSpeedRpm / 60;
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
@@ -92,8 +92,8 @@ public final class Constants {
   }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+        public static final double kMaxSpeedMetersPerSecond = 5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 5;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
@@ -108,8 +108,8 @@ public final class Constants {
 
     }
 
-  public static final class NeoMotorConstants {
-    public static final double kFreeSpeedRpm = 5676;
+  public static final class VortexMotorConstants {
+    public static final double kFreeSpeedRpm = 6784;
   }
 
   public static final class TrackingConstants {
@@ -156,15 +156,15 @@ public final class Constants {
     public static final double kThroughCoralOutakeScoringPos = 1.0;
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final SimpleMatrix visionMeasurementStdDevs1Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
+    public static final SimpleMatrix visionMeasurementStdDevs1Data = new SimpleMatrix(new double[] {1.0, 1.0, 1.0});
     public static final Matrix<N3,N1> visionMeasurementStdDevs1 = new Matrix<N3, N1>(visionMeasurementStdDevs1Data);
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final SimpleMatrix visionMeasurementStdDevs2Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
+    public static final SimpleMatrix visionMeasurementStdDevs2Data = new SimpleMatrix(new double[] {1.0, 1.0, 1.0});
     public static final Matrix<N3,N1> visionMeasurementStdDevs2 = new Matrix<N3,N1>(visionMeasurementStdDevs2Data);
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {0.0, 0.0, 0.0});
+    public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {1.0, 1.0, 1.0});
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
     public static final String kMovingLimelightName = "limelight-moving";

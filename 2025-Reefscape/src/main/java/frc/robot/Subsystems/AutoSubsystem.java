@@ -7,6 +7,7 @@ package frc.robot.Subsystems;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -14,6 +15,7 @@ import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,11 +23,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 public class AutoSubsystem {
     SendableChooser<Command> autoChooser;
-    private Pose2d startPose;
 
-    public AutoSubsystem() {
-        startPose = new Pose2d(0, 0, new Rotation2d(0));
-    }
+    public AutoSubsystem() {}
 
 
     //TODO: TEST THIS
@@ -34,8 +33,8 @@ public class AutoSubsystem {
      *
      * @return The initial pose (position and orientation) of the object.
      */
-    public Pose2d getInitPose() {
-        return startPose;
+    public Pose2d getCurrentAutoPose() {
+        return AutoBuilder.getCurrentPose();
     }
 
     
@@ -53,15 +52,9 @@ public class AutoSubsystem {
         }
     }
 
-    public Command pointToCommand(Pose2d endPoint, GoalEndState endState) {
-        // Create a list of waypoints from poses. Each pose represents one waypoint.
-        // The rotation component of the pose should be the direction of travel. Do not use holonomic rotation.
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-                endPoint
-        );
-
+    public Command waypointsToCommand(List<Waypoint> waypoints, GoalEndState endState) {    
         PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
-
+            
         // Create the path using the waypoints created above
         PathPlannerPath path = new PathPlannerPath(
                 waypoints,
@@ -74,6 +67,12 @@ public class AutoSubsystem {
         path.preventFlipping = true;
 
         return AutoBuilder.pathfindThenFollowPath(path, constraints);
+    }
+
+    public Command endPoseToCommand(Pose2d endPose, double goalEndVelocity) {
+        PathConstraints constraints = PathConstraints.unlimitedConstraints(12.0); // You can also use unlimited constraints, only limited by motor torque and nominal battery voltage
+        
+        return AutoBuilder.pathfindToPose(endPose, constraints, goalEndVelocity);
     }
 
 }

@@ -21,6 +21,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.Subsystems.TrackingSubsystem;
@@ -88,8 +89,9 @@ public class TeleopTracking extends Command {
         );
 
         LimelightHelpers.PoseEstimate limelight1 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName1);
-            if (limelight1 != null) {
-                if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        if (limelight1 != null) {
+            SmartDashboard.putBoolean("Limelight1", true);
+            if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             {
                 doRejectUpdate1 = true;
             }
@@ -105,6 +107,8 @@ public class TeleopTracking extends Command {
                     limelight1.timestampSeconds
                 );
             }
+        } else {
+            SmartDashboard.putBoolean("Limelight1", false);
         }
 
 
@@ -120,6 +124,7 @@ public class TeleopTracking extends Command {
 
         LimelightHelpers.PoseEstimate limelight2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName2);
         if (limelight2 != null) {
+            SmartDashboard.putBoolean("Limelight2", true);
             if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             {
                 doRejectUpdate2 = true;
@@ -136,6 +141,8 @@ public class TeleopTracking extends Command {
                     limelight2.timestampSeconds
                 );
             }
+        } else {
+            SmartDashboard.putBoolean("Limelight2", false);
         }
 
 
@@ -151,6 +158,7 @@ public class TeleopTracking extends Command {
 
         LimelightHelpers.PoseEstimate limelight3 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName3);
         if (limelight3 != null) {
+            SmartDashboard.putBoolean("Limelight3", true);
             if(Math.abs(gryoRate.get()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             {
                 doRejectUpdate3 = true;
@@ -167,6 +175,8 @@ public class TeleopTracking extends Command {
                     limelight3.timestampSeconds
                 );
             }
+        } else {
+            SmartDashboard.putBoolean("Limelight3", false);
         }
 
 

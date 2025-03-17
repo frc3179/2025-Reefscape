@@ -44,7 +44,6 @@ import frc.robot.Subsystems.BranchCoralOuttakeSubsystem;
 import frc.robot.Subsystems.ClimbingSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.ElevatorSubsystem;
-import frc.robot.Subsystems.FieldSubsystem;
 import frc.robot.Subsystems.LightSubsystem;
 import frc.robot.Subsystems.TrackingSubsystem;
 import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
@@ -65,7 +64,6 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
   private final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
-  private final FieldSubsystem m_FieldSubsystem = new FieldSubsystem();
   private final AlgaeInOutTakeSubsystem m_AlgaeInOutTakeSubsystem = new AlgaeInOutTakeSubsystem();
   private final AlgaeWristSubsystem m_AlgaeWristSubsystem = new AlgaeWristSubsystem();
   private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem(m_AlgaeInOutTakeSubsystem, m_AlgaeWristSubsystem);
@@ -237,7 +235,7 @@ public class RobotContainer {
         DriveConstants.kDriveKinematics,
         m_robotDrive.getGryoAngle(),
         m_robotDrive.getWheelPosition(),
-        m_AutoSubsystem.getInitPose()
+        m_AutoSubsystem.getCurrentAutoPose()
       );
     }
 
@@ -282,7 +280,7 @@ public class RobotContainer {
     m_TrackingSubsystem.setDefaultCommand(
       new TeleopTracking(
         m_TrackingSubsystem,
-        TrackingConstants.kBranchIntakeLimelightName, //first to update pose
+        TrackingConstants.kStillLimelightName, //first to update pose
         TrackingConstants.kStillLimelightName, //second to update pose
         TrackingConstants.kStillLimelightName,//TrackingConstants.kReefLimelightName, //third to update pose
         () -> m_robotDrive.getGryoAngle(),
@@ -291,13 +289,6 @@ public class RobotContainer {
         TrackingConstants.visionMeasurementStdDevs1,
         TrackingConstants.visionMeasurementStdDevs2,
         TrackingConstants.visionMeasurementStdDevs3
-      )
-    );
-
-    m_FieldSubsystem.setDefaultCommand(
-      new RunCommand(
-        () -> m_TrackingSubsystem.poseEstimator.getEstimatedPosition(),
-        m_FieldSubsystem
       )
     );
     
@@ -509,6 +500,15 @@ public class RobotContainer {
             () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) < -10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset+5, //Strafe Current
             0.3, //Stra fe Error offset
             () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+          )
+        );
+
+    
+    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kB.value)
+        .whileTrue(
+          m_AutoSubsystem.endPoseToCommand(
+            new Pose2d(0.0, 0.0, new Rotation2d(0.0)),
+            0.0
           )
         );
   }

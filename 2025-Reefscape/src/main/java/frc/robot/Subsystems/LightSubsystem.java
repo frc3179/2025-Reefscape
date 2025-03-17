@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightSubsystem extends SubsystemBase {
     private Spark blinkin;
-    private boolean isBlueAlliance;
+    private static boolean isBlueAlliance;
 
     public static final double RED = 0.61; //color values for the blikin in the set method
     public static final double BLUE = 0.87;
@@ -19,13 +19,6 @@ public class LightSubsystem extends SubsystemBase {
     
     public LightSubsystem(int blinkinPort) {
         blinkin = new Spark(blinkinPort);
-
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            isBlueAlliance = (alliance.get() == DriverStation.Alliance.Blue);
-        } else {
-            isBlueAlliance = false;
-        }
     }
 
     /**
@@ -69,6 +62,15 @@ public class LightSubsystem extends SubsystemBase {
             return LightSubsystem.YELLOW;
         } else {
             return isBlueAlliance ? LightSubsystem.BLUE : LightSubsystem.RED;
+        }
+    }
+
+    public static void updateAlliance() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            isBlueAlliance = (alliance.get() == DriverStation.Alliance.Blue);
+        } else {
+            isBlueAlliance = false;
         }
     }
 }
