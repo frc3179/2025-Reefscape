@@ -1,8 +1,21 @@
+/**
+ * A command that rotates the drive subsystem to a specified point using PID control.
+ *
+ * This command calculates the necessary rotation to reach a goal position using a PID controller.
+ * The command ends when the rotation reaches the goal position or when interrupted.
+ *
+ * @param m_DriveSubsystem The DriveSubsystem to control
+ * @param xSpeed A supplier for the x-axis speed
+ * @param ySpeed A supplier for the y-axis speed
+ * @param goalPos The goal position to rotate towards
+ * @param currentPos A supplier for the current position
+ * @param errOffset The error offset tolerance for the PID controller
+ * @param interupt A supplier for the interruption condition
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TrackingConstants;
@@ -59,9 +72,10 @@ public class RotateDriveToPoint extends Command{
     public void execute() {
         finalXSpeed = xSpeed.get();
         finalYSpeed = ySpeed.get();
-        finalRot = MathUtil.clamp(rotatePidController.calculate(currentPos.get()), -0.5, 0.5);
+        //finalRot = MathUtil.clamp(rotatePidController.calculate(currentPos.get()), -1, 1);
+        finalRot = rotatePidController.calculate(currentPos.get());
 
-        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false);
+        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);
     }
 
     @Override

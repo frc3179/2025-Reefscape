@@ -1,3 +1,10 @@
+/**
+ * A command to control the Trough Coral Outtake subsystem during teleop.
+ * This command sets the speed of the Trough Coral Outtake subsystem based on a supplier function.
+ *
+ * @param m_TroughCoralOuttake The Trough Coral Outtake subsystem to control
+ * @param speed A supplier function that provides the speed value to set
+ */
 package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;

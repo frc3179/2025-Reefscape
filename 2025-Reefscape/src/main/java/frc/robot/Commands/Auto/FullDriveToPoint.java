@@ -1,9 +1,25 @@
+/**
+ * A command that controls the drive subsystem to move to a specific point using PID controllers.
+ *
+ * This command calculates the necessary speeds for the drive subsystem to reach the desired positions
+ * using PID controllers for each movement direction (drive, rotate, strafe).
+ *
+ * @param m_DriveSubsystem The drive subsystem to control
+ * @param driveGoalPos The goal position for driving
+ * @param driveCurrentPos A supplier for the current position for driving
+ * @param driveErrOffset The error offset for driving
+ * @param rotateGoalPos The goal position for rotation
+ * @param rotateCurrentPos A supplier for the current position for rotation
+ * @param rotateErrOffset The error offset for rotation
+ * @param strafe
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TrackingConstants;
 import frc.robot.Subsystems.DriveSubsystem;
@@ -81,23 +97,41 @@ public class FullDriveToPoint extends Command{
         drivePidController.reset();
         rotatePidController.reset();
         strafePidController.reset();
+        SmartDashboard.putBoolean("Full Drive Done", false);
     }
 
     @Override
     public void execute() {
-        finalXSpeed = MathUtil.clamp(drivePidController.calculate(driveCurrentPos.get()), -0.5, 0.5);
-        finalYSpeed = MathUtil.clamp(strafePidController.calculate(strafeCurrentPos.get()), -0.5, 0.5);
-        finalRot = MathUtil.clamp(rotatePidController.calculate(rotateCurrentPos.get()), -0.5, 0.5);
+        double xSpeed = drivePidController.calculate(driveCurrentPos.get());
+        double ySpeed = strafePidController.calculate(strafeCurrentPos.get());
+        double rotSpeed = rotatePidController.calculate(rotateCurrentPos.get());
 
-        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false);
+        SmartDashboard.putNumber("xSpeed", xSpeed);
+        SmartDashboard.putNumber("ySpeed", ySpeed);
+        SmartDashboard.putNumber("rotSpeed", rotSpeed);
+        SmartDashboard.putNumber("xSpeedCurrent", driveCurrentPos.get());
+        SmartDashboard.putNumber("ySpeedCurrent", strafeCurrentPos.get());
+        SmartDashboard.putNumber("rotSpeedCurrent", rotateCurrentPos.get());
+        SmartDashboard.putNumber("ty", driveCurrentPos.get());
+        SmartDashboard.putNumber("tx", strafeCurrentPos.get());
+
+
+        finalXSpeed = MathUtil.clamp(xSpeed, -0.3, 0.3);
+        finalYSpeed = MathUtil.clamp(ySpeed, -0.3, 0.3);
+        finalRot = MathUtil.clamp(rotSpeed, -0.2, 0.2);
+
+        m_DriveSubsystem.drive(drivePidController.atSetpoint() ? 0.0 : -finalXSpeed, strafePidController.atSetpoint() ? 0.0 : finalYSpeed, rotatePidController.atSetpoint() ? 0.0 : finalRot, false, false);
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        m_DriveSubsystem.drive(0, 0, 0, false, false);
+    }
 
     @Override
     public boolean isFinished() {
-        if (drivePidController.atSetpoint()) {
+        if (drivePidController.atSetpoint() && strafePidController.atSetpoint() && rotatePidController.atSetpoint()) {
+            SmartDashboard.putBoolean("Full Drive Done", true);
             return true;
         }
 

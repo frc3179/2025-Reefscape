@@ -1,3 +1,15 @@
+/**
+ * A command that moves the elevator subsystem to a specified position using a PID controller.
+ *
+ * @param m_elevator The elevator subsystem to control
+ * @param goalPos The target position for the elevator
+ * @param currentPos A supplier for the current position of the elevator
+ * @param errOffset The allowable error offset from the target position
+ * @param interupt A supplier for interrupt condition
+ * @param P The proportional gain for the PID controller
+ * @param I The integral gain for the PID controller
+ * @param D The derivative gain for the PID controller
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;
@@ -5,7 +17,6 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.TrackingConstants;
 import frc.robot.Subsystems.ElevatorSubsystem;
 
 public class ElevatorMoveToPoint extends Command {
@@ -18,13 +29,19 @@ public class ElevatorMoveToPoint extends Command {
     double finalSpeed;
 
     private PIDController elevatorPidController;
+    private double P;
+    private double I;
+    private double D;
     
     public ElevatorMoveToPoint(
             ElevatorSubsystem m_elevator,
             double goalPos,
             Supplier<Double> currentPos,
             double errOffset,
-            Supplier<Boolean> interupt
+            Supplier<Boolean> interupt,
+            double P,
+            double I,
+            double D
         ) {
 
         this.m_elevator = m_elevator;
@@ -34,7 +51,11 @@ public class ElevatorMoveToPoint extends Command {
         this.errOffset = errOffset;
         this.interupt = interupt;
 
-        elevatorPidController = new PIDController(TrackingConstants.kElevatorP, TrackingConstants.kElevatorI, TrackingConstants.kElevatorD);
+        this.P = P;
+        this.I = I;
+        this.D = D;
+
+        elevatorPidController = new PIDController(this.P, this.I, this.D);
         elevatorPidController.setSetpoint(this.goalPos);
         elevatorPidController.setTolerance(this.errOffset);
 
@@ -48,13 +69,15 @@ public class ElevatorMoveToPoint extends Command {
 
     @Override
     public void execute() {
-        finalSpeed = MathUtil.clamp(elevatorPidController.calculate(currentPos.get()), -0.5, 0.5); //TODO: change the speed
+        finalSpeed = MathUtil.clamp(elevatorPidController.calculate(currentPos.get()), -1, 1);
 
         m_elevator.setElevatorSpeed(finalSpeed);
     }
 
     @Override
-    public void end(boolean interrupted) {}
+    public void end(boolean interrupted) {
+        m_elevator.setElevatorSpeed(0.0);
+    }
 
     @Override
     public boolean isFinished() {

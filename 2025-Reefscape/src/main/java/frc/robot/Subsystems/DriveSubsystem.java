@@ -4,6 +4,7 @@
 
 package frc.robot.Subsystems;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -45,12 +46,14 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  //public final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  public final Pigeon2 m_gyro = new Pigeon2(50);
+  
   
     // Odometry class for tracking robot pose
     SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
         DriveConstants.kDriveKinematics,
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(-m_gyro.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -76,7 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
               this::getPose, // Robot pose supplier
               this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
               this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-              (speeds) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+              this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                       new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                       new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
@@ -101,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
     public void periodic() {
       // Update the odometry in the periodic block
       m_odometry.update(
-          Rotation2d.fromDegrees(m_gyro.getAngle()),
+          Rotation2d.fromDegrees(-m_gyro.getAngle()),
           new SwerveModulePosition[] {
               m_frontLeft.getPosition(),
               m_frontRight.getPosition(),
@@ -126,7 +129,7 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void resetPose(Pose2d pose) {
       m_odometry.resetPosition(
-          Rotation2d.fromDegrees(m_gyro.getAngle()),
+          Rotation2d.fromDegrees(-m_gyro.getAngle()),
           new SwerveModulePosition[] {
               m_frontLeft.getPosition(),
               m_frontRight.getPosition(),
@@ -145,7 +148,12 @@ public class DriveSubsystem extends SubsystemBase {
      * @param fieldRelative Whether the provided x and y speeds are relative to the
      *                      field.
      */
-    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean gyroReset) {
+      if (gyroReset) {
+        m_gyro.reset();
+      }
+
+
       // Convert the commanded speeds into the correct units for the drivetrain
       double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
       double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
@@ -154,7 +162,7 @@ public class DriveSubsystem extends SubsystemBase {
       var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
           fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                  Rotation2d.fromDegrees(m_gyro.getAngle()))
+                  Rotation2d.fromDegrees(-m_gyro.getAngle()))
               : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
       SwerveDriveKinematics.desaturateWheelSpeeds(
           swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -207,7 +215,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @return the robot's heading in degrees, from -180 to 180
      */
     public double getHeading() {
-      return Rotation2d.fromDegrees(m_gyro.getAngle()).getDegrees();
+      return Rotation2d.fromDegrees(-m_gyro.getAngle()).getDegrees();
     }
   
     /**
@@ -236,10 +244,7 @@ public class DriveSubsystem extends SubsystemBase {
   
       SwerveDriveKinematics.desaturateWheelSpeeds(
           swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-      m_frontLeft.setDesiredState(swerveModuleStates[0]);
-      m_frontRight.setDesiredState(swerveModuleStates[1]);
-      m_rearLeft.setDesiredState(swerveModuleStates[2]);
-      m_rearRight.setDesiredState(swerveModuleStates[3]);
+      setModuleStates(swerveModuleStates);
     }
   
     public boolean shouldFlipPath() {
@@ -259,7 +264,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getGryoAngle() {
-      Rotation2d res = new Rotation2d(m_gyro.getAngle());
+      Rotation2d res = new Rotation2d(((Math.PI * -m_gyro.getAngle()) / 180));
       return res;
     }
 

@@ -1,3 +1,18 @@
+/**
+ * A command that drives the robot to a specified point using PID control.
+ *
+ * This command calculates the necessary speeds to drive the robot towards a goal position
+ * using a PID controller. It adjusts the robot's movement based on the error between the
+ * current position and the goal position.
+ *
+ * @param m_DriveSubsystem The DriveSubsystem of the robot
+ * @param ySpeed A supplier for the forward/backward speed of the robot
+ * @param rot A supplier for the rotational speed of the robot
+ * @param goalPos The goal position to drive towards
+ * @param currentPos A supplier for the current position of the robot
+ * @param errOffset The error offset for the PID controller
+ * @param interupt
+ */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;
@@ -61,7 +76,7 @@ public class DriveDriveToPoint extends Command{
         finalYSpeed = ySpeed.get();
         finalRot = rot.get();
 
-        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false);
+        m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);
     }
 
     @Override

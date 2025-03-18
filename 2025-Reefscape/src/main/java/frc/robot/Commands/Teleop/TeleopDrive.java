@@ -1,3 +1,16 @@
+/**
+ * A command that handles teleoperated driving of the robot.
+ *
+ * This command takes input from various suppliers for xSpeed, ySpeed, rotation, field relative mode,
+ * slow mode, fast mode, POV, and gyro reset. It calculates the final speeds and rotation based on the input
+ * and the drive speed settings. The command then drives the robot using the DriveSubsystem.
+ *
+ * @param m_DriveSubsystem The DriveSubsystem instance to control the robot's drive system.
+ * @param m_DriveSpeedSettings The DriveSpeedSettings instance to configure the drive speed settings.
+ * @param xSpeed A supplier for the x-axis speed input.
+ * @param ySpeed A supplier for the y-axis speed input.
+ * @param
+ */
 package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;
@@ -16,6 +29,7 @@ public class TeleopDrive extends Command{
     private Supplier<Boolean> isSlowMode;
     private Supplier<Boolean> isFastMode;
     private Supplier<Double> pov;
+    Supplier<Boolean> resetGyro;
 
     private double[] finalSpeeds; // [x, y]
     private double finalRot;
@@ -31,7 +45,8 @@ public class TeleopDrive extends Command{
             Supplier<Boolean> fieldRelative,
             Supplier<Boolean> isSlowMode,
             Supplier<Boolean> isFastMode,
-            Supplier<Double> pov
+            Supplier<Double> pov,
+            Supplier<Boolean> resetGyro
         ){
 
         this.m_DriveSubsystem = m_DriveSubsystem;
@@ -44,6 +59,7 @@ public class TeleopDrive extends Command{
         this.isSlowMode = isSlowMode;
         this.isFastMode = isFastMode;
         this.pov = pov;
+        this.resetGyro = resetGyro;
 
         finalSpeeds = new double[2];
 
@@ -68,7 +84,7 @@ public class TeleopDrive extends Command{
             finalRot = m_DriveSpeedSettings.getFinalSpeed(rot.get(), isFastMode.get(), isSlowMode.get());
         }
 
-        m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get());
+        m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get(), resetGyro.get());
     }
 
     @Override
