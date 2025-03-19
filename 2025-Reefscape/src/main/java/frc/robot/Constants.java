@@ -113,10 +113,10 @@ public final class Constants {
   }
 
   public static final class TrackingConstants {
-    public static final double kStrafeDriveP = 0.03;
-    public static final double kStrafeDriveI = 0.001;
-    public static final double kStrafeDriveD = 0.001;
-    public static final double kRightReefStrafeLimelightOffset = 17.75;
+    public static final double kStrafeDriveP = 0.005;
+    public static final double kStrafeDriveI = 0.03;
+    public static final double kStrafeDriveD = 0.005;
+    public static final double kRightReefStrafeLimelightOffset = -16.24;
     public static final double kLeftReefStrafeLimelightOffset = 0.0;
     
     public static final double kRotateDriveP = 0.01;
@@ -125,10 +125,10 @@ public final class Constants {
     public static final double kRotGoalPose = 12.4;
     
     
-    public static final double kDriveDriveP = 0.1;
+    public static final double kDriveDriveP = 0.15;
     public static final double kDriveDriveI = 0.03; 
     public static final double kDriveDriveD = 0.0;
-    public static final double kReefForwardLimelightOffset = -11.9;
+    public static final double kReefForwardLimelightOffset = 12.91;
     
     public static final double kElevatorL2P = 10.0;
     public static final double kElevatorL2I = 0.005;
@@ -156,15 +156,15 @@ public final class Constants {
     public static final double kThroughCoralOutakeScoringPos = 1.0;
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final SimpleMatrix visionMeasurementStdDevs1Data = new SimpleMatrix(new double[] {1.0, 1.0, 1.0});
+    public static final SimpleMatrix visionMeasurementStdDevs1Data = new SimpleMatrix(new double[] {0.7, 0.7, 0.999});
     public static final Matrix<N3,N1> visionMeasurementStdDevs1 = new Matrix<N3, N1>(visionMeasurementStdDevs1Data);
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final SimpleMatrix visionMeasurementStdDevs2Data = new SimpleMatrix(new double[] {1.0, 1.0, 1.0});
+    public static final SimpleMatrix visionMeasurementStdDevs2Data = new SimpleMatrix(new double[] {0.7, 0.7, 0.999});
     public static final Matrix<N3,N1> visionMeasurementStdDevs2 = new Matrix<N3,N1>(visionMeasurementStdDevs2Data);
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less
-    public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {1.0, 1.0, 1.0});
+    public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {0.7, 0.7, 0.999});
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
     public static final String kMovingLimelightName = "limelight-moving";
@@ -191,9 +191,9 @@ public final class Constants {
     public static final double kMaxThresholdForResetPercent = 0.9;
   }
 
-  public static final class ThroughCoralOuttakeConstants {
-    public static final int kThroughCoralOuttakeMotorPort = 12;
-  }
+  //public static final class ThroughCoralOuttakeConstants {
+  //  public static final int kThroughCoralOuttakeMotorPort = 12;
+  //}
 
   public static final class BranchCoralOuttakeConstants {
     public static final int kBranchCoralOuttakeMotorPort = 19;

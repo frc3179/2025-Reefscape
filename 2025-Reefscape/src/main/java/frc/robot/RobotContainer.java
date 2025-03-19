@@ -8,12 +8,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Commands.Auto.BranchIntake;
@@ -21,7 +24,7 @@ import frc.robot.Commands.Auto.BranchIntakeNoInteruptStopMotor;
 import frc.robot.Commands.Auto.BranchOuttake;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
 import frc.robot.Commands.Auto.FullDriveToPoint;
-import frc.robot.Commands.Auto.ThroughCoralOuttakeToPoint;
+//import frc.robot.Commands.Auto.ThroughCoralOuttakeToPoint;
 import frc.robot.Commands.Teleop.TeleopAlgae;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
 import frc.robot.Commands.Teleop.TeleopClimb;
@@ -29,7 +32,7 @@ import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
 import frc.robot.Commands.Teleop.TeleopLights;
 import frc.robot.Commands.Teleop.TeleopTracking;
-import frc.robot.Commands.Teleop.TeleopTroughCoralOuttake;
+//import frc.robot.Commands.Teleop.TeleopTroughCoralOuttake;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LightSubsystemConstants;
 import frc.robot.Constants.OIConstants;
@@ -45,8 +48,9 @@ import frc.robot.Subsystems.ClimbingSubsystem;
 import frc.robot.Subsystems.DriveSubsystem;
 import frc.robot.Subsystems.ElevatorSubsystem;
 import frc.robot.Subsystems.LightSubsystem;
+import frc.robot.Subsystems.LimelightVision;
 import frc.robot.Subsystems.TrackingSubsystem;
-import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
+//import frc.robot.Subsystems.TroughCoralOuttakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -60,27 +64,34 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
-  private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
-  private final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
-  private final AlgaeInOutTakeSubsystem m_AlgaeInOutTakeSubsystem = new AlgaeInOutTakeSubsystem();
-  private final AlgaeWristSubsystem m_AlgaeWristSubsystem = new AlgaeWristSubsystem();
-  private final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem(m_AlgaeInOutTakeSubsystem, m_AlgaeWristSubsystem);
-  private final LightSubsystem m_lightSubsystem = new LightSubsystem(LightSubsystemConstants.kBlinkinPort);
-  private final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
+  //private final TroughCoralOuttakeSubsystem m_troughCoralOuttake = new TroughCoralOuttakeSubsystem();
+  public final BranchCoralOuttakeSubsystem m_branchCoralOuttake = new BranchCoralOuttakeSubsystem();
+  public final AlgaeInOutTakeSubsystem m_AlgaeInOutTakeSubsystem = new AlgaeInOutTakeSubsystem();
+  public final AlgaeWristSubsystem m_AlgaeWristSubsystem = new AlgaeWristSubsystem();
+  public final AlgaeSubsystem m_algaeSubsystem = new AlgaeSubsystem(m_AlgaeInOutTakeSubsystem, m_AlgaeWristSubsystem);
+  public final LightSubsystem m_lightSubsystem = new LightSubsystem(LightSubsystemConstants.kBlinkinPort);
+  public final ClimbingSubsystem m_ClimbingSubsystem = new ClimbingSubsystem();
   
   // Other objects
   private final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
     SpeedSettingsConstants.kDriveSlowModePCT,
     SpeedSettingsConstants.kDriveDefaultModePCT,
     SpeedSettingsConstants.kDriveFastModePCT
-  );
+    );
+    
+    private SendableChooser<Command> autoChooser;
+    private AutoSubsystem m_AutoSubsystem = new AutoSubsystem();
+    
+    private TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem(
+      DriveConstants.kDriveKinematics,
+      m_robotDrive.getGryoAngle(),
+      m_robotDrive.getWheelPosition(),
+      new Pose2d(0, 0, new Rotation2d(0))
+    );
 
-  private SendableChooser<Command> autoChooser;
-  private AutoSubsystem m_AutoSubsystem = new AutoSubsystem();
-
-  private TrackingSubsystem m_TrackingSubsystem = new TrackingSubsystem();
+    public final LimelightVision m_stillLimelight = new LimelightVision(m_robotDrive, m_TrackingSubsystem, TrackingConstants.kStillLimelightName);
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -107,23 +118,169 @@ public class RobotContainer {
   
     private void configureAutoBindings() {
       //TODO: AUTO COMMANDS
+      // NamedCommands.registerCommand(
+      //   "To Top Feeder",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.topFeedZone,
+      //       0.0,
+      //       m_robotDrive.shouldFlipPath()
+      //   )
+      // );
+      
+      // NamedCommands.registerCommand(
+      //   "To Bottom Feeder",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.bottomFeedZone,
+      //       0.0,
+      //       m_robotDrive.shouldFlipPath()
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Processor",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.processor,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef A",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefA,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+      
+      // NamedCommands.registerCommand(
+      //   "To Reef B",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefB,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef C",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefC,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef D",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefD,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef E",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefE,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef F",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefF,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef G",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefG,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef H",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefH,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef I",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefI,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef J",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefJ,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef K",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefK,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+      // NamedCommands.registerCommand(
+      //   "To Reef L",
+      //   Poses.poseShouldFlipThenToCommand(
+      //       Poses.reefL,
+      //       0.0,
+      //       !LightSubsystem.isBlueAlliance
+      //   )
+      // );
+
+
+
+
+
+
+
+
+
+
+
+
 
       //TODO: needs offset to right
       NamedCommands.registerCommand(
-        "Robot Line Up",
+        "Right Robot Line Up",
         new FullDriveToPoint(
             m_robotDrive,
             TrackingConstants.kReefForwardLimelightOffset, //Goal Drive
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName), //Drive Current
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName),
             0.3, //Drive Error offset
             0.0, //Goal Rotate
             () -> 0.0, //Rotate Current
-            0.1, //Rotate Error offset
+            0.3, //Rotate Error offset
             TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) < -10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset+5, //Strafe Current
-            0.3, //Stra fe Error offset
-            () -> false
-          ).withTimeout(1.3) 
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) > 10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset+5, //Strafe Current
+            0.5, //Stra fe Error offset
+            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kB.value)
+          )//.withTimeout(1.3) 
       );
 
       NamedCommands.registerCommand(
@@ -228,15 +385,6 @@ public class RobotContainer {
           m_branchCoralOuttake
         ).withTimeout(2)
       );
-
-  
-      //TODO: TEST
-      m_TrackingSubsystem.setValues(
-        DriveConstants.kDriveKinematics,
-        m_robotDrive.getGryoAngle(),
-        m_robotDrive.getWheelPosition(),
-        m_AutoSubsystem.getCurrentAutoPose()
-      );
     }
 
   public void configureDefaultBindings() {
@@ -263,41 +411,25 @@ public class RobotContainer {
       )
     );
 
-    m_troughCoralOuttake.setDefaultCommand(
-      new TeleopTroughCoralOuttake(
-        m_troughCoralOuttake,
-        () -> m_armController.getRawButton(10) ? 0.25 : (m_armController.getRawButton(9) ? -0.25 : 0.0)
-        )
-    );
+    // m_troughCoralOuttake.setDefaultCommand(
+    //   new TeleopTroughCoralOuttake(
+    //     m_troughCoralOuttake,
+    //     () -> m_armController.getRawButton(10) ? 0.25 : (m_armController.getRawButton(9) ? -0.25 : 0.0)
+    //     )
+    // );
 
     m_branchCoralOuttake.setDefaultCommand(
       new TeleopBranchCoralOuttake(
         m_branchCoralOuttake,
         () -> m_armController.getRawButton(1) ? 1.0 : (m_armController.getRawButton(2) ? -1.0 : 0.0)
       )
-    );
-
-    m_TrackingSubsystem.setDefaultCommand(
-      new TeleopTracking(
-        m_TrackingSubsystem,
-        TrackingConstants.kStillLimelightName, //first to update pose
-        TrackingConstants.kStillLimelightName, //second to update pose
-        TrackingConstants.kStillLimelightName,//TrackingConstants.kReefLimelightName, //third to update pose
-        () -> m_robotDrive.getGryoAngle(),
-        () -> m_robotDrive.getWheelPosition(),
-        () -> m_robotDrive.getGryoRate(),
-        TrackingConstants.visionMeasurementStdDevs1,
-        TrackingConstants.visionMeasurementStdDevs2,
-        TrackingConstants.visionMeasurementStdDevs3
-      )
-    );
-    
+    );    
 
     m_algaeSubsystem.setDefaultCommand(
       new TeleopAlgae(
         m_algaeSubsystem,
         () -> m_armController.getRawButton(3) ? 1.0 : (m_armController.getRawButton(5) ? -1.0 : 0.0), //In Out Take Speed
-        () -> m_armController.getRawButton(7) ? 0.3 : (m_armController.getRawButton(8) ? -0.3 : 0.0) //Wrist speed
+        () -> m_armController.getRawButton(7) ? 1 : (m_armController.getRawButton(8) ? -1 : 0.0) //Wrist speed
       )
     );
 
@@ -466,16 +598,16 @@ public class RobotContainer {
 
 
 
-    new JoystickButton(m_armController, 4)
-        .whileTrue(
-          new ThroughCoralOuttakeToPoint(
-            m_troughCoralOuttake,
-            TrackingConstants.kThroughCoralOuttakeIntakePos,
-            () -> m_troughCoralOuttake.getEncoder(),
-            0.1,
-            () -> !m_armController.getRawButton(4)
-          )
-        );
+    // new JoystickButton(m_armController, 4)
+    //     .whileTrue(
+    //       new ThroughCoralOuttakeToPoint(
+    //         m_troughCoralOuttake,
+    //         TrackingConstants.kThroughCoralOuttakeIntakePos,
+    //         () -> m_troughCoralOuttake.getEncoder(),
+    //         0.1,
+    //         () -> !m_armController.getRawButton(4)
+    //       )
+    //     );
 
     
     new JoystickButton(m_autoController, 1)
@@ -486,31 +618,59 @@ public class RobotContainer {
           )
         );
 
+    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kB.value)
+        .whileTrue(
+          new FullDriveToPoint(
+            m_robotDrive,
+            TrackingConstants.kReefForwardLimelightOffset, //Goal Drive
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName),
+            0.3, //Drive Error offset
+            0.0, //Goal Rotate
+            () -> 0.0, //Rotate Current
+            0.3, //Rotate Error offset
+            TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) > 10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset, //Strafe Current
+            0.5, //Stra fe Error offset
+            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kB.value)
+          )
+        );
+
     new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
         .whileTrue(
           new FullDriveToPoint(
             m_robotDrive,
-            0.0, //Goal Drive
-            () -> 0.0, //Drive Current
+            TrackingConstants.kReefForwardLimelightOffset, //Goal Drive
+            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName), //Drive Current
             0.3, //Drive Error offset
             0.0, //Goal Rotate
             () -> 0.0, //Rotate Current
-            0.1, //Rotate Error offset
-            TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) < -10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset+5, //Strafe Current
-            0.3, //Stra fe Error offset
+            0.3, //Rotate Error offset
+            0.0, //Goal Strafe
+            () -> 0.0, //Strafe Current
+            0.5, //Stra fe Error offset
             () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kA.value)
           )
         );
 
-    
-    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kB.value)
+    // Bottom feed zone
+    new JoystickButton(m_driverController, 8)
         .whileTrue(
-          m_AutoSubsystem.endPoseToCommand(
-            new Pose2d(0.0, 0.0, new Rotation2d(0.0)),
-            0.0
+          Poses.endPoseToCommand(
+            Poses.bottomFeedZone,
+            0.0,
+            !m_lightSubsystem.isBlueAlliance()
           )
         );
+
+    // Top feed zone
+    new JoystickButton(m_driverController, 7)
+    .whileTrue(
+      Poses.endPoseToCommand(
+            Poses.topFeedZone,
+            0.0,
+            !m_lightSubsystem.isBlueAlliance()
+      )
+    );
   }
 
   /**

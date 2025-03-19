@@ -5,7 +5,6 @@
 package frc.robot.Subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -19,7 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -81,8 +80,8 @@ public class DriveSubsystem extends SubsystemBase {
               this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
               this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                      new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                      new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                      new PIDConstants(30.0, 0.0, 0.0), // Translation PID constants
+                      new PIDConstants(20.0, 0.0, 0.0) // Rotation PID constants
               ),
               config, // The robot configuration
               () -> {
@@ -111,6 +110,8 @@ public class DriveSubsystem extends SubsystemBase {
               m_rearLeft.getPosition(),
               m_rearRight.getPosition()
           });
+
+      
     }
   
     /**
@@ -153,7 +154,6 @@ public class DriveSubsystem extends SubsystemBase {
         m_gyro.reset();
       }
 
-
       // Convert the commanded speeds into the correct units for the drivetrain
       double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
       double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
@@ -162,7 +162,7 @@ public class DriveSubsystem extends SubsystemBase {
       var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
           fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                  Rotation2d.fromDegrees(-m_gyro.getAngle()))
+                  Rotation2d.fromDegrees(-m_gyro.getAngle()/*shouldFlipPath() ? -m_gyro.getAngle() + 180 : -m_gyro.getAngle()*/))
               : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
       SwerveDriveKinematics.desaturateWheelSpeeds(
           swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -252,7 +252,9 @@ public class DriveSubsystem extends SubsystemBase {
       // This will flip the path being followed to the red side of the field.
       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
       var alliance = DriverStation.getAlliance();
+      SmartDashboard.putString("Alliance Color", "null");
       if (alliance.isPresent()) {
+        SmartDashboard.putString("Alliance Color", alliance.get().toString());
         return alliance.get() == DriverStation.Alliance.Red;
       }
       return false;
@@ -261,6 +263,10 @@ public class DriveSubsystem extends SubsystemBase {
     //Made for tracking
     public double getGryoRate() {
       return m_gyro.getRate();
+    }
+
+    public void setGryoAngle(double angle) {
+      m_gyro.setYaw(angle);
     }
 
     public Rotation2d getGryoAngle() {

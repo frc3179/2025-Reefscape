@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "S2_JI"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Right Robot Line Up"
+            "name": "To Reef E"
           }
         },
         {
@@ -23,9 +17,9 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "JI_End-F1"
+            "name": "To Bottom Feeder"
           }
         },
         {
@@ -35,15 +29,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "F1_End_L"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "Right Robot Line Up"
+            "name": "To Reef D"
           }
         },
         {
@@ -53,39 +41,69 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "L_End_F1"
+            "name": "To Bottom Feeder"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Right Robot Line Up"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "F1_End_L"
+            "name": "Branch Intake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Right Robot Line Up"
+            "name": "To Reef C"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L3 Score"
+            "name": "L4 Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "To Bottom Feeder"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Branch Intake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "To Reef B"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "To Bottom Feeder"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Branch Intake"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "1Comp",
   "choreoAuto": false
 }

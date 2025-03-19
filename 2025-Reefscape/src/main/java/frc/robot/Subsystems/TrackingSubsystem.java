@@ -23,9 +23,7 @@ public class TrackingSubsystem extends SubsystemBase {
     public SwerveDrivePoseEstimator poseEstimator;
     private StructPublisher<Pose2d> publisher; 
     
-    public TrackingSubsystem() {}
-
-    public void setValues(
+    public TrackingSubsystem(
         SwerveDriveKinematics kinematics,
         Rotation2d gyroAngle,
         SwerveModulePosition[] wheelPositions,

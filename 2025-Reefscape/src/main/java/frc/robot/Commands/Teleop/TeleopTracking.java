@@ -16,6 +16,8 @@ package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;
 
+import com.ctre.phoenix6.Utils;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -74,7 +76,11 @@ public class TeleopTracking extends Command {
     }
 
     @Override
-    public void initialize() {}
+    public void initialize() {
+        doRejectUpdate1 = false;
+        doRejectUpdate2 = false;
+        doRejectUpdate3 = false;
+    }
 
     @Override
     public void execute() {
@@ -101,10 +107,11 @@ public class TeleopTracking extends Command {
             }
             if(!doRejectUpdate1)
             {
-                m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight1VisionMeasurementStdDevs);
+                //m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight1VisionMeasurementStdDevs);
                 m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
                     limelight1.pose,
-                    limelight1.timestampSeconds
+                    limelight1.timestampSeconds,
+                    limelight3VisionMeasurementStdDevs
                 );
             }
         } else {
@@ -135,10 +142,11 @@ public class TeleopTracking extends Command {
             }
             if(!doRejectUpdate2)
             {
-                m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight2VisionMeasurementStdDevs);
+                //m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight2VisionMeasurementStdDevs);
                 m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
                     limelight2.pose,
-                    limelight2.timestampSeconds
+                    limelight2.timestampSeconds,
+                    limelight2VisionMeasurementStdDevs
                 );
             }
         } else {
@@ -169,10 +177,11 @@ public class TeleopTracking extends Command {
             }
             if(!doRejectUpdate3)
             {
-                m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight3VisionMeasurementStdDevs);
+                // m_TrackingSubsystem.poseEstimator.setVisionMeasurementStdDevs(limelight3VisionMeasurementStdDevs);
                 m_TrackingSubsystem.poseEstimator.addVisionMeasurement(
                     limelight3.pose,
-                    limelight3.timestampSeconds
+                    limelight3.timestampSeconds,
+                    limelight3VisionMeasurementStdDevs
                 );
             }
         } else {
