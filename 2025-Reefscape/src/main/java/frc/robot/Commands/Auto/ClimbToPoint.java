@@ -67,7 +67,7 @@ public class ClimbToPoint extends Command{
     @Override
     public void execute() {
         m_climb.setSpeed(
-            MathUtil.clamp(climbPID.calculate(currentPos.get()), -0.5, 0.5) //TODO: could remove clamp
+            MathUtil.clamp(-climbPID.calculate(currentPos.get()), -1, 1)
         );
     }
 

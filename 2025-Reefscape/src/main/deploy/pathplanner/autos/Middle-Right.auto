@@ -5,9 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "To Reef H"
+            "pathName": "S4_HG"
           }
         },
         {

@@ -16,8 +16,6 @@ package frc.robot.Commands.Teleop;
 
 import java.util.function.Supplier;
 
-import com.ctre.phoenix6.Utils;
-
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;

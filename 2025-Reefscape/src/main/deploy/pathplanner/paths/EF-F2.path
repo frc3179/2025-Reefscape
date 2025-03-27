@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.205960264900662,
-        "y": 3.981415562913906
+        "x": 5.389942052980132,
+        "y": 2.4922806291390716
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.957730408101906,
-        "y": 4.011113007141801
+        "x": 6.268086219061111,
+        "y": 2.788862996871462
       },
       "isLocked": false,
-      "linkedName": "S4"
+      "linkedName": "EF"
     },
     {
       "anchor": {
-        "x": 5.4046022727272724,
-        "y": 5.266463068181817
+        "x": 1.0171022727272727,
+        "y": 1.0285369318181814
       },
       "prevControl": {
-        "x": 5.958444487110634,
-        "y": 4.703160770715931
+        "x": 0.5268046718874044,
+        "y": 0.8178156379953114
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "JI"
+      "linkedName": "F2"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.00797872340425532,
-      "rotationDegrees": -119.99999999999999
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": -36.22120617134285
   },
   "reversed": false,
-  "folder": "S4",
+  "folder": "S6",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

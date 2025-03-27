@@ -81,7 +81,7 @@ public class DriveSubsystem extends SubsystemBase {
               this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
               new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
                       new PIDConstants(30.0, 0.0, 0.0), // Translation PID constants
-                      new PIDConstants(20.0, 0.0, 0.0) // Rotation PID constants
+                      new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
               ),
               config, // The robot configuration
               () -> {
@@ -151,7 +151,7 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean gyroReset) {
       if (gyroReset) {
-        m_gyro.reset();
+        setGryoAngle(180);
       }
 
       // Convert the commanded speeds into the correct units for the drivetrain

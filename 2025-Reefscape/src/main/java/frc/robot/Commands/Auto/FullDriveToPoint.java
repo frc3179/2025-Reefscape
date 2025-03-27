@@ -17,11 +17,12 @@ package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.TrackingConstants;
 import frc.robot.Subsystems.DriveSubsystem;
 
 public class FullDriveToPoint extends Command{
@@ -36,6 +37,10 @@ public class FullDriveToPoint extends Command{
     private double strafeGoalPos;
     private Supplier<Double> strafeCurrentPos;
     private double strafeErrOffset;
+
+    private PIDConstants drivPidConstants;
+    private PIDConstants strafePidConstants;
+    private PIDConstants rotatePidConstants;
 
     private Supplier<Boolean> interupt;
 
@@ -58,7 +63,10 @@ public class FullDriveToPoint extends Command{
             double strafeGoalPos,
             Supplier<Double> strafeCurrentPos,
             double strafeErrOffset,
-            Supplier<Boolean> interupt
+            Supplier<Boolean> interupt,
+            PIDConstants drivPidConstants,
+            PIDConstants strafePidConstants,
+            PIDConstants rotatePidConstants
         ){
 
         this.m_DriveSubsystem = m_DriveSubsystem;
@@ -77,15 +85,19 @@ public class FullDriveToPoint extends Command{
 
         this.interupt = interupt;
 
-        drivePidController = new PIDController(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD);
+        this.drivPidConstants = drivPidConstants;
+        this.strafePidConstants = strafePidConstants;
+        this.rotatePidConstants = rotatePidConstants;
+
+        drivePidController = new PIDController(this.drivPidConstants.kP, this.drivPidConstants.kI, this.drivPidConstants.kD);
         drivePidController.setSetpoint(this.driveGoalPos);
         drivePidController.setTolerance(this.driveErrOffset);
 
-        rotatePidController = new PIDController(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD);
+        rotatePidController = new PIDController(this.rotatePidConstants.kP, this.rotatePidConstants.kI, this.rotatePidConstants.kD);
         rotatePidController.setSetpoint(this.rotateGoalPos);
         rotatePidController.setTolerance(this.rotateErrOffset);
 
-        strafePidController = new PIDController(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD);
+        strafePidController = new PIDController(this.strafePidConstants.kP, this.strafePidConstants.kI, this.strafePidConstants.kD);
         strafePidController.setSetpoint(this.strafeGoalPos);
         strafePidController.setTolerance(this.strafeErrOffset);
 

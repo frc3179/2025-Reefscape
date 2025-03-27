@@ -6,22 +6,18 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.util.FlippingUtil;
-
+import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Commands.Auto.BranchIntake;
 import frc.robot.Commands.Auto.BranchIntakeNoInteruptStopMotor;
 import frc.robot.Commands.Auto.BranchOuttake;
+import frc.robot.Commands.Auto.ClimbToPoint;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
 import frc.robot.Commands.Auto.FullDriveToPoint;
 //import frc.robot.Commands.Auto.ThroughCoralOuttakeToPoint;
@@ -31,7 +27,6 @@ import frc.robot.Commands.Teleop.TeleopClimb;
 import frc.robot.Commands.Teleop.TeleopDrive;
 import frc.robot.Commands.Teleop.TeleopElevator;
 import frc.robot.Commands.Teleop.TeleopLights;
-import frc.robot.Commands.Teleop.TeleopTracking;
 //import frc.robot.Commands.Teleop.TeleopTroughCoralOuttake;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LightSubsystemConstants;
@@ -268,19 +263,42 @@ public class RobotContainer {
       //TODO: needs offset to right
       NamedCommands.registerCommand(
         "Right Robot Line Up",
-        new FullDriveToPoint(
-            m_robotDrive,
-            TrackingConstants.kReefForwardLimelightOffset, //Goal Drive
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName),
-            0.3, //Drive Error offset
-            0.0, //Goal Rotate
-            () -> 0.0, //Rotate Current
-            0.3, //Rotate Error offset
-            TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) > 10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset+5, //Strafe Current
-            0.5, //Stra fe Error offset
-            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kB.value)
-          )//.withTimeout(1.3) 
+        new SequentialCommandGroup(
+            new FullDriveToPoint(
+              m_robotDrive,
+              TrackingConstants.kReefForwardLimelightOffset,
+              () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName),
+              0.3, //Drive Error offset
+              0.0, //Goal Rotate
+              () -> 0.0, //Rotate Current
+              0.3, //Rotate Error offset
+              0.0, //Goal Strafe
+              () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) > 5.0 ? 0.0 : LimelightHelpers.getTX(TrackingConstants.kStillLimelightName), //Strafe Current
+              0.5, //Stra fe Error offset
+              () -> false,
+              new PIDConstants(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD),
+              new PIDConstants(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD),
+              new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD)
+            ),
+
+            new FullDriveToPoint(
+              m_robotDrive,
+              0.0,
+              () -> 0.0,
+              0.3, //Drive Error offset
+              0.0, //Goal Rotate
+              () -> 0.0, //Rotate Current
+              0.3, //Rotate Error offset
+              TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
+              () -> LimelightHelpers.getTX(TrackingConstants.kStillLimelightName), //Strafe Current
+              0.5, //Stra fe Error offset
+              () -> false,
+              new PIDConstants(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD),
+              new PIDConstants(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD),
+              new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD)
+            )
+
+          )//.withTimeout(2) 
       );
 
       NamedCommands.registerCommand(
@@ -620,36 +638,43 @@ public class RobotContainer {
 
     new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kB.value)
         .whileTrue(
-          new FullDriveToPoint(
-            m_robotDrive,
-            TrackingConstants.kReefForwardLimelightOffset, //Goal Drive
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName),
-            0.3, //Drive Error offset
-            0.0, //Goal Rotate
-            () -> 0.0, //Rotate Current
-            0.3, //Rotate Error offset
-            TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) > 10.0 ? LimelightHelpers.getTX(TrackingConstants.kStillLimelightName) : TrackingConstants.kRightReefStrafeLimelightOffset, //Strafe Current
-            0.5, //Stra fe Error offset
-            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kB.value)
-          )
+            new FullDriveToPoint(
+              m_robotDrive,
+              0.0,
+              () -> 0.0,
+              0.3, //Drive Error offset
+              0.0, //Goal Rotate
+              () -> 0.0, //Rotate Current
+              0.3, //Rotate Error offset
+              TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
+              () -> LimelightHelpers.getTX(TrackingConstants.kStillLimelightName), //Strafe Current
+              0.5, //Stra fe Error offset
+              () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kB.value),
+              new PIDConstants(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD),
+              new PIDConstants(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD),
+              new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD)
+            )
         );
 
-    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+
+        new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
         .whileTrue(
-          new FullDriveToPoint(
-            m_robotDrive,
-            TrackingConstants.kReefForwardLimelightOffset, //Goal Drive
-            () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName), //Drive Current
-            0.3, //Drive Error offset
-            0.0, //Goal Rotate
-            () -> 0.0, //Rotate Current
-            0.3, //Rotate Error offset
-            0.0, //Goal Strafe
-            () -> 0.0, //Strafe Current
-            0.5, //Stra fe Error offset
-            () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kA.value)
-          )
+            new FullDriveToPoint(
+              m_robotDrive,
+              0.0,
+              () -> 0.0,
+              0.3, //Drive Error offset
+              0.0, //Goal Rotate
+              () -> 0.0, //Rotate Current
+              0.3, //Rotate Error offset
+              TrackingConstants.kLeftReefStrafeLimelightOffset, //Goal Strafe
+              () -> LimelightHelpers.getTX(TrackingConstants.kMovingLimelightName), //Strafe Current
+              0.5, //Stra fe Error offset
+              () -> !m_driverController.getRawButton(edu.wpi.first.wpilibj.XboxController.Button.kA.value),
+              new PIDConstants(TrackingConstants.kDriveDriveLeftP, TrackingConstants.kDriveDriveLeftI, TrackingConstants.kDriveDriveLeftD),
+              new PIDConstants(TrackingConstants.kStrafeDriveLeftP, TrackingConstants.kStrafeDriveLeftI, TrackingConstants.kStrafeDriveLeftD),
+              new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD)
+            )
         );
 
     // Bottom feed zone
@@ -671,6 +696,36 @@ public class RobotContainer {
             !m_lightSubsystem.isBlueAlliance()
       )
     );
+
+    //Climb out
+    new JoystickButton(m_autoController, 7)
+        .whileTrue(
+          new ClimbToPoint(
+            m_ClimbingSubsystem,
+            TrackingConstants.kClimbP,
+            TrackingConstants.kClimbI,
+            TrackingConstants.kClimbD,
+            TrackingConstants.kClimbOut,
+            0.03,
+            () -> m_ClimbingSubsystem.getEncoder(),
+            () -> !m_autoController.getRawButton(7)
+          )
+        );
+
+    //Climb in
+    new JoystickButton(m_autoController, 8)
+        .whileTrue(
+          new ClimbToPoint(
+            m_ClimbingSubsystem,
+            TrackingConstants.kClimbP,
+            TrackingConstants.kClimbI,
+            TrackingConstants.kClimbD,
+            TrackingConstants.kClimbZero,
+            0.03,
+            () -> m_ClimbingSubsystem.getEncoder(),
+            () -> !m_autoController.getRawButton(8)
+          )
+        );
   }
 
   /**

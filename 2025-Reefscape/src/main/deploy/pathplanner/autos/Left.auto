@@ -5,9 +5,15 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "S2_JI"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "To Reef E"
+            "name": "Right Robot Line Up"
           }
         },
         {
@@ -17,9 +23,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "To Bottom Feeder"
+            "pathName": "JI_End-F1"
           }
         },
         {
@@ -29,9 +35,15 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "F1_End_L"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "To Reef D"
+            "name": "Right Robot Line Up"
           }
         },
         {
@@ -41,9 +53,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "To Bottom Feeder"
+            "pathName": "L_End_F1"
           }
         },
         {
@@ -53,51 +65,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "To Reef C"
+            "pathName": "F1_End_L"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L4 Score"
+            "name": "Right Robot Line Up"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "To Bottom Feeder"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Branch Intake"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "To Reef B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L4 Score"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "To Bottom Feeder"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Branch Intake"
+            "name": "L3 Score"
           }
         }
       ]
