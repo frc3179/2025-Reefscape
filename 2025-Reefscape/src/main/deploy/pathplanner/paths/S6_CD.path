@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.176903973509933,
+        "y": 1.9329470198675494
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.187689531893073,
+        "y": 1.9248679633416363
+      },
+      "isLocked": false,
+      "linkedName": "S6"
+    },
+    {
+      "anchor": {
+        "x": 3.3205397727272725,
+        "y": 2.6738494318181822
+      },
+      "prevControl": {
+        "x": 4.619635318184398,
+        "y": 2.379376187283265
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "CD"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 100.0,
+    "maxAcceleration": 100.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 50.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 59.99999999999999
+  },
+  "reversed": false,
+  "folder": "S6",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

@@ -1,31 +1,30 @@
 /**
- * A command that drives the robot to a specified point using strafing motion.
+ * A command that rotates the drive subsystem to a specified point using PID control.
  *
- * This command uses a PID controller to adjust the robot's position based on the current and goal positions.
+ * This command calculates the necessary rotation to reach a goal position using a PID controller.
+ * The command ends when the rotation reaches the goal position or when interrupted.
  *
- * @param m_DriveSubsystem The DriveSubsystem of the robot
- * @param xSpeed A supplier for the forward/backward speed of the robot
- * @param rot A supplier for the rotational speed of the robot
- * @param goalPos The goal position to drive the robot to
- * @param currentPos A supplier for the current position of the robot
- * @param errOffset The error offset for the PID controller
- * @param interupt A supplier for interrupting the command
+ * @param m_DriveSubsystem The DriveSubsystem to control
+ * @param xSpeed A supplier for the x-axis speed
+ * @param ySpeed A supplier for the y-axis speed
+ * @param goalPos The goal position to rotate towards
+ * @param currentPos A supplier for the current position
+ * @param errOffset The error offset tolerance for the PID controller
+ * @param interupt A supplier for the interruption condition
  */
 package frc.robot.Commands.Auto;
 
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.TrackingConstants;
 import frc.robot.Subsystems.Drive.DriveSubsystem;
 
-public class StrafeDriveToPoint extends Command{
+public class RotateDriveToPoint extends Command{
     private DriveSubsystem m_DriveSubsystem;
     private Supplier<Double> xSpeed;
-    private Supplier<Double> rot;
-
+    private Supplier<Double> ySpeed;
     private double goalPos;
     private Supplier<Double> currentPos;
     private double errOffset;
@@ -35,12 +34,12 @@ public class StrafeDriveToPoint extends Command{
     private double finalYSpeed;
     private double finalRot;
 
-    private PIDController strafePidController;
+    private PIDController rotatePidController;
 
-    public StrafeDriveToPoint(
+    public RotateDriveToPoint(
             DriveSubsystem m_DriveSubsystem,
             Supplier<Double> xSpeed, 
-            Supplier<Double> rot,
+            Supplier<Double> ySpeed,
             double goalPos,
             Supplier<Double> currentPos,
             double errOffset,
@@ -50,30 +49,31 @@ public class StrafeDriveToPoint extends Command{
         this.m_DriveSubsystem = m_DriveSubsystem;
 
         this.xSpeed = xSpeed;
-        this.rot = rot;
+        this.ySpeed = ySpeed;
 
         this.currentPos = currentPos;
         this.goalPos = goalPos;
         this.errOffset = errOffset;
         this.interupt = interupt;
 
-        strafePidController = new PIDController(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD);
-        strafePidController.setSetpoint(this.goalPos);
-        strafePidController.setTolerance(this.errOffset);
+        rotatePidController = new PIDController(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD);
+        rotatePidController.setSetpoint(this.goalPos);
+        rotatePidController.setTolerance(this.errOffset);
 
         addRequirements(m_DriveSubsystem);
     }
 
     @Override
     public void initialize() {
-        strafePidController.reset();
+        rotatePidController.reset();
     }
 
     @Override
     public void execute() {
         finalXSpeed = xSpeed.get();
-        finalYSpeed = -MathUtil.clamp(strafePidController.calculate(currentPos.get()), -0.3, 0.3);
-        finalRot = rot.get();
+        finalYSpeed = ySpeed.get();
+        //finalRot = MathUtil.clamp(rotatePidController.calculate(currentPos.get()), -1, 1);
+        finalRot = rotatePidController.calculate(currentPos.get());
 
         m_DriveSubsystem.drive(finalXSpeed, finalYSpeed, finalRot, false, false);
     }
@@ -83,7 +83,7 @@ public class StrafeDriveToPoint extends Command{
 
     @Override
     public boolean isFinished() {
-        if (strafePidController.atSetpoint()) {
+        if (rotatePidController.atSetpoint()) {
             return true;
         }
 

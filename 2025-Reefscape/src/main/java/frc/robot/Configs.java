@@ -1,14 +1,16 @@
 package frc.robot;
 
+import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
     public static final class MAXSwerveModule {
-        public static final SparkMaxConfig drivingConfig = new SparkMaxConfig();
+        public static final SparkFlexConfig drivingConfig = new SparkFlexConfig();
         public static final SparkMaxConfig turningConfig = new SparkMaxConfig();
 
         static {
@@ -26,7 +28,7 @@ public final class Configs {
                     .velocityConversionFactor(drivingFactor / 60.0); // meters per second
             drivingConfig.closedLoop
                     .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                    // These are example gains you may need to them for your own robot!
+                    // These are example gains you may need to change them for your own robot!
                     .pid(0.04, 0, 0)
                     .velocityFF(drivingVelocityFeedForward)
                     .outputRange(-1, 1);
@@ -51,6 +53,78 @@ public final class Configs {
                     // longer route.
                     .positionWrappingEnabled(true)
                     .positionWrappingInputRange(0, turningFactor);
+        }
+    }
+
+    public static final class ElevatorSubsystemConfig {
+        public static final SparkMaxConfig leftElevatorConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig rightElevatorConfig = new SparkMaxConfig();
+
+        static {
+                rightElevatorConfig
+                        .follow(ElevatorConstants.kLeftMotorPort, true)
+                        .idleMode(IdleMode.kBrake)
+                        .openLoopRampRate(0.15);
+                
+                leftElevatorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake)
+                        .openLoopRampRate(0.15);
+
+        }
+    }
+
+    public static final class TroughCoralOuttakeConfig {
+        public static final SparkMaxConfig troughMotorConfig = new SparkMaxConfig();
+
+        static {
+                troughMotorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+
+                troughMotorConfig.absoluteEncoder
+                        .inverted(false);
+        }
+    }
+
+    public static final class BranchCoralOuttakeConfig {
+        public static final SparkMaxConfig branchMotorConfig = new SparkMaxConfig();
+
+        static {
+                branchMotorConfig
+                        .inverted(true)
+                        .idleMode(IdleMode.kBrake);
+        }
+    }
+
+    public static final class AlgaeSubsystemConfig {
+        public static final SparkMaxConfig inOutTakeMotorConfig = new SparkMaxConfig();
+        public static final SparkMaxConfig wristMotorConfig = new SparkMaxConfig();
+
+        static {
+                inOutTakeMotorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+
+                wristMotorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+                
+                wristMotorConfig.absoluteEncoder
+                        .inverted(false);
+        }
+    }
+
+    public static final class ClimbingSubsystemConfig {
+        public static final SparkMaxConfig climbMotorConfig = new SparkMaxConfig();
+
+        static {
+                climbMotorConfig
+                        .inverted(false)
+                        .idleMode(IdleMode.kBrake);
+                
+                climbMotorConfig.absoluteEncoder
+                        .inverted(false);
         }
     }
 }

@@ -1,0 +1,79 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S6_EF"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Right Robot Line Up"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "EF-F2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Branch Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "F2-CD"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Right Robot Line Up"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CD-F2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Right Robot Line Up"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3 Score"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "1Comp",
+  "choreoAuto": false
+}

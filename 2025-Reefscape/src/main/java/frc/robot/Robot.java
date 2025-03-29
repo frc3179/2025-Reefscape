@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
+import au.grapplerobotics.CanBridge;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -15,11 +19,16 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+    FollowPathCommand.warmupCommand().schedule();
+    CanBridge.runTCP();
+    CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    //SmartDashboard.putNumber("Goal Elevator Pose", TrackingConstants.kElevatorEncoderL3Position);
   }
 
   @Override
@@ -37,6 +46,13 @@ public class Robot extends TimedRobot {
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
+    }
+
+
+    if (m_robotContainer.m_lightSubsystem.isBlueAlliance()) {
+      m_robotContainer.m_robotDrive.setGryoAngle(180);
+    } else {
+      m_robotContainer.m_robotDrive.setGryoAngle(0);
     }
   }
 
