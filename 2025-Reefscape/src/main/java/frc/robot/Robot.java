@@ -32,7 +32,13 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_robotContainer.m_robotDrive.drive(0, 0, 0, false, false);
+    m_robotContainer.m_elevator.setElevatorSpeed(0);
+    m_robotContainer.m_algaeSubsystem.move(0, 0);
+    m_robotContainer.m_branchCoralOuttake.setSpeed(0.0);
+    m_robotContainer.m_ClimbingSubsystem.setSpeed(0);
+  }
 
   @Override
   public void disabledPeriodic() {}

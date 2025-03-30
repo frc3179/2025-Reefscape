@@ -94,7 +94,7 @@ public class Poses {
      * 
      * @param id Red side april tag id
      * @return the blue side april tag id.
-     * If could not convert to blue side id. It will return 0
+     * If could not convert to blue side id. It will return the given id
      */
     public static int redSideAprilTagIdToBlueSideId(int id) {
         switch (id) {
@@ -121,8 +121,17 @@ public class Poses {
             
             case 6:
                 return 19;
+            
+            case 3:
+                return 16;
+            
+            case 4:
+                return 15;
+            
+            case 5:
+                return 14;
         }
 
-        return 0;
+        return id;
     }
 }

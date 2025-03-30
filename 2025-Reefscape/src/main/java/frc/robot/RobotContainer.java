@@ -7,17 +7,13 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.events.TriggerEvent;
-import com.pathplanner.lib.path.PathConstraints;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Commands.StopAll;
 import frc.robot.Commands.Auto.BranchIntake;
 import frc.robot.Commands.Auto.BranchIntakeNoInteruptStopMotor;
 import frc.robot.Commands.Auto.BranchOuttake;
@@ -49,11 +45,10 @@ import frc.robot.Subsystems.Vision.Vision;
 import frc.robot.Subsystems.Vision.VisionConstants;
 import frc.robot.Subsystems.Vision.VisionIOPhotonVisionTrig;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -89,6 +84,7 @@ public class RobotContainer {
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   Joystick m_armController = new Joystick(OIConstants.kArmControllerPort);
   Joystick m_autoController = new Joystick(2);
+  GenericHID m_buttonBoard = new GenericHID(3);
   
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -376,7 +372,7 @@ public class RobotContainer {
         );
     
     // L4
-    new JoystickButton(m_autoController, 6)
+    new JoystickButton(m_buttonBoard, 2)
         .onTrue(
           new SequentialCommandGroup(
             new ElevatorMoveToPoint(
@@ -409,7 +405,7 @@ public class RobotContainer {
         );
 
     // L3
-    new JoystickButton(m_autoController, 4)
+    new JoystickButton(m_buttonBoard, 4)
         .onTrue(
           new SequentialCommandGroup(
             new ElevatorMoveToPoint(
@@ -442,7 +438,7 @@ public class RobotContainer {
         );
 
     // L2
-    new JoystickButton(m_autoController, 3)
+    new JoystickButton(m_buttonBoard, 6)
         .onTrue(
           new SequentialCommandGroup(
             new ElevatorMoveToPoint(
@@ -488,11 +484,11 @@ public class RobotContainer {
     //     );
 
     
-    new JoystickButton(m_autoController, 1)
+    new JoystickButton(m_buttonBoard, 8)
         .whileTrue(
           new BranchIntake(
             m_branchCoralOuttake,
-            () -> !m_autoController.getRawButton(1)
+            () -> !m_buttonBoard.getRawButton(8)
           )
         );
 
@@ -530,6 +526,18 @@ public class RobotContainer {
     new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
         .onTrue(
           new GoToPose(m_robotDrive, Poses.kLeftFeeder)
+        );
+
+
+    new JoystickButton(m_buttonBoard, 7)
+        .whileTrue(
+          new StopAll(
+            m_robotDrive,
+            m_elevator,
+            m_algaeSubsystem,
+            m_branchCoralOuttake,
+            m_ClimbingSubsystem
+          )
         );
     
     
