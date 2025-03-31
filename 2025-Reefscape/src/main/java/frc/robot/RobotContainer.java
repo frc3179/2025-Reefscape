@@ -47,7 +47,6 @@ import frc.robot.Subsystems.Vision.VisionIOPhotonVisionTrig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /*
@@ -99,7 +98,6 @@ public class RobotContainer {
           m_robotDrive::getGryoAngle
         )
       );
-
 
       // Configure Auto Bindings
       configureAutoBindings();
@@ -318,7 +316,7 @@ public class RobotContainer {
     m_ClimbingSubsystem.setDefaultCommand(
       new TeleopClimb(
         m_ClimbingSubsystem,
-        () -> m_autoController.getRawAxis(1)
+        () -> m_buttonBoard.getRawButton(1) ? 1.0 : m_buttonBoard.getRawButton(3) ? -1.0 : 0.0
       )
     );
 
@@ -380,7 +378,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderL4Position,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> m_buttonBoard.getRawButton(7),
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -388,7 +386,7 @@ public class RobotContainer {
 
             new BranchOuttake(
               m_branchCoralOuttake,
-              () -> m_autoController.getRawButton(2)
+              () -> m_buttonBoard.getRawButton(7)
             ),
 
             new ElevatorMoveToPoint(
@@ -396,7 +394,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderIntakePosition,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> m_buttonBoard.getRawButton(7),
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -413,7 +411,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderL3Position,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> m_buttonBoard.getRawButton(7),
               TrackingConstants.kElevatorL3P,
               TrackingConstants.kElevatorL3I,
               TrackingConstants.kElevatorL3D
@@ -421,7 +419,7 @@ public class RobotContainer {
 
             new BranchOuttake(
               m_branchCoralOuttake,
-              () -> m_autoController.getRawButton(2)
+              () -> m_buttonBoard.getRawButton(7)
             ),
 
             new ElevatorMoveToPoint(
@@ -429,7 +427,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderIntakePosition,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> m_buttonBoard.getRawButton(7),
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -446,7 +444,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderL2Position,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> m_buttonBoard.getRawButton(7),
               TrackingConstants.kElevatorL2P,
               TrackingConstants.kElevatorL2I,
               TrackingConstants.kElevatorL2D
@@ -454,7 +452,7 @@ public class RobotContainer {
 
             new BranchOuttake(
               m_branchCoralOuttake,
-              () -> m_autoController.getRawButton(2)
+              () -> m_buttonBoard.getRawButton(7)
             ),
 
             new ElevatorMoveToPoint(
@@ -462,7 +460,7 @@ public class RobotContainer {
               TrackingConstants.kElevatorEncoderIntakePosition,
               () -> m_elevator.getEncoder(),
               TrackingConstants.kElevatorEncoderOffset,
-              () -> m_autoController.getRawButton(2),
+              () -> m_buttonBoard.getRawButton(7),
               TrackingConstants.kElevatorL4P,
               TrackingConstants.kElevatorL4I,
               TrackingConstants.kElevatorL4D
@@ -503,7 +501,7 @@ public class RobotContainer {
             TrackingConstants.kClimbOut,
             0.03,
             () -> m_ClimbingSubsystem.getEncoder(),
-            () -> !m_autoController.getRawButton(7)
+            () -> m_buttonBoard.getRawButton(7)
           )
         );
 
@@ -518,7 +516,7 @@ public class RobotContainer {
             TrackingConstants.kClimbZero,
             0.03,
             () -> m_ClimbingSubsystem.getEncoder(),
-            () -> !m_autoController.getRawButton(8)
+            () -> m_buttonBoard.getRawButton(7)
           )
         );
 
