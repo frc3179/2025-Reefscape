@@ -84,12 +84,13 @@ public class TeleopDrive extends Command{
             finalRot = m_DriveSpeedSettings.getFinalSpeed(rot.get(), isFastMode.get(), isSlowMode.get());
         }
 
-        // if (finalSpeeds [0] == 0 && finalSpeeds[1] == 0 && finalRot == 0) {
-        //     m_DriveSubsystem.setX();
-        // } else {
-        //     m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get(), resetGyro.get());
-        // }
-        m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get(), resetGyro.get());
+        if (finalSpeeds [0] == 0 && finalSpeeds[1] == 0 && finalRot == 0) {
+            m_DriveSubsystem.drive(0, 0, 0, fieldRelative.get(), resetGyro.get());
+            m_DriveSubsystem.setX();
+        } else {
+            m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get(), resetGyro.get());
+        }
+        //m_DriveSubsystem.drive(finalSpeeds[0], finalSpeeds[1], finalRot, fieldRelative.get(), resetGyro.get());
     }
 
     @Override

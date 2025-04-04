@@ -4,10 +4,19 @@
 
 package frc.robot;
 
+import java.nio.file.Path;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,7 +29,7 @@ import frc.robot.Commands.Auto.BranchOuttake;
 import frc.robot.Commands.Auto.ClimbToPoint;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
 import frc.robot.Commands.Auto.FullDriveToPoint;
-import frc.robot.Commands.Auto.GoToPose;
+//import frc.robot.Commands.Auto.GoToPose;
 import frc.robot.Commands.Teleop.TeleopAlgae;
 import frc.robot.Commands.Teleop.TeleopBranchCoralOuttake;
 import frc.robot.Commands.Teleop.TeleopClimb;
@@ -43,6 +52,7 @@ import frc.robot.Subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.Subsystems.Lights.LightSubsystem;
 import frc.robot.Subsystems.Vision.Vision;
 import frc.robot.Subsystems.Vision.VisionConstants;
+import frc.robot.Subsystems.Vision.VisionIOLimelight;
 import frc.robot.Subsystems.Vision.VisionIOPhotonVisionTrig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -69,6 +79,18 @@ public class RobotContainer {
 
   @SuppressWarnings("unused")
   private final Vision vision;
+
+  private VisionIOPhotonVisionTrig backCamera = new VisionIOPhotonVisionTrig(
+    VisionConstants.camera0Name,
+    VisionConstants.robotToCamera0,
+    m_robotDrive::getGryoAngle
+  );
+
+  private VisionIOPhotonVisionTrig frontCamera = new VisionIOPhotonVisionTrig(
+    VisionConstants.camera1Name,
+    VisionConstants.robotToCamera1,
+    m_robotDrive::getGryoAngle
+  );
   
   // Other objects
   public final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
@@ -89,14 +111,14 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
     */
     public RobotContainer() {
+      
+
       vision = new Vision(
         m_robotDrive::addEstimatedVisionMeasurement,
 
-        new VisionIOPhotonVisionTrig(
-          VisionConstants.camera0Name,
-          VisionConstants.robotToCamera0,
-          m_robotDrive::getGryoAngle
-        )
+        backCamera,
+
+        frontCamera
       );
 
       // Configure Auto Bindings
@@ -117,42 +139,22 @@ public class RobotContainer {
       //TODO: AUTO COMMANDS
       NamedCommands.registerCommand(
         "Right Robot Line Up",
-        new SequentialCommandGroup(
-            new FullDriveToPoint(
-              m_robotDrive,
-              TrackingConstants.kReefForwardLimelightOffset,
-              () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName),
-              0.3, //Drive Error offset
-              0.0, //Goal Rotate
-              () -> 0.0, //Rotate Current
-              0.3, //Rotate Error offset
-              0.0, //Goal Strafe
-              () -> LimelightHelpers.getTY(TrackingConstants.kStillLimelightName) > 5.0 ? 0.0 : LimelightHelpers.getTX(TrackingConstants.kStillLimelightName), //Strafe Current
-              0.5, //Stra fe Error offset
-              () -> false,
-              new PIDConstants(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD),
-              new PIDConstants(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD),
-              new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD)
-            ),
-
-            new FullDriveToPoint(
-              m_robotDrive,
-              0.0,
-              () -> 0.0,
-              0.3, //Drive Error offset
-              0.0, //Goal Rotate
-              () -> 0.0, //Rotate Current
-              0.3, //Rotate Error offset
-              TrackingConstants.kRightReefStrafeLimelightOffset, //Goal Strafe
-              () -> LimelightHelpers.getTX(TrackingConstants.kStillLimelightName), //Strafe Current
-              0.5, //Stra fe Error offset
-              () -> false,
-              new PIDConstants(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD),
-              new PIDConstants(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kStrafeDriveD),
-              new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kRotateDriveD)
-            )
-
-          )//.withTimeout(2) 
+        new FullDriveToPoint(
+            m_robotDrive,
+            0,
+            () -> 0.0,
+            0,
+            0,
+            () -> 0.0,
+            0,
+            TrackingConstants.kRightReefStrafeLimelightOffset,
+            () -> LimelightHelpers.getTX(TrackingConstants.kBasicTrackingLimelightName),
+            0.3,
+            () -> m_buttonBoard.getRawButton(7),
+            new PIDConstants(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD),
+            new PIDConstants(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kDriveDriveD),
+            new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kDriveDriveD)
+          ).withTimeout(2) 
       );
 
       NamedCommands.registerCommand(
@@ -257,6 +259,78 @@ public class RobotContainer {
           m_branchCoralOuttake
         ).withTimeout(2)
       );
+
+
+
+      NamedCommands.registerCommand(
+        "Go To A",
+        m_robotDrive.followPathToPose(Poses.kReefA, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To B",
+        m_robotDrive.followPathToPose(Poses.kReefB, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To C",
+        m_robotDrive.followPathToPose(Poses.kReefC, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To D",
+        m_robotDrive.followPathToPose(Poses.kReefD, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To E",
+        m_robotDrive.followPathToPose(Poses.kReefE, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To F",
+        m_robotDrive.followPathToPose(Poses.kReefF, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To G",
+        m_robotDrive.followPathToPose(Poses.kReefG, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To H",
+        m_robotDrive.followPathToPose(Poses.kReefH, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To I",
+        m_robotDrive.followPathToPose(Poses.kReefI, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To J",
+        m_robotDrive.followPathToPose(Poses.kReefJ, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To K",
+        m_robotDrive.followPathToPose(Poses.kReefK, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To L",
+        m_robotDrive.followPathToPose(Poses.kReefL, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To LF",
+        m_robotDrive.followPathToPose(Poses.kLeftFeeder, () -> !m_robotDrive.shouldFlipPath())
+      );
+
+      NamedCommands.registerCommand(
+        "Go To RF",
+        m_robotDrive.followPathToPose(Poses.kRightFeeder, () -> !m_robotDrive.shouldFlipPath())
+      );
     }
 
   public void configureDefaultBindings() {
@@ -297,11 +371,19 @@ public class RobotContainer {
       )
     );    
 
+    // m_algaeSubsystem.setDefaultCommand(
+    //   new TeleopAlgae(
+    //     m_algaeSubsystem,
+    //     () -> m_armController.getRawButton(3) ? 1.0 : (m_armController.getRawButton(5) ? -1.0 : 0.0), //In Out Take Speed
+    //     () -> m_armController.getRawButton(7) ? 1 : (m_armController.getRawButton(8) ? -1 : 0.0) //Wrist speed
+    //   )
+    // );
+
     m_algaeSubsystem.setDefaultCommand(
       new TeleopAlgae(
         m_algaeSubsystem,
         () -> m_armController.getRawButton(3) ? 1.0 : (m_armController.getRawButton(5) ? -1.0 : 0.0), //In Out Take Speed
-        () -> m_armController.getRawButton(7) ? 1 : (m_armController.getRawButton(8) ? -1 : 0.0) //Wrist speed
+        () -> (m_armController.getPOV() == 0 ? 1.0 : (m_armController.getPOV() == 180 ? -1.0 : 0.0)) //Wrist speed
       )
     );
 
@@ -316,7 +398,7 @@ public class RobotContainer {
     m_ClimbingSubsystem.setDefaultCommand(
       new TeleopClimb(
         m_ClimbingSubsystem,
-        () -> m_buttonBoard.getRawButton(1) ? 1.0 : m_buttonBoard.getRawButton(3) ? -1.0 : 0.0
+        () -> m_buttonBoard.getRawButton(3) ? 1.0 : m_buttonBoard.getRawButton(1) ? -1.0 : 0.0
       )
     );
 
@@ -482,49 +564,85 @@ public class RobotContainer {
     //     );
 
     
-    new JoystickButton(m_buttonBoard, 8)
+    new JoystickButton(m_buttonBoard, 5)
         .whileTrue(
           new BranchIntake(
             m_branchCoralOuttake,
-            () -> !m_buttonBoard.getRawButton(8)
+            () -> !m_buttonBoard.getRawButton(5)
           )
         );
 
     //Climb out
-    new JoystickButton(m_autoController, 7)
-        .whileTrue(
-          new ClimbToPoint(
-            m_ClimbingSubsystem,
-            TrackingConstants.kClimbP,
-            TrackingConstants.kClimbI,
-            TrackingConstants.kClimbD,
-            TrackingConstants.kClimbOut,
-            0.03,
-            () -> m_ClimbingSubsystem.getEncoder(),
-            () -> m_buttonBoard.getRawButton(7)
-          )
-        );
+    // new JoystickButton(m_autoController, 7)
+    //     .whileTrue(
+    //       new ClimbToPoint(
+    //         m_ClimbingSubsystem,
+    //         TrackingConstants.kClimbP,
+    //         TrackingConstants.kClimbI,
+    //         TrackingConstants.kClimbD,
+    //         TrackingConstants.kClimbOut,
+    //         0.03,
+    //         () -> m_ClimbingSubsystem.getEncoder(),
+    //         () -> m_buttonBoard.getRawButton(7)
+    //       )
+    //     );
 
     //Climb in
-    new JoystickButton(m_autoController, 8)
-        .whileTrue(
-          new ClimbToPoint(
-            m_ClimbingSubsystem,
-            TrackingConstants.kClimbP,
-            TrackingConstants.kClimbI,
-            TrackingConstants.kClimbD,
-            TrackingConstants.kClimbZero,
-            0.03,
-            () -> m_ClimbingSubsystem.getEncoder(),
-            () -> m_buttonBoard.getRawButton(7)
-          )
-        );
+    // new JoystickButton(m_autoController, 8)
+    //     .whileTrue(
+    //       new ClimbToPoint(
+    //         m_ClimbingSubsystem,
+    //         TrackingConstants.kClimbP,
+    //         TrackingConstants.kClimbI,
+    //         TrackingConstants.kClimbD,
+    //         TrackingConstants.kClimbZero,
+    //         0.03,
+    //         () -> m_ClimbingSubsystem.getEncoder(),
+    //         () -> m_buttonBoard.getRawButton(7)
+    //       )
+    //     );
 
     
     new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
         .onTrue(
-          new GoToPose(m_robotDrive, Poses.kLeftFeeder)
+         m_robotDrive.aprilTagToFollowPathToPose(frontCamera.getAprilTagId(), () -> !m_robotDrive.shouldFlipPath(), false)
         );
+    // new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+    //     .onTrue(
+    //      m_robotDrive.followPathToPose(Poses.kLeftFeeder, () -> !m_robotDrive.shouldFlipPath())
+    //     );
+
+    // new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+    //     .onTrue(
+    //       AutoBuilder.pathfindToPose(
+    //         new Pose2d(
+    //           16.43,
+    //           0.98,
+    //           new Rotation2d(Units.degreesToRadians(37.16))
+    //         ),
+    //         PathConstraints.unlimitedConstraints(11)
+    //       )
+    //     );
+
+    // new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+    //     .whileTrue(
+    //       new FullDriveToPoint(
+    //         m_robotDrive,
+    //         0,
+    //         () -> 0.0,
+    //         0,
+    //         0,
+    //         () -> 0.0,
+    //         0,
+    //         TrackingConstants.kRightReefStrafeLimelightOffset,
+    //         () -> LimelightHelpers.getTX(TrackingConstants.kBasicTrackingLimelightName),
+    //         0.3,
+    //         () -> m_buttonBoard.getRawButton(7),
+    //         new PIDConstants(TrackingConstants.kDriveDriveP, TrackingConstants.kDriveDriveI, TrackingConstants.kDriveDriveD),
+    //         new PIDConstants(TrackingConstants.kStrafeDriveP, TrackingConstants.kStrafeDriveI, TrackingConstants.kDriveDriveD),
+    //         new PIDConstants(TrackingConstants.kRotateDriveP, TrackingConstants.kRotateDriveI, TrackingConstants.kDriveDriveD)
+    //       )
+    //     );
 
 
     new JoystickButton(m_buttonBoard, 7)

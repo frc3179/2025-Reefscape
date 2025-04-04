@@ -6,6 +6,8 @@ package frc.robot.Subsystems.Drive;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -60,7 +62,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final Pigeon2 m_gyro = new Pigeon2(50);
 
 
-
+  StructPublisher<Pose2d> goalpublisher = NetworkTableInstance.getDefault()
+  .getStructTopic("goalPose", Pose2d.struct).publish();
 
 
 
@@ -111,15 +114,31 @@ public class DriveSubsystem extends SubsystemBase {
 
 
 
-
-  public Command followPathToPose(Pose2d targetPose, boolean shouldFlip) {
-    if (shouldFlip) {
+  
+  public Command followPathToPose(Pose2d targetPose, Supplier<Boolean> flipPath) {
+    if (flipPath.get()) {
       targetPose = FlippingUtil.flipFieldPose(targetPose);
     }
+    goalpublisher.set(targetPose);
+
 
     return AutoBuilder.pathfindToPose(
-      targetPose,
-      PathConstraints.unlimitedConstraints(12));
+      new Pose2d(targetPose.getX(), targetPose.getY(), targetPose.getRotation()),
+      PathConstraints.unlimitedConstraints(11),
+      0.0
+    );
+  }
+
+
+  public Command aprilTagToFollowPathToPose(int aprilTagId, Supplier<Boolean> flipPath, boolean leftSide) {
+    aprilTagId = Poses.redSideAprilTagIdToBlueSideId(aprilTagId);
+    Pose2d[] possiblePoses = Poses.aprilTagIdToPoseOptions(aprilTagId);
+
+    if (leftSide) {
+        return this.followPathToPose(possiblePoses[0], flipPath);
+    } else {
+        return this.followPathToPose(possiblePoses[1], flipPath);
+    }
   }
 
 
@@ -251,7 +270,7 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean gyroReset) {
       if (gyroReset) {
-        setGryoAngle(180);
+        m_gyro.setYaw(180);
       }
 
       // Convert the commanded speeds into the correct units for the drivetrain
@@ -262,7 +281,7 @@ public class DriveSubsystem extends SubsystemBase {
       var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
           fieldRelative
               ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                  Rotation2d.fromDegrees(shouldFlipPath() ? -m_gyro.getAngle() + 180 : -m_gyro.getAngle()))
+                  Rotation2d.fromDegrees(-m_gyro.getAngle(/*shouldFlipPath() ? -m_gyro.getAngle() + 180 : -m_gyro.getAngle()*/)))
               : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
       SwerveDriveKinematics.desaturateWheelSpeeds(
           swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);

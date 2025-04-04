@@ -123,7 +123,7 @@ public class FullDriveToPoint extends Command{
         finalYSpeed = MathUtil.clamp(ySpeed, -0.3, 0.3);
         finalRot = MathUtil.clamp(rotSpeed, -0.2, 0.2);
 
-        m_DriveSubsystem.drive(drivePidController.atSetpoint() ? 0.0 : finalXSpeed, strafePidController.atSetpoint() ? 0.0 : -finalYSpeed, rotatePidController.atSetpoint() ? 0.0 : finalRot, false, false);
+        m_DriveSubsystem.drive(drivePidController.atSetpoint() ? 0.0 : finalXSpeed, strafePidController.atSetpoint() ? 0.0 : finalYSpeed, rotatePidController.atSetpoint() ? 0.0 : finalRot, false, false);
     }
 
     @Override

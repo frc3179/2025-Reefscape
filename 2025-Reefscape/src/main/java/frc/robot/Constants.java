@@ -114,9 +114,10 @@ public final class Constants {
 
   public static final class TrackingConstants {
     public static final double kStrafeDriveP = 0.003;
-    public static final double kStrafeDriveI = 0.03;
-    public static final double kStrafeDriveD = 0.01;
-    public static final double kRightReefStrafeLimelightOffset = -19;
+    public static final double kStrafeDriveI = 0.001;
+    public static final double kStrafeDriveD = 0.0;
+    public static final double kRightReefStrafeLimelightOffset = 11.5;
+    
     public static final double kStrafeDriveLeftP = 0.005;
     public static final double kStrafeDriveLeftI = 0.0;
     public static final double kStrafeDriveLeftD = 0.0;
@@ -131,7 +132,7 @@ public final class Constants {
     public static final double kDriveDriveP = 0.15;
     public static final double kDriveDriveI = 0.0; 
     public static final double kDriveDriveD = 0.0;
-    public static final double kReefForwardLimelightOffset = 8;
+    public static final double kReefForwardLimelightOffset = 11.5;
     public static final double kDriveDriveLeftP = 0.15;
     public static final double kDriveDriveLeftI = 0.03; 
     public static final double kDriveDriveLeftD = 0.0;
@@ -153,7 +154,7 @@ public final class Constants {
     public static final double kThroughCoralOuttakeI = 0.0;
     public static final double kThroughCoralOuttakeD = 0.0;
 
-    public static final double kElevatorEncoderIntakePosition = 0.02;
+    public static final double kElevatorEncoderIntakePosition = 0.025;
     public static final double kElevatorEncoderL2Position = 0.22;
     public static final double kElevatorEncoderL3Position = 0.37;
     public static final double kElevatorEncoderL4Position = 0.6;
@@ -174,7 +175,7 @@ public final class Constants {
     public static final SimpleMatrix visionMeasurementStdDevs3Data = new SimpleMatrix(new double[] {0.7, 0.7, 0.999});
     public static final Matrix<N3,N1> visionMeasurementStdDevs3 = new Matrix<N3,N1>(visionMeasurementStdDevs3Data);
 
-    public static final String kMovingLimelightName = "limelight-moving";
+    public static final String kBasicTrackingLimelightName = "limelight-middle";
     public static final String kStillLimelightName = "limelight-still";
     public static final String kBranchIntakeLimelightName = "limelight-branch";
 

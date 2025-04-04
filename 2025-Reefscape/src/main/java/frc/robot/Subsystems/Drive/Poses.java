@@ -8,7 +8,7 @@ import edu.wpi.first.math.util.Units;
 
 public class Poses {
     /*
-     * All poses are for the Blue Alliance.
+     * All poses are for the Red Alliance.
      * They are named from the driver perspective then robot perspective.
      * ReefA
      * This means on the reef at the A location
@@ -37,17 +37,23 @@ public class Poses {
 
     public static Pose2d kReefJ = new Pose2d();
 
-    public static Pose2d kReefK = new Pose2d();
+    public static Pose2d kReefK = new Pose2d(
+        13.04,
+        2.55,
+        new Rotation2d(Units.degreesToRadians(112.46))
+    );
 
-    public static Pose2d kReefL = new Pose2d();
+    public static Pose2d kReefL = new Pose2d(
+        13.75,
+        2.95,
+        new Rotation2d(Units.degreesToRadians(115.54))
+    );
 
-
-    //on red side so need flip
-    public static Pose2d kLeftFeeder = FlippingUtil.flipFieldPose(new Pose2d(
+    public static Pose2d kLeftFeeder = new Pose2d(
         16.43,
         0.98,
         new Rotation2d(Units.degreesToRadians(37.16))
-    ));
+    );
 
     public static Pose2d kRightFeeder = new Pose2d();
 
@@ -94,7 +100,7 @@ public class Poses {
      * 
      * @param id Red side april tag id
      * @return the blue side april tag id.
-     * If could not convert to blue side id. It will return the given id
+     * If could not convert to blue side id. It will return the given id because it must already be blue side
      */
     public static int redSideAprilTagIdToBlueSideId(int id) {
         switch (id) {

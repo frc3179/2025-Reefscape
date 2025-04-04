@@ -5,10 +5,15 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.pathfinding.LocalADStar;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 
 import au.grapplerobotics.CanBridge;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -18,6 +23,7 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   public Robot() {
+    Pathfinding.setPathfinder(new LocalADStar());
     m_robotContainer = new RobotContainer();
     FollowPathCommand.warmupCommand().schedule();
     CanBridge.runTCP();
@@ -55,11 +61,11 @@ public class Robot extends TimedRobot {
     }
 
 
-    if (m_robotContainer.m_lightSubsystem.isBlueAlliance()) {
-      m_robotContainer.m_robotDrive.setGryoAngle(180);
-    } else {
-      m_robotContainer.m_robotDrive.setGryoAngle(0);
-    }
+    // if (m_robotContainer.m_lightSubsystem.isBlueAlliance()) {
+    //   m_robotContainer.m_robotDrive.setGryoAngle(180);
+    // } else {
+    //   m_robotContainer.m_robotDrive.setGryoAngle(0);
+    // }
   }
 
   @Override

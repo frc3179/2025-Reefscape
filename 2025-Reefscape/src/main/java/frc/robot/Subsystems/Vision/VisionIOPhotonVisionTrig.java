@@ -33,6 +33,10 @@ public class VisionIOPhotonVisionTrig implements VisionIO {
     gyroRotationSupplier = gyroRotation;
   }
 
+  public int getAprilTagId() {
+    return 6;
+  }
+
   @Override
   public void updateInputs(VisionIOInputs inputs) {
     inputs.connected = camera.isConnected();
