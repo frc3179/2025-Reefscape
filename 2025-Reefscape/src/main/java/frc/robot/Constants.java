@@ -155,8 +155,8 @@ public final class Constants {
     public static final double kThroughCoralOuttakeD = 0.0;
 
     public static final double kElevatorEncoderIntakePosition = 0.025;
-    public static final double kElevatorEncoderL2Position = 0.22;
-    public static final double kElevatorEncoderL3Position = 0.37;
+    public static final double kElevatorEncoderL2Position = 0.2;
+    public static final double kElevatorEncoderL3Position = 0.35;
     public static final double kElevatorEncoderL4Position = 0.6;
     public static final double kElevatorEncoderOffset = 0.015;
 

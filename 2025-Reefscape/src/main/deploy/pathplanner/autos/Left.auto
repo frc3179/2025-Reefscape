@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S2_JI"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Right Robot Line Up"
+            "pathName": "S1_JI"
           }
         },
         {
@@ -43,12 +37,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Right Robot Line Up"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "L4 Score"
           }
         },
@@ -62,24 +50,6 @@
           "type": "named",
           "data": {
             "name": "Branch Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "F1_End_L"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Right Robot Line Up"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3 Score"
           }
         }
       ]

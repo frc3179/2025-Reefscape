@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S6_EF"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Right Robot Line Up"
+            "pathName": "S7_EF"
           }
         },
         {
@@ -43,12 +37,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Right Robot Line Up"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "L4 Score"
           }
         },
@@ -61,13 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Right Robot Line Up"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L3 Score"
+            "name": "Branch Intake"
           }
         }
       ]

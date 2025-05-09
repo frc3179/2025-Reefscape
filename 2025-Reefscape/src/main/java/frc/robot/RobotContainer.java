@@ -4,19 +4,10 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.pathfinding.LocalADStar;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -26,7 +17,6 @@ import frc.robot.Commands.StopAll;
 import frc.robot.Commands.Auto.BranchIntake;
 import frc.robot.Commands.Auto.BranchIntakeNoInteruptStopMotor;
 import frc.robot.Commands.Auto.BranchOuttake;
-import frc.robot.Commands.Auto.ClimbToPoint;
 import frc.robot.Commands.Auto.ElevatorMoveToPoint;
 import frc.robot.Commands.Auto.FullDriveToPoint;
 //import frc.robot.Commands.Auto.GoToPose;
@@ -50,10 +40,6 @@ import frc.robot.Subsystems.Drive.DriveSubsystem;
 import frc.robot.Subsystems.Drive.Poses;
 import frc.robot.Subsystems.Elevator.ElevatorSubsystem;
 import frc.robot.Subsystems.Lights.LightSubsystem;
-import frc.robot.Subsystems.Vision.Vision;
-import frc.robot.Subsystems.Vision.VisionConstants;
-import frc.robot.Subsystems.Vision.VisionIOLimelight;
-import frc.robot.Subsystems.Vision.VisionIOPhotonVisionTrig;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -78,19 +64,19 @@ public class RobotContainer {
 
 
   @SuppressWarnings("unused")
-  private final Vision vision;
+  //private final Vision vision;
 
-  private VisionIOPhotonVisionTrig backCamera = new VisionIOPhotonVisionTrig(
-    VisionConstants.camera0Name,
-    VisionConstants.robotToCamera0,
-    m_robotDrive::getGryoAngle
-  );
+  // private VisionIOPhotonVisionTrig backCamera = new VisionIOPhotonVisionTrig(
+  //   VisionConstants.camera0Name,
+  //   VisionConstants.robotToCamera0,
+  //   m_robotDrive::getGryoAngle
+  // );
 
-  private VisionIOPhotonVisionTrig frontCamera = new VisionIOPhotonVisionTrig(
-    VisionConstants.camera1Name,
-    VisionConstants.robotToCamera1,
-    m_robotDrive::getGryoAngle
-  );
+  // private VisionIOPhotonVisionTrig frontCamera = new VisionIOPhotonVisionTrig(
+  //   VisionConstants.camera1Name,
+  //   VisionConstants.robotToCamera1,
+  //   m_robotDrive::getGryoAngle
+  // );
   
   // Other objects
   public final DriveSpeedSettings m_DriveSpeedSettings = new DriveSpeedSettings(
@@ -113,13 +99,13 @@ public class RobotContainer {
     public RobotContainer() {
       
 
-      vision = new Vision(
-        m_robotDrive::addEstimatedVisionMeasurement,
+      // vision = new Vision(
+      //   m_robotDrive::addEstimatedVisionMeasurement,
 
-        backCamera,
+      //   backCamera,
 
-        frontCamera
-      );
+      //   frontCamera
+      // );
 
       // Configure Auto Bindings
       configureAutoBindings();
@@ -603,10 +589,10 @@ public class RobotContainer {
     //     );
 
     
-    new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
-        .onTrue(
-         m_robotDrive.aprilTagToFollowPathToPose(frontCamera.getAprilTagId(), () -> !m_robotDrive.shouldFlipPath(), false)
-        );
+    // new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
+    //     .onTrue(
+    //      m_robotDrive.aprilTagToFollowPathToPose(frontCamera.getAprilTagId(), () -> !m_robotDrive.shouldFlipPath(), false)
+    //     );
     // new JoystickButton(m_driverController, edu.wpi.first.wpilibj.XboxController.Button.kA.value)
     //     .onTrue(
     //      m_robotDrive.followPathToPose(Poses.kLeftFeeder, () -> !m_robotDrive.shouldFlipPath())

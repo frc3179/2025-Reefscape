@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Subsystems.Lights.LightSubsystem;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -47,7 +48,15 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (Math.abs(m_robotContainer.m_robotDrive.getGryoAngle().getDegrees()) >= 0 && Math.abs(m_robotContainer.m_robotDrive.getGryoAngle().getDegrees()) <= 4) {
+      m_robotContainer.m_lightSubsystem.set(LightSubsystem.GREEN);
+    } else if (Math.abs(m_robotContainer.m_robotDrive.getGryoAngle().getDegrees()) >= 178 && Math.abs(m_robotContainer.m_robotDrive.getGryoAngle().getDegrees()) <= 182) {
+      m_robotContainer.m_lightSubsystem.set(LightSubsystem.GREEN);
+    } else {
+      m_robotContainer.m_lightSubsystem.set(LightSubsystem.RED);
+    }
+  }
 
   @Override
   public void disabledExit() {}
