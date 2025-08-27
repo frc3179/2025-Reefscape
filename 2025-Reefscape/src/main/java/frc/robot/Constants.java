@@ -154,13 +154,13 @@ public final class Constants {
     public static final double kThroughCoralOuttakeI = 0.0;
     public static final double kThroughCoralOuttakeD = 0.0;
 
-    public static final double kElevatorEncoderIntakePosition = 0.025;
-    public static final double kElevatorEncoderL2Position = 0.2;
-    public static final double kElevatorEncoderL3Position = 0.35;
-    public static final double kElevatorEncoderL4Position = 0.6;
+    public static final double kElevatorEncoderIntakePosition = 0.06;
+    public static final double kElevatorEncoderL2Position = 0.23;
+    public static final double kElevatorEncoderL3Position = 0.39;
+    public static final double kElevatorEncoderL4Position = 0.64;
     public static final double kElevatorEncoderOffset = 0.015;
 
-    public static final double kThroughCoralOuttakeIntakePos = 0.0;
+    public static final double kThroughCoralOuttakeIntakePos = 0.05;
     public static final double kThroughCoralOutakeScoringPos = 1.0;
 
     // x position in meters, y position in meters, and heading in radians; higher number = trust less

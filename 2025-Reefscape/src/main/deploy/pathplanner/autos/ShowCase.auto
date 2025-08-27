@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S4_HG"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4 Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShowCaseFeed"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Branch Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ShowCaseScore"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L3 Score"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
